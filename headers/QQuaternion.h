@@ -28,11 +28,10 @@
 #define __QQUATERNION__
 
 #include "QBaseQuaternion.h"
-#include "StringsDefinitions.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
@@ -47,7 +46,7 @@ namespace Math
 // Forward declarations
 class QMatrix4x3;
 class QMatrix4x4;
-template<class MatrixT> class QTransformationMatrix;
+template<class MatrixType> class QTransformationMatrix;
 class QRotationMatrix3x3;
 class QBaseVector3;
 class QBaseVector4;
@@ -67,7 +66,7 @@ class QBaseVector4;
 /// <br/>
 /// (Text extracted from: Flipcode.)
 /// </remarks>
-class QE_LAYER_TOOLS_SYMBOLS QQuaternion : public QBaseQuaternion
+class QDllExport QQuaternion : public QBaseQuaternion
 {
     // FRIENDS
     // ---------------
@@ -84,16 +83,16 @@ public:
     /// <returns>
     /// The resultant quaternion.
     /// </returns>
-    friend QQuaternion QE_LAYER_TOOLS_SYMBOLS operator*(const float_q fScalar, const QQuaternion &qQuat);
+    friend QQuaternion QDllExport operator*(const float_q &fScalar, const QQuaternion &qQuat);
 
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
     QQuaternion();
 
     /// <summary>
@@ -119,7 +118,7 @@ public:
     /// <param name="fRotationAngleX">[IN] Rotation angle about X global axis.</param>
     /// <param name="fRotationAngleY">[IN] Rotation angle about Y global axis.</param>
     /// <param name="fRotationAngleZ">[IN] Rotation angle about Z global axis.</param>
-    QQuaternion(const float_q fRotationAngleX, const float_q fRotationAngleY, const float_q fRotationAngleZ);
+    QQuaternion(const float_q &fRotationAngleX, const float_q &fRotationAngleY, const float_q &fRotationAngleZ);
 
     /// <summary>
     /// Constructor that receives 4 values, one per quaternion's component.
@@ -128,7 +127,7 @@ public:
     /// <param name="fValueY">[IN] Y component value.</param>
     /// <param name="fValueZ">[IN] Z component value.</param>
     /// <param name="fValueW">[IN] W component value.</param>
-    QQuaternion(const float_q fValueX, const float_q fValueY, const float_q fValueZ, const float_q fValueW);
+    QQuaternion(const float_q &fValueX, const float_q &fValueY, const float_q &fValueZ, const float_q &fValueW);
 
     /// <summary>
     /// Constructor that receives a pointer to a sequence of 4 contiguous values, one per quaternion's component in the order: X, Y, Z and W.
@@ -143,38 +142,38 @@ public:
     /// The values order is: X, Y, Z and W.
     /// </summary>
     /// <param name="value">[IN] A four 32 bits floating point types pack.</param>
-    explicit QQuaternion(const vf32_q value);
+    explicit QQuaternion(const vf32_q &value);
 
-    /// <summary>
-    /// Constructor that receives a rotation angle and a normalized vector in the direction of the spin axis.
+	/// <summary>
+    /// Constructor that receives a rotation angle  and a normalized vector in the direction of the spin axis.
     /// </summary>
     /// <remarks>
-    /// Being \f$ (\theta)\f$ the angle and \f$ \vec{n}(n_x, n_y, n_z)\f$ the axis, he resultant quaternion is:
-    ///
-    /// \f$ (n_x sin(\frac{\theta}{2}), n_y sin(\frac{\theta}{2}), n_z sin(\frac{\theta}{2}), cos(\frac{\theta}{2}))\f$ <br/>
-    /// Please note it's a mandatory that the input vector representing the spin axis has to be normalized
-    /// in order to create the quaternion correctly (a normalized rotation quaternion).
-    /// </remarks>
+	/// Being \f$ (\theta)\f$ the angle and \f$ \vec{n}(n_x, n_y, n_z)\f$ the axis, he resultant quaternion is:
+	///
+	/// \f$ (n_x sin(\frac{\theta}{2}), n_y sin(\frac{\theta}{2}), n_z sin(\frac{\theta}{2}), cos(\frac{\theta}{2}))\f$ <br/>
+	/// Please note it's a mandatory that the input vector representing the spin axis has to be normalized
+	/// in order to create the quaternion correctly (a normalized rotation quaternion).
+	/// </remarks>
     /// <param name="vRotationAxis">[IN] Normalined vector in the direction of the spin axis.</param>
-    /// <param name="fRotationAngle">[IN] Angle of rotation.</param>
-    QQuaternion(const QBaseVector3 &vRotationAxis, const float_q fRotationAngle);
+	/// <param name="fRotationAngle">[IN] Angle of rotation.</param>
+	QQuaternion(const QBaseVector3 &vRotationAxis, const float_q &fRotationAngle);
 
-    /// <summary>
-    /// Constructor that receives a rotation angle and a normalized vector in the direction of the spin axis.
+	/// <summary>
+    /// Constructor that receives a rotation angle  and a normalized vector in the direction of the spin axis.
     /// </summary>
     /// <remarks>
-    /// Being \f$ (\theta)\f$ the angle and \f$ \vec{n}(n_x, n_y, n_z)\f$ the axis, he resultant quaternion is:
-    ///
-    /// \f$ (n_x sin(\frac{\theta}{2}), n_y sin(\frac{\theta}{2}), n_z sin(\frac{\theta}{2}), cos(\frac{\theta}{2}))\f$ <br/>
-    /// Please note it's a mandatory that the input vector representing the spin axis has to be normalized
-    /// in order to create the quaternion correctly (a normalized rotation quaternion).
-    /// </remarks>
+	/// Being \f$ (\theta)\f$ the angle and \f$ \vec{n}(n_x, n_y, n_z)\f$ the axis, he resultant quaternion is:
+	///
+	/// \f$ (n_x sin(\frac{\theta}{2}), n_y sin(\frac{\theta}{2}), n_z sin(\frac{\theta}{2}), cos(\frac{\theta}{2}))\f$ <br/>
+	/// Please note it's a mandatory that the input vector representing the spin axis has to be normalized
+	/// in order to create the quaternion correctly (a normalized rotation quaternion).
+	/// </remarks>
     /// <param name="vRotationAxis">[IN] Normalized vector in the direction of the spin axis.</param>
-    /// <param name="fRotationAngle">[IN] Angle of rotation.</param>
-    QQuaternion(const QBaseVector4 &vRotationAxis, const float_q fRotationAngle);
+	/// <param name="fRotationAngle">[IN] Angle of rotation.</param>
+	QQuaternion(const QBaseVector4 &vRotationAxis, const float_q &fRotationAngle);
 
-    /// <summary>
-    /// Constructor that receives a transformation matrix. The quaternion will contain the rotation the matrix represents.
+	/// <summary>
+	/// Constructor that receives a transformation matrix. The quaternion will contain the rotation the matrix represents.
     /// </summary>
     /// <remarks>
     /// Realize that getting the rotation of transformation matrices which were compound of negative scales may
@@ -182,10 +181,10 @@ public:
     /// This method produces a normalized quaternion.
     /// </remarks>
     /// <param name="transformation">[IN] A transformation matrix. If it is a null matrix, the result is undefined.</param>
-    explicit QQuaternion(const QTransformationMatrix<QMatrix4x3> &transformation);
+	explicit QQuaternion(const QTransformationMatrix<QMatrix4x3> &transformation);
 
-    /// <summary>
-    /// Constructor that receives a transformation matrix. The quaternion will contain the rotation the matrix represents.
+	/// <summary>
+	/// Constructor that receives a transformation matrix. The quaternion will contain the rotation the matrix represents.
     /// </summary>
     /// <remarks>
     /// Realize that getting the rotation of transformation matrices which were compound of negative scales may
@@ -193,26 +192,26 @@ public:
     /// This method produces a normalized quaternion.
     /// </remarks>
     /// <param name="transformation">[IN] A transformation matrix. If it is a null matrix, the result is undefined.</param>
-    explicit QQuaternion(const QTransformationMatrix<QMatrix4x4> &transformation);
+	explicit QQuaternion(const QTransformationMatrix<QMatrix4x4> &transformation);
 
-    /// <summary>
-    /// Constructor that receives a 3x3 rotation matrix.
+	/// <summary>
+	/// Constructor that receives a 3x3 rotation matrix.
     /// </summary>
     /// <remarks>
     /// This method produces a normalized quaternion.
     /// </remarks>
     /// <param name="rotation">[IN] A 3x3 rotation matrix. If it is a null matrix, the result is undefined.</param>
-    explicit QQuaternion(const QRotationMatrix3x3 &rotation);
+	explicit QQuaternion(const QRotationMatrix3x3 &rotation);
 
 private:
 
-    /// <summary>
-    /// Constructor that receives a transformation matrix. The quaternion will contain the rotation the matrix represents.
+	/// <summary>
+	/// Constructor that receives a transformation matrix. The quaternion will contain the rotation the matrix represents.
     /// </summary>
-    /// <typeparam name="MatrixT">Allowed types: QMatrix4x3, QMatrix4x4.</typeparam>
+    /// <typeparam name="MatrixType">Allowed types: QMatrix4x3, QMatrix4x4.</typeparam>
     /// <param name="transformation">[IN] A transformation matrix. If it is a null matrix, the result is undefined.</param>
-    template <class MatrixT>
-    void QQuaternionImp(const QTransformationMatrix<MatrixT> &transformation);
+	template <class MatrixType>
+    void QQuaternionImp(const QTransformationMatrix<MatrixType> &transformation);
 
 
     // PROPERTIES
@@ -228,8 +227,8 @@ public:
     static const QQuaternion& GetIdentity();
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -283,9 +282,9 @@ public:
     /// <returns>
     /// The resultant quaternion.
     /// </returns>
-    QQuaternion operator*(const float_q fScalar) const;
+    QQuaternion operator*(const float_q &fScalar) const;
 
-    /// <summary>
+	/// <summary>
     /// Multiply by 3D vector operator.<br/>
     /// The vector is converted into a quaternion \f$ (v_x, v_y, v_z, 0) \f$ before multiplication.
     /// </summary>
@@ -298,7 +297,7 @@ public:
     /// </returns>
     QQuaternion operator*(const QBaseVector3 &vVector) const;
 
-    /// <summary>
+	/// <summary>
     /// Multiply by 4D vector operator.<br/>
     /// The vector is converted into a quaternion \f$ (v_x, v_y, v_z, v_w) \f$ before multiplication.
     /// </summary>
@@ -337,7 +336,7 @@ public:
     /// <returns>
     /// The resultant quaternion.
     /// </returns>
-    QQuaternion operator/(const float_q fScalar) const;
+    QQuaternion operator/(const float_q &fScalar) const;
 
     /// <summary>
     /// Add and assign operator. Each input quaternion's component is added to the corresponding quaternion's.
@@ -392,7 +391,7 @@ public:
     /// </returns>
     QQuaternion& operator*=(const float_q fScalar);
 
-    /// <summary>
+	/// <summary>
     /// Multiply by 3D vector and assign operator.<br/>
     /// The vector is converted into a quaternion \f$ (v_x, v_y, v_z, 0) \f$ before multiplication.
     /// </summary>
@@ -405,7 +404,7 @@ public:
     /// </returns>
     QQuaternion& operator*=(const QBaseVector3 &vVector);
 
-    /// <summary>
+	/// <summary>
     /// Multiply by 4D vector and assign operator.<br/>
     /// The vector is converted into a quaternion \f$ (v_x, v_y, v_z, v_w) \f$ before multiplication.
     /// </summary>
@@ -444,7 +443,7 @@ public:
     /// <returns>
     /// The modified quaternion.
     /// </returns>
-    QQuaternion& operator/=(const float_q fScalar);
+    QQuaternion& operator/=(const float_q &fScalar);
 
     /// <summary>
     /// Assignation operator. Assigns the provided quaternion to the resident quaternion.
@@ -461,9 +460,9 @@ public:
     /// <returns>
     /// A copy of the resident quaternion which has each component multiplied by -1.
     /// </returns>
-    QQuaternion operator-() const;
+	QQuaternion operator-() const;
 
-    /// <summary>
+	/// <summary>
     /// Normalizes the quaternion by dividing all quaternion's components by the quaternion's length.
     /// </summary>
     /// <remarks>
@@ -536,14 +535,13 @@ public:
     /// Calculates the angle between resident quaternion and the provided quaternion, via dot product.
     /// </summary>
     /// <remarks>
-    /// Both quaternions have to be normalized to obtain a more precise value.<br/>
-    /// The result could be not as accurate as expected due to loss of precision when working with angles using floating point numbers.
+    /// Both quaternions have to be normalized to obtain a more precise value.
     /// </remarks>
     /// <param name="qQuat">[IN] Multiplying quaternion.</param>
     /// <returns>
     /// A floating point value which is the smaller angle between quaternions (less or equal to \f$ 180^0\f$).
     /// </returns>
-    float_q AngleBetween(const QQuaternion &qQuat) const;
+    float_q DotProductAngle(const QQuaternion &qQuat) const;
 
     /// <summary>
     /// Calculates the quaternion's conjugate.
@@ -574,7 +572,7 @@ public:
     /// <returns>
     /// The "lerped" quaternion. It's normalized.
     /// </returns>
-    QQuaternion Lerp(const float_q fProportion, const QQuaternion &qQuat) const;
+    QQuaternion Lerp(const float_q &fProportion, const QQuaternion &qQuat) const;
 
     /// <summary>
     /// Calculates the spherical linear interpolation between this quaternion and the input quaternion.
@@ -602,7 +600,7 @@ public:
     /// <returns>
     /// The "lerped" quaternion. If \f$ \beta = 0\f$ or \f$ \beta = \pi\f$, the returned value is the resident quaternion.
     /// </returns>
-    QQuaternion Slerp(const float_q fProportion, const QQuaternion &qQuat) const;
+    QQuaternion Slerp(const float_q &fProportion, const QQuaternion &qQuat) const;
 
     /// <summary>
     /// Calculates the spherical linear interpolation between two normalized quaternions.
@@ -630,7 +628,7 @@ public:
     /// <returns>
     /// The "lerped" quaternion. If \f$ \beta = 0\f$ or \f$ \beta = \pi\f$ (see formulas), the returned value is the resident quaternion.
     /// </returns>
-    QQuaternion UnitSlerp(const float_q fProportion, const QQuaternion &qQuat) const;
+    QQuaternion UnitSlerp(const float_q &fProportion, const QQuaternion &qQuat) const;
 
     /// <summary>
     /// Obtains Euler angles that represent the same rotation than the quaternion does.<br/>
@@ -683,17 +681,17 @@ public:
 
     /// <summary>
     /// Obtains the angle of rotation and the spin axis contained in the resident quaternion.
-    /// </summary>
+	/// </summary>
     /// <remarks>
     /// There are two possible singularities: when rotation angle is 0 or \f$ 180^0\f$.
     /// </remarks>
     /// <param name="vRotationAxis">Vector to store the spin axis.</param>
     /// <param name="fRotationAngle">Angle of rotation.</param>
-    void ToAxisAngle(QBaseVector3 &vRotationAxis, float_q &fRotationAngle) const;
+	void ToAxisAngle(QBaseVector3 &vRotationAxis, float_q &fRotationAngle) const;
 
     /// <summary>
     /// Obtains the angle of rotation and the spin axis contained in the resident quaternion.
-    /// </summary>
+	/// </summary>
     /// <remarks>
     /// There are two possible singularities: when rotation angle is 0 or \f$ 180^0\f$.<br/>
     /// Note that angle and axis haven't to match whatever values were used to create the quaternion from
@@ -701,9 +699,9 @@ public:
     /// </remarks>
     /// <param name="vRotationAxis">Vector to store the spin axis.</param>
     /// <param name="fRotationAngle">Angle of rotation.</param>
-    void ToAxisAngle(QBaseVector4 &vRotationAxis, float_q &fRotationAngle) const;
+	void ToAxisAngle(QBaseVector4 &vRotationAxis, float_q &fRotationAngle) const;
 
-    /// <summary>
+	/// <summary>
     /// Gets a character string that represents the quaternion values.
     /// </summary>
     /// <remarks>

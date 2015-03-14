@@ -35,14 +35,12 @@ using namespace boost::unit_test;
 #include "QBaseMatrix3x4.h"
 #include "SQVF32.h"
 #include "SQFloat.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
 
 QTEST_SUITE_BEGIN( QMatrix3x3_TestSuite )
@@ -290,7 +288,7 @@ QTEST_CASE ( Constructor6_AssertionFailsWhenPointerIsNull_Test )
     {
         QMatrix3x3 vMatrixUT(NULL_ARRAY);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -341,13 +339,13 @@ QTEST_CASE ( Constructor7_MatrixComponentsAreSetToValidVF32PackedValues_Test )
 /// <summary>
 /// Checks that all the elements of the returned matrix equal zero.
 /// </summary>
-QTEST_CASE ( GetNullMatrix_AllElementsEqualZero_Test )
+QTEST_CASE ( GetZeroMatrix_AllElementsEqualZero_Test )
 {
     // [Preparation]
     const float_q EXPECTED_VALUE_FOR_ALL = SQFloat::_0;
 
 	// [Execution]
-    QMatrix3x3 matrixUT = QMatrix3x3::GetNullMatrix();
+    QMatrix3x3 matrixUT = QMatrix3x3::GetZeroMatrix();
 
     // [Verification]
     BOOST_CHECK_EQUAL(matrixUT.ij[0][0], EXPECTED_VALUE_FOR_ALL);
@@ -588,7 +586,7 @@ QTEST_CASE ( OperatorDivision_AssertionFailsWhenScalarEqualsZero_Test )
         QMatrix3x3 vMatrixUT;
         vMatrixUT / ZERO_SCALAR;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -947,7 +945,7 @@ QTEST_CASE ( OperatorDivisionAssignation_AssertionFailsWhenScalarEqualsZero_Test
         QMatrix3x3 vMatrixUT;
         vMatrixUT /= ZERO_SCALAR;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -1158,11 +1156,11 @@ QTEST_CASE ( Transpose_TheRowAndColumOfElementsAreSwapped_Test )
 QTEST_CASE ( IsZero_ReturnsTrueWhenAllElementsEqualZero_Test )
 {
     // [Preparation]
-    const QMatrix3x3 NULL_MATRIX = QMatrix3x3::GetNullMatrix();
+    const QMatrix3x3 ZERO_MATRIX = QMatrix3x3::GetZeroMatrix();
     const bool EXPECTED_VALUE = true;
 
     // [Execution]
-    QMatrix3x3 matrixUT = NULL_MATRIX;
+    QMatrix3x3 matrixUT = ZERO_MATRIX;
     bool bResult = matrixUT.IsZero();
 
     // [Verification]
@@ -1175,11 +1173,11 @@ QTEST_CASE ( IsZero_ReturnsTrueWhenAllElementsEqualZero_Test )
 QTEST_CASE ( IsZero_ReturnsFalseWhenNotAllElementsEqualZero_Test )
 {
     // [Preparation]
-    const QMatrix3x3 NULL_MATRIX = QMatrix3x3::GetNullMatrix();
+    const QMatrix3x3 ZERO_MATRIX = QMatrix3x3::GetZeroMatrix();
     const bool EXPECTED_VALUE = false;
 
     // [Execution]
-    QMatrix3x3 matrixUT = NULL_MATRIX;
+    QMatrix3x3 matrixUT = ZERO_MATRIX;
     bool bAtLeastOneReturnsTrue = false;
 
     matrixUT.ij[0][0] = SQFloat::_1;    bAtLeastOneReturnsTrue |= matrixUT.IsZero();    matrixUT.ij[0][0] = SQFloat::_0;
@@ -1281,11 +1279,11 @@ QTEST_CASE ( GetDeterminant_DeterminantOfIdentityEqualsOne_Test )
 QTEST_CASE ( GetDeterminant_DeterminantOfZeroMatrixEqualsZero_Test )
 {
     // [Preparation]
-    const QMatrix3x3 NULL_MATRIX = QMatrix3x3::GetNullMatrix();
+    const QMatrix3x3 ZERO_MATRIX = QMatrix3x3::GetZeroMatrix();
     const float_q EXPECTED_VALUE = SQFloat::_0;
 
     // [Execution]
-    float_q fResultUT = NULL_MATRIX.GetDeterminant();
+    float_q fResultUT = ZERO_MATRIX.GetDeterminant();
 
     // [Verification]
     BOOST_CHECK_EQUAL(fResultUT, EXPECTED_VALUE);
@@ -1342,7 +1340,7 @@ QTEST_CASE ( HasInverse_ReturnsTrueWhenDeterminantIsNotZero_Test )
 QTEST_CASE ( HasInverse_ReturnsFalseWhenDeterminantIsZero_Test )
 {
     // [Preparation]
-    const QMatrix3x3 MATRIX = QMatrix3x3::GetNullMatrix();
+    const QMatrix3x3 MATRIX = QMatrix3x3::GetZeroMatrix();
     const bool EXPECTED_VALUE = false;
 
     // [Execution]

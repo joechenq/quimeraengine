@@ -26,12 +26,10 @@
 
 #include "QBaseQuaternion.h"
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
 #include "SQFloat.h"
 #include "SQVF32.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 namespace Kinesis
 {
@@ -43,12 +41,12 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QBaseQuaternion::QBaseQuaternion() : x(SQFloat::_0), y(SQFloat::_0), z(SQFloat::_0), w(SQFloat::_0)
@@ -57,14 +55,14 @@ QBaseQuaternion::QBaseQuaternion() : x(SQFloat::_0), y(SQFloat::_0), z(SQFloat::
 
 QBaseQuaternion::QBaseQuaternion(const QBaseQuaternion &qQuat)
 {
-    this->x = qQuat.x;
-    this->y = qQuat.y;
-    this->z = qQuat.z;
-    this->w = qQuat.w;
+	this->x = qQuat.x;
+	this->y = qQuat.y;
+	this->z = qQuat.z;
+	this->w = qQuat.w;
 }
 
-QBaseQuaternion::QBaseQuaternion(const float_q fValueX, const float_q fValueY,
-                                 const float_q fValueZ, const float_q fValueW) :
+QBaseQuaternion::QBaseQuaternion(const float_q &fValueX, const float_q &fValueY,
+                                const float_q &fValueZ, const float_q &fValueW) :
                                        x(fValueX), y(fValueY), z(fValueZ), w(fValueW)
 {
 }
@@ -72,12 +70,12 @@ QBaseQuaternion::QBaseQuaternion(const float_q fValueX, const float_q fValueY,
 QBaseQuaternion::QBaseQuaternion(const float_q* arValues)
 {
     // [REVIEW] Thund: Should we put these constants in another place?
-    static const int QE_X_INDEX_IN_FLOATTYPE_ARRAY = 0;
-    static const int QE_Y_INDEX_IN_FLOATTYPE_ARRAY = 1;
-    static const int QE_Z_INDEX_IN_FLOATTYPE_ARRAY = 2;
-    static const int QE_W_INDEX_IN_FLOATTYPE_ARRAY = 3;
+    const int QE_X_INDEX_IN_FLOATTYPE_ARRAY = 0;
+    const int QE_Y_INDEX_IN_FLOATTYPE_ARRAY = 1;
+    const int QE_Z_INDEX_IN_FLOATTYPE_ARRAY = 2;
+    const int QE_W_INDEX_IN_FLOATTYPE_ARRAY = 3;
 
-    QE_ASSERT_ERROR(arValues != null_q, "Input array must not be null");
+    QE_ASSERT(arValues != null_q)
 
     this->x = arValues[QE_X_INDEX_IN_FLOATTYPE_ARRAY];
     this->y = arValues[QE_Y_INDEX_IN_FLOATTYPE_ARRAY];
@@ -85,9 +83,9 @@ QBaseQuaternion::QBaseQuaternion(const float_q* arValues)
     this->w = arValues[QE_W_INDEX_IN_FLOATTYPE_ARRAY];
 }
 
-QBaseQuaternion::QBaseQuaternion(const vf32_q value)
+QBaseQuaternion::QBaseQuaternion(const vf32_q &value)
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
 
     // Quaternion's components are mapped into the 4x32 pack as configured (see DataTypesDefinitions.h for further information)
     SQVF32::Unpack(value, QE_VF32_FIRST_COMPONENT, QE_VF32_SECOND_COMPONENT, QE_VF32_THIRD_COMPONENT, QE_VF32_FOURTH_COMPONENT);
@@ -95,12 +93,12 @@ QBaseQuaternion::QBaseQuaternion(const vf32_q value)
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 bool QBaseQuaternion::operator==(const QBaseQuaternion &qQuat) const

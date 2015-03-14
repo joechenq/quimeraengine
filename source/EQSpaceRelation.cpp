@@ -36,39 +36,25 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |  ATTRIBUTES INITIALIZATION |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |  ATTRIBUTES INITIALIZATION |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
+EQSpaceRelation::TNameValuePair EQSpaceRelation::sm_arValueName[] =
+    {
+        std::pair<string_q, EQSpaceRelation::EnumType>(QE_L("Contained"),    EQSpaceRelation::E_Contained),
+        std::pair<string_q, EQSpaceRelation::EnumType>(QE_L("PositiveSide"), EQSpaceRelation::E_PositiveSide),
+        std::pair<string_q, EQSpaceRelation::EnumType>(QE_L("NegativeSide"), EQSpaceRelation::E_NegativeSide),
+        std::pair<string_q, EQSpaceRelation::EnumType>(QE_L("BothSides"),    EQSpaceRelation::E_BothSides)
+    };
 
-const char* EQSpaceRelation::sm_arStrings[] = { "Contained", 
-                                                "PositiveSide", 
-                                                "NegativeSide", 
-                                                "BothSides"};
-
-const EQSpaceRelation::EnumType EQSpaceRelation::sm_arValues[] = { EQSpaceRelation::E_Contained,
-                                                                   EQSpaceRelation::E_PositiveSide,
-                                                                   EQSpaceRelation::E_NegativeSide,
-                                                                   EQSpaceRelation::E_BothSides};
-
-
-//##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
-//##################=======================================================##################
-
-unsigned int EQSpaceRelation::_GetNumberOfValues()
-{
-    return sizeof(sm_arValues) / sizeof(EQSpaceRelation::EnumType);
-}
-
+EQSpaceRelation::TNameValueMap EQSpaceRelation::sm_mapValueName(
+        EQSpaceRelation::sm_arValueName ,
+        &EQSpaceRelation::sm_arValueName[0] + sizeof(EQSpaceRelation::sm_arValueName) / sizeof(EQSpaceRelation::sm_arValueName[0])
+    );
 
 } //namespace Math
 } //namespace Tools

@@ -27,15 +27,19 @@
 #ifndef __SQINTEGER__
 #define __SQINTEGER__
 
+#include <stdlib.h>
+#include <boost/lexical_cast.hpp>
+
 #include "DataTypesDefinitions.h"
-#include "CommonDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
 {
 namespace QuimeraEngine
 {
-namespace Common
+namespace Tools
 {
 namespace DataTypes
 {
@@ -43,7 +47,7 @@ namespace DataTypes
 /// <summary>
 /// Helper class that offers functionality related to integer types.
 /// </summary>
-class QE_LAYER_COMMON_SYMBOLS SQInteger
+class QDllExport SQInteger
 {
     // CONSTANTS
     // ---------------
@@ -110,16 +114,16 @@ public:
     static const i64_q MaxNegativeI64_Q;
 
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 private:
 
-    // Default constructor (hidden).
-    SQInteger();
+	// Default constructor (hidden).
+	SQInteger();
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -129,7 +133,7 @@ public:
     /// <returns>
     /// The absolute value, expressed as an 8-bit integer.
     /// </returns>
-    static i8_q Abs(const i8_q nValue);
+    static i8_q Abs(i8_q& nValue);
 
     /// <summary>
     /// Returns the absolute value of a short integer value.
@@ -138,7 +142,7 @@ public:
     /// <returns>
     /// The absolute value, expressed as a short integer.
     /// </returns>
-    static i16_q Abs(const i16_q nValue);
+    static i16_q Abs(const i16_q& nValue);
 
     /// <summary>
     /// Returns the absolute value of an integer value.
@@ -147,7 +151,7 @@ public:
     /// <returns>
     /// The absolute value, expressed as an integer.
     /// </returns>
-    static i32_q Abs(const i32_q nValue);
+    static i32_q Abs(const i32_q& nValue);
 
     /// <summary>
     /// Returns the absolute value of a long integer value.
@@ -156,7 +160,7 @@ public:
     /// <returns>
     /// The absolute value, expressed as a long integer.
     /// </returns>
-    static i64_q Abs(const i64_q nValue);
+    static i64_q Abs(const i64_q& nValue);
 
     /// <summary>
     /// Inverts the order of bytes which compound an integer number and returns the result as output parameter.
@@ -164,22 +168,21 @@ public:
     /// <remarks>
     /// A 32-bits integer number whose value equals to 0xAABBCCDD will be transformed to 0xDDCCBBAA, for example.
     /// </remarks>
-    /// <typeparam name="IntegerT">The integral type passed as argument.</typeparam>
     /// <param name="nValue">[IN] The value whose bytes are to be swapped.</param>
     /// <returns>
     /// The transformed value.
     /// </returns>
-    template<typename IntegerT>
-    static IntegerT SwapEndianess(const IntegerT nValue)
+    template<typename IntegerType>
+    static IntegerType SwapEndianess(const IntegerType &nValue)
     {
-        const unsigned int INTEGER_SIZE = sizeof(IntegerT);
+        const unsigned int INTEGER_SIZE = sizeof(IntegerType);
 
         // Ambiguous type to treat the same bit strip as byte array and integer types
         // Note: The type change is not immediate, it has memory reading/writing cost
         union IntegerOrBytesUnion
         {
-            IntegerT _integer;
-            u8_q     _bytes[INTEGER_SIZE];
+            IntegerType _integer;
+            u8_q        _bytes[INTEGER_SIZE];
         };
 
         IntegerOrBytesUnion srcValue;
@@ -193,11 +196,38 @@ public:
 
         return swappedValue._integer;
     }
-    
+
+    /// <summary>
+    /// Converts the integer number to a readable character string that represents it.
+    /// </summary>
+    /// <param name="nValue">[IN] The integer number to be converted.</param>
+    /// <returns>
+    /// The string that represents the number.
+    /// </returns>
+    template<typename IntegerType>
+    static string_q ToString(const IntegerType &nValue)
+    {
+        string_q strOut = boost::lexical_cast<string_q>(nValue);
+        return strOut;
+    }
+
 };
 
+// SPECIALIZATIONS
+// ---------------
+
+/// <summary>
+/// Converts the integer number to a readable character string that represents it.
+/// </summary>
+/// <param name="nValue">[IN] The integer number to be converted.</param>
+/// <returns>
+/// The string that represents the number.
+/// </returns>
+template<>
+string_q QDllExport SQInteger::ToString<i8_q>(const char &nValue);
+
 } //namespace DataTypes
-} //namespace Common
+} //namespace Tools
 } //namespace QuimeraEngine
 } //namespace Kinesis
 

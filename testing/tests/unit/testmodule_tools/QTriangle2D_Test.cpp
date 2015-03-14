@@ -30,15 +30,15 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QTriangle2D.h"
 
 #include "QTransformationMatrix3x3.h"
 #include "SQAngle.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
 using Kinesis::QuimeraEngine::Tools::Math::QTriangle2D;
 
@@ -50,9 +50,9 @@ QTEST_SUITE_BEGIN( QTriangle2D_TestSuite )
 QTEST_CASE ( Constructor1_DefaultValuesHaveNotChanged_Test )
 {
     // [Preparation]
-    const QVector2 EXPECTED_VALUE_FOR_A = QVector2::GetNullVector();
-    const QVector2 EXPECTED_VALUE_FOR_B = QVector2::GetNullVector();
-    const QVector2 EXPECTED_VALUE_FOR_C = QVector2::GetNullVector();
+    const QVector2 EXPECTED_VALUE_FOR_A = QVector2::GetZeroVector();
+    const QVector2 EXPECTED_VALUE_FOR_B = QVector2::GetZeroVector();
+    const QVector2 EXPECTED_VALUE_FOR_C = QVector2::GetZeroVector();
 
 	// [Execution]
     QTriangle2D triangleUT;
@@ -178,9 +178,9 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test )
 
     try
     {
-        QTriangle2D(NULL_POINTER, VECTOR_COMPONENTS_B, VECTOR_COMPONENTS_C);
+        QTriangle2D triangleUT = QTriangle2D(NULL_POINTER, VECTOR_COMPONENTS_B, VECTOR_COMPONENTS_C);
     }
-    catch(const QAssertException&) 
+    catch(...) 
     {
         bAssertionFailedWhenAIsNull = true;
     }
@@ -189,9 +189,9 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test )
 
     try
     {
-        QTriangle2D(VECTOR_COMPONENTS_A, NULL_POINTER, VECTOR_COMPONENTS_C);
+        QTriangle2D triangleUT = QTriangle2D(VECTOR_COMPONENTS_A, NULL_POINTER, VECTOR_COMPONENTS_C);
     }
-    catch(const QAssertException&) 
+    catch(...) 
     {
         bAssertionFailedWhenBIsNull = true;
     }
@@ -200,9 +200,9 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test )
 
     try
     {
-        QTriangle2D(VECTOR_COMPONENTS_A, VECTOR_COMPONENTS_B, NULL_POINTER);
+        QTriangle2D triangleUT = QTriangle2D(VECTOR_COMPONENTS_A, VECTOR_COMPONENTS_B, NULL_POINTER);
     }
-    catch(const QAssertException&) 
+    catch(...) 
     {
         bAssertionFailedWhenCIsNull = true;
     }
@@ -220,8 +220,8 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test )
 /// </summary>
 QTEST_CASE ( Constructor6_ValuesAreCorrectlySet_Test )
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-    using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
     // [Preparation]
     const QVector2 EXPECTED_VALUE_FOR_A = QVector2(SQFloat::_5, SQFloat::_3);
@@ -341,11 +341,11 @@ QTEST_CASE ( Transform_AllVerticesAreMovedToCoordinateOriginWhenTransfomedByZero
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
 
     // [Preparation]
-    const QVector2 EXPECTED_VALUE_FOR_A = QVector2::GetNullVector();
-    const QVector2 EXPECTED_VALUE_FOR_B = QVector2::GetNullVector();
-    const QVector2 EXPECTED_VALUE_FOR_C = QVector2::GetNullVector();
+    const QVector2 EXPECTED_VALUE_FOR_A = QVector2::GetZeroVector();
+    const QVector2 EXPECTED_VALUE_FOR_B = QVector2::GetZeroVector();
+    const QVector2 EXPECTED_VALUE_FOR_C = QVector2::GetZeroVector();
 
-    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetNullMatrix();
+    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetZeroMatrix();
 
 	// [Execution]
     QTriangle2D triangleUT = QTriangle2D(EXPECTED_VALUE_FOR_A, EXPECTED_VALUE_FOR_B, EXPECTED_VALUE_FOR_C);
@@ -437,7 +437,7 @@ QTEST_CASE ( TransformWithPivot_AllVerticesAreMovedToPivotPointWhenTransformedBy
     const QVector2 VALUE_FOR_B = QVector2(-SQFloat::_1, SQFloat::_9);
     const QVector2 VALUE_FOR_C = QVector2(-SQFloat::_2, SQFloat::_7);
 
-    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetNullMatrix();
+    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetZeroMatrix();
 
     const QVector2 PIVOT_POINT = QVector2(SQFloat::_3, SQFloat::_6);
 
@@ -492,7 +492,7 @@ QTEST_CASE ( GetCircumcenter_AssertionFailsWhenAllPointsCoincide_Test )
     {
         TRIANGLE.GetCircumcenter();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception when implemented
     {
         bAssertionFailed = true;
     }
@@ -544,7 +544,7 @@ QTEST_CASE ( GetOrthocenter_AssertionFailsWhenAllPointsCoincide_Test )
     {
         TRIANGLE.GetOrthocenter();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception when implemented
     {
         bAssertionFailed = true;
     }
@@ -591,7 +591,7 @@ QTEST_CASE ( Translate1_TriangleIsNotTranslatedWhenTranslationIsZero_Test )
     const QVector2 EXPECTED_VALUE_FOR_B = QVector2(SQFloat::_1, SQFloat::_6);
     const QVector2 EXPECTED_VALUE_FOR_C = QVector2(SQFloat::_7, SQFloat::_9);
 
-    const QVector2 TRANSLATION_VECTOR = QVector2::GetNullVector();
+    const QVector2 TRANSLATION_VECTOR = QVector2::GetZeroVector();
 
 	// [Execution]
     QTriangle2D triangleUT = QTriangle2D(EXPECTED_VALUE_FOR_A, EXPECTED_VALUE_FOR_B, EXPECTED_VALUE_FOR_C);
@@ -639,7 +639,7 @@ QTEST_CASE ( Translate2_TriangleIsNotTranslatedWhenTranslationIsZero_Test )
     const QVector2 EXPECTED_VALUE_FOR_B = QVector2(SQFloat::_1, SQFloat::_6);
     const QVector2 EXPECTED_VALUE_FOR_C = QVector2(SQFloat::_7, SQFloat::_9);
 
-    const QVector2 TRANSLATION_VECTOR = QVector2::GetNullVector();
+    const QVector2 TRANSLATION_VECTOR = QVector2::GetZeroVector();
 
 	// [Execution]
     QTriangle2D triangleUT = QTriangle2D(EXPECTED_VALUE_FOR_A, EXPECTED_VALUE_FOR_B, EXPECTED_VALUE_FOR_C);

@@ -30,7 +30,6 @@
 #include <StlHeaders>
 #include <3rdPartyHeaders>
 #include "QEHeaders"
-#include "<LayerName>Definitions.h"
 
 ForwardDeclarations
 
@@ -46,7 +45,7 @@ namespace NAMESPACE
 /// <summary>
 /// [DOC]
 /// </summary>
-class QE_LAYER_<LayerName>_SYMBOLS ClassName
+class QDllExport ClassName
 {
     friends
 
@@ -56,38 +55,38 @@ class QE_LAYER_<LayerName>_SYMBOLS ClassName
 
     enumerations
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    ClassName();
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
+	ClassName();
 
 
-    // DESTRUCTOR
-    // ---------------
+	// DESTRUCTOR
+	// ---------------
 public:
 
-    /// <summary>
-    /// Destructor.
-    /// </summary>
-    virtual ~ClassName();
+	/// <summary>
+	/// Destructor.
+	/// </summary>		
+	virtual ~ClassName();
 
 
-    // METHODS
-    // ---------------
-public:
-
-
-    // PROPERTIES
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
 
-    // ATTRIBUTES
-    // ---------------
+	// PROPERTIES
+	// ---------------
+public:
+
+
+	// ATTRIBUTES
+	// ---------------
 protected:
 
 

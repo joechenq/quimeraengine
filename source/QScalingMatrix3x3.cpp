@@ -26,7 +26,6 @@
 
 #include "QScalingMatrix3x3.h"
 
-#include "Assertions.h"
 #include "QVector3.h"
 #include "QTranslationMatrix.h"
 #include "QRotationMatrix3x3.h"
@@ -35,7 +34,7 @@
 #include "QMatrix4x4.h"
 #include "SQFloat.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -49,12 +48,12 @@ namespace Math
 
     
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
     
 QScalingMatrix3x3::QScalingMatrix3x3()
@@ -70,7 +69,7 @@ QScalingMatrix3x3::QScalingMatrix3x3(const QBaseMatrix3x3 &scale) : QMatrix3x3(s
 {
 }
 
-QScalingMatrix3x3::QScalingMatrix3x3(const float_q fScaleX, const float_q fScaleY, const float_q fScaleZ)
+QScalingMatrix3x3::QScalingMatrix3x3(const float_q &fScaleX, const float_q &fScaleY, const float_q &fScaleZ)
 {
     this->ij[0][0] = fScaleX;
     this->ij[1][1] = fScaleY;
@@ -92,12 +91,12 @@ QScalingMatrix3x3::QScalingMatrix3x3(const QBaseVector3 &vScale)
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QScalingMatrix3x3 QScalingMatrix3x3::operator*(const QScalingMatrix3x3 &matrix) const
@@ -155,7 +154,7 @@ QScalingMatrix3x3& QScalingMatrix3x3::operator=(const QBaseMatrix3x3 &matrix)
 QScalingMatrix3x3 QScalingMatrix3x3::Invert() const
 {
     // If one of the diagonal elements is 0, the matrix has not inverse.
-    QE_ASSERT_WARNING(this->ij[0][0] != SQFloat::_0 && this->ij[1][1] != SQFloat::_0 && this->ij[2][2] != SQFloat::_0, "One of the diagonal elements equals zero, so the matrix has not inverse");
+    QE_ASSERT(this->ij[0][0] != SQFloat::_0 && this->ij[1][1] != SQFloat::_0 && this->ij[2][2] != SQFloat::_0)
 
     return QScalingMatrix3x3(SQFloat::_1 / this->ij[0][0], SQFloat::_1 / this->ij[1][1], SQFloat::_1 / this->ij[2][2]);
 }
@@ -176,7 +175,7 @@ void QScalingMatrix3x3::GetScale(QBaseVector3 &vScale) const
 
 float_q QScalingMatrix3x3::GetDeterminant() const
 {
-    return this->ij[0][0] * this->ij[1][1] * this->ij[2][2];
+	return this->ij[0][0] * this->ij[1][1] * this->ij[2][2];
 }
 
 QScalingMatrix3x3& QScalingMatrix3x3::operator*=(const QScalingMatrix3x3 &matrix)
@@ -188,10 +187,10 @@ QScalingMatrix3x3& QScalingMatrix3x3::operator*=(const QScalingMatrix3x3 &matrix
     return *this;
 }
 
-template <class MatrixT>
-QTransformationMatrix<MatrixT> QScalingMatrix3x3::ProductOperatorImp(const QTranslationMatrix<MatrixT> &matrix) const
+template <class MatrixType>
+QTransformationMatrix<MatrixType> QScalingMatrix3x3::ProductOperatorImp(const QTranslationMatrix<MatrixType> &matrix) const
 {
-    QTransformationMatrix<MatrixT> aux(QTransformationMatrix<MatrixT>::GetIdentity());
+    QTransformationMatrix<MatrixType> aux(QTransformationMatrix<MatrixType>::GetIdentity());
 
     aux.ij[0][0] = this->ij[0][0];
     aux.ij[1][1] = this->ij[1][1];
@@ -210,15 +209,15 @@ QTransformationMatrix<MatrixT> QScalingMatrix3x3::ProductOperatorImp(const QTran
 /// <remarks>
 /// This product is not conmmutative.
 /// </remarks>
-/// <typeparam name="MatrixT">Allowed types: QMatrix4x3, QMatrix4x4.</typeparam>
+/// <typeparam name="MatrixType">Allowed types: QMatrix4x3, QMatrix4x4.</typeparam>
 /// <param name="matrix">[IN] Transformation matrix to be multiplied by.</param>
 /// <returns>
 /// The resultant 4x3 or 4x4 transformation matrix, depending on the method template parameter.
 /// </returns>
-template <class MatrixT>
-QTransformationMatrix<MatrixT> QScalingMatrix3x3::ProductOperatorImp(const QTransformationMatrix<MatrixT> &matrix) const
+template <class MatrixType>
+QTransformationMatrix<MatrixType> QScalingMatrix3x3::ProductOperatorImp(const QTransformationMatrix<MatrixType> &matrix) const
 {
-    QTransformationMatrix<MatrixT> aux(QTransformationMatrix<MatrixT>::GetIdentity());
+    QTransformationMatrix<MatrixType> aux(QTransformationMatrix<MatrixType>::GetIdentity());
 
     aux.ij[3][0] = matrix.ij[3][0];
     aux.ij[3][1] = matrix.ij[3][1];
@@ -241,12 +240,12 @@ QTransformationMatrix<MatrixT> QScalingMatrix3x3::ProductOperatorImp(const QTran
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 const QScalingMatrix3x3& QScalingMatrix3x3::GetIdentity()

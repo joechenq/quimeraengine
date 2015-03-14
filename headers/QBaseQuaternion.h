@@ -28,10 +28,9 @@
 #define __QBASEQUATERNION__
 
 #include "DataTypesDefinitions.h"
-#include "ToolsDefinitions.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 
 
 namespace Kinesis
@@ -46,23 +45,23 @@ namespace Math
 /// <summary>
 /// It represents the basic form of a quaternion with its four components: x, y, z and w.
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS QBaseQuaternion
+class QDllExport QBaseQuaternion
 {
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
     /// <summary>
-    /// Default constructor.
-    /// </summary>
+	/// Default constructor.
+	/// </summary>
     QBaseQuaternion();
 
     /// <summary>
-    /// Copy constructor. Copies attributes from given quaternion.
-    /// </summary>
-    /// <param name="qQuat">[IN] The quaternion from which we want to create a copy in the resident quaternion.</param>
-    QBaseQuaternion(const QBaseQuaternion &qQuat);
+	/// Copy constructor. Copies attributes from given quaternion.
+	/// </summary>
+	/// <param name="qQuat">[IN] The quaternion from which we want to create a copy in the resident quaternion.</param>
+	QBaseQuaternion(const QBaseQuaternion &qQuat);
 
     /// <summary>
     /// Constructor that receives 4 values, one per quaternion's component.
@@ -71,7 +70,7 @@ public:
     /// <param name="fValueY">[IN] Y component value.</param>
     /// <param name="fValueZ">[IN] Z component value.</param>
     /// <param name="fValueW">[IN] W component value.</param>
-    QBaseQuaternion(const float_q fValueX, const float_q fValueY, const float_q fValueZ, const float_q fValueW);
+    QBaseQuaternion(const float_q &fValueX, const float_q &fValueY, const float_q &fValueZ, const float_q &fValueW);
 
     /// <summary>
     /// Constructor that receives a pointer to a sequence of 4 contiguous values, one per quaternion's component.
@@ -88,11 +87,11 @@ public:
     /// The values order is: X, Y, Z and W.
     /// </remarks>
     /// <param name="value">[IN] A four 32 bits floating point types pack.</param>
-    explicit QBaseQuaternion(const vf32_q value);
+    explicit QBaseQuaternion(const vf32_q &value);
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -114,29 +113,29 @@ public:
     bool operator!=(const QBaseQuaternion &qQuat) const;
 
 
-    // ATTRIBUTES
-    // ---------------
+	// ATTRIBUTES
+	// ---------------
 public:
 
-    /// <summary>
-    /// Quaternion's x component.
-    /// </summary>
-    float_q x;
+	/// <summary>
+	/// Quaternion's x component.
+	/// </summary>
+	float_q x;
 
-    /// <summary>
-    /// Quaternion's y component.
-    /// </summary>
-    float_q y;
+	/// <summary>
+	/// Quaternion's y component.
+	/// </summary>
+	float_q y;
 
-    /// <summary>
-    /// Quaternion's z component.
-    /// </summary>
-    float_q z;
+	/// <summary>
+	/// Quaternion's z component.
+	/// </summary>
+	float_q z;
 
-    /// <summary>
-    /// Quaternion's w component.
-    /// </summary>
-    float_q w;
+	/// <summary>
+	/// Quaternion's w component.
+	/// </summary>
+	float_q w;
 };
 
 } //namespace Math

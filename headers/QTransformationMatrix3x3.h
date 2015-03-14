@@ -29,7 +29,7 @@
 
 #include "QMatrix3x3.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 
 
 namespace Kinesis
@@ -44,16 +44,13 @@ namespace Math
 // Forwoard declarations
 // -----------------------
 class QBaseVector2;
-class QTransformationMatrix3x3;
 
-// Preventing friend global operator to be called.
-QTransformationMatrix3x3 operator*(const float_q fScalar, const QTransformationMatrix3x3 &matrix);
 
 /// <summary>
 /// It represents a 3x3 matrix containing spatial transformations relating to translation, rotation and scaling,
 /// applying them to 2D space points.
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS QTransformationMatrix3x3 : public QMatrix3x3
+class QDllExport QTransformationMatrix3x3 : public QMatrix3x3
 {
 
     // CONSTRUCTORS
@@ -88,7 +85,7 @@ public:
     /// <param name="vTranslation">[IN] Vector with the displacement values.</param>
     /// <param name="fRotationAngle">[IN] Angle of rotation.</param>
     /// <param name="vScale">[IN] Vector with the scale values.</param>
-    QTransformationMatrix3x3(const QBaseVector2 &vTranslation, const float_q fRotationAngle, const QBaseVector2 &vScale);
+    QTransformationMatrix3x3(const QBaseVector2 &vTranslation, const float_q &fRotationAngle, const QBaseVector2 &vScale);
 
 
     // PROPERTIES
@@ -158,8 +155,8 @@ public:
     /// Turns the hand convention into opposite rules.
     /// </summary>
     /// <remarks>
-    /// Remember that Quimera Engine works with left-hand convention by default.<br/>
-    /// To do that, we simply invert rotation (by trasposing its submatrix).
+	/// Remember that Quimera Engine works with left-hand convention by default.<br/>
+	/// To do that, we simply invert rotation (by trasposing its submatrix).
     /// </remarks>
     /// <returns>
     /// The switched matrix.
@@ -167,19 +164,6 @@ public:
     QTransformationMatrix3x3 SwitchHandConvention() const;
 
 private:
-
-    // Preventing the operators from base class to be used.
-    QMatrix3x3 operator*(const float_q fScalar) const;
-    QMatrix3x3 operator*(const QBaseMatrix3x3 &matrix) const;
-    QBaseMatrix3x4 operator*(const QBaseMatrix3x4& matrix) const;
-    QMatrix3x3 operator/(const float_q fScalar) const;
-    QMatrix3x3 operator+(const QBaseMatrix3x3 &matrix) const;
-    QMatrix3x3 operator-(const QBaseMatrix3x3 &matrix) const;
-    QMatrix3x3& operator*=(const QBaseMatrix3x3 &matrix);
-    QMatrix3x3& operator*=(const float_q Scalar);
-    QMatrix3x3& operator/=(const float_q fScalar);
-    QMatrix3x3& operator+=(const QBaseMatrix3x3 &matrix);
-    QMatrix3x3& operator-=(const QBaseMatrix3x3 &matrix);
 
     // Hidden method to prevent it could be used.
     void ResetToZero();

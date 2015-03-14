@@ -35,12 +35,10 @@ using namespace boost::unit_test;
 #include "QTransformationMatrix3x3.h"
 #include "SQFloat.h"
 #include "SQAngle.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 using Kinesis::QuimeraEngine::Tools::Math::QQuadrilateral;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
 
@@ -362,7 +360,7 @@ QTEST_CASE ( Contains_AssertionFailsWhenAllVerticesCoincide_Test )
     {
         QUAD.Contains(POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -832,7 +830,7 @@ QTEST_CASE ( Intersection_AssertionFailsWhenAllVerticesCoincide_Test )
     {
         QUAD1.Intersection(QUAD2);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed1 = true;
     }
@@ -843,7 +841,7 @@ QTEST_CASE ( Intersection_AssertionFailsWhenAllVerticesCoincide_Test )
     {
         QUAD2.Intersection(QUAD1);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed2 = true;
     }
@@ -1086,7 +1084,7 @@ QTEST_CASE ( GetAngleA_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD1.GetAngleA();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed1 = true;
     }
@@ -1097,7 +1095,7 @@ QTEST_CASE ( GetAngleA_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD2.GetAngleA();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed2 = true;
     }
@@ -1184,7 +1182,7 @@ QTEST_CASE ( GetAngleB_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD1.GetAngleB();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed1 = true;
     }
@@ -1195,7 +1193,7 @@ QTEST_CASE ( GetAngleB_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD2.GetAngleB();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed2 = true;
     }
@@ -1282,7 +1280,7 @@ QTEST_CASE ( GetAngleC_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD1.GetAngleC();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed1 = true;
     }
@@ -1293,7 +1291,7 @@ QTEST_CASE ( GetAngleC_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD2.GetAngleC();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed2 = true;
     }
@@ -1380,7 +1378,7 @@ QTEST_CASE ( GetAngleD_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD1.GetAngleD();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed1 = true;
     }
@@ -1391,7 +1389,7 @@ QTEST_CASE ( GetAngleD_AssertionFailsWhenContiguousVertexAndCornerCoincide_Test 
     {
         QUAD2.GetAngleD();
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed2 = true;
     }
@@ -1504,7 +1502,7 @@ QTEST_CASE ( Translate1_QuadrilateralIsNotTranslatedWhenTranslationIsZero_Test )
     const QVector2 EXPECTED_VALUE_FOR_C = QVector2(SQFloat::_7, SQFloat::_9);
     const QVector2 EXPECTED_VALUE_FOR_D = QVector2(SQFloat::_3, SQFloat::_5);
 
-    const QVector2 TRANSLATION_VECTOR = QVector2::GetNullVector();
+    const QVector2 TRANSLATION_VECTOR = QVector2::GetZeroVector();
 
     const QQuadrilateral QUAD = QQuadrilateral(EXPECTED_VALUE_FOR_A, EXPECTED_VALUE_FOR_B, EXPECTED_VALUE_FOR_C, EXPECTED_VALUE_FOR_D);
 
@@ -1559,7 +1557,7 @@ QTEST_CASE ( Translate2_QuadrilateralIsNotTranslatedWhenTranslationIsZero_Test )
     const QVector2 EXPECTED_VALUE_FOR_C = QVector2(SQFloat::_7, SQFloat::_9);
     const QVector2 EXPECTED_VALUE_FOR_D = QVector2(SQFloat::_3, SQFloat::_5);
 
-    const QVector2 TRANSLATION_VECTOR = QVector2::GetNullVector();
+    const QVector2 TRANSLATION_VECTOR = QVector2::GetZeroVector();
 
     const QQuadrilateral QUAD = QQuadrilateral(EXPECTED_VALUE_FOR_A, EXPECTED_VALUE_FOR_B, EXPECTED_VALUE_FOR_C, EXPECTED_VALUE_FOR_D);
 
@@ -1639,9 +1637,9 @@ QTEST_CASE ( Scale1_AllVerticesAreMovedToCoordinatesOriginWhenScaleEqualsZero_Te
     const QVector2 POINT_C = QVector2(SQFloat::_7, SQFloat::_5);
     const QVector2 POINT_D = QVector2(SQFloat::_2, SQFloat::_0);
 
-    const QVector2 EXPECTED_VALUE_FOR_ALL = QVector2::GetNullVector();
+    const QVector2 EXPECTED_VALUE_FOR_ALL = QVector2::GetZeroVector();
 
-    const QVector2 SCALING_VECTOR = QVector2::GetNullVector();
+    const QVector2 SCALING_VECTOR = QVector2::GetZeroVector();
 
     const QQuadrilateral QUAD = QQuadrilateral(POINT_A, POINT_B, POINT_C, POINT_D);
 
@@ -1721,9 +1719,9 @@ QTEST_CASE ( Scale2_AllVerticesAreMovedToCoordinatesOriginWhenScaleEqualsZero_Te
     const QVector2 POINT_C = QVector2(SQFloat::_7, SQFloat::_5);
     const QVector2 POINT_D = QVector2(SQFloat::_2, SQFloat::_0);
 
-    const QVector2 EXPECTED_VALUE_FOR_ALL = QVector2::GetNullVector();
+    const QVector2 EXPECTED_VALUE_FOR_ALL = QVector2::GetZeroVector();
 
-    const QVector2 SCALING_VECTOR = QVector2::GetNullVector();
+    const QVector2 SCALING_VECTOR = QVector2::GetZeroVector();
 
     const QQuadrilateral QUAD = QQuadrilateral(POINT_A, POINT_B, POINT_C, POINT_D);
 
@@ -1820,9 +1818,9 @@ QTEST_CASE ( Transform_AllVerticesAreMovedToCoordinateOriginWhenTransfomedByZero
     const QVector2 POINT_C = QVector2(SQFloat::_7, SQFloat::_5);
     const QVector2 POINT_D = QVector2(SQFloat::_2, SQFloat::_0);
 
-    const QVector2 EXPECTED_RESULT_ALL = QVector2::GetNullVector();
+    const QVector2 EXPECTED_RESULT_ALL = QVector2::GetZeroVector();
 
-    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetNullMatrix();
+    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetZeroMatrix();
 
     const QQuadrilateral QUAD = QQuadrilateral(POINT_A, POINT_B, POINT_C, POINT_D);
 
@@ -1966,7 +1964,7 @@ QTEST_CASE ( ScaleWithPivot1_AllVerticesAreMovedToPositionOfPivotWhenScaleEquals
     const QVector2 POINT_C = QVector2(SQFloat::_7, SQFloat::_5);
     const QVector2 POINT_D = QVector2(SQFloat::_2, SQFloat::_0);
 
-    const QVector2 SCALING_VECTOR = QVector2::GetNullVector();
+    const QVector2 SCALING_VECTOR = QVector2::GetZeroVector();
 
     const QQuadrilateral QUAD = QQuadrilateral(POINT_A, POINT_B, POINT_C, POINT_D);
     const QVector2 PIVOT = QVector2(SQFloat::_1, SQFloat::_2);
@@ -2049,7 +2047,7 @@ QTEST_CASE ( ScaleWithPivot2_AllVerticesAreMovedToPositionOfPivotWhenScaleEquals
     const QVector2 POINT_C = QVector2(SQFloat::_7, SQFloat::_5);
     const QVector2 POINT_D = QVector2(SQFloat::_2, SQFloat::_0);
 
-    const QVector2 SCALING_VECTOR = QVector2::GetNullVector();
+    const QVector2 SCALING_VECTOR = QVector2::GetZeroVector();
 
     const QQuadrilateral QUAD = QQuadrilateral(POINT_A, POINT_B, POINT_C, POINT_D);
     const QVector2 PIVOT = QVector2(SQFloat::_1, SQFloat::_2);
@@ -2149,7 +2147,7 @@ QTEST_CASE ( TransformWithPivot_AllVerticesAreMovedToPositionOfPivotWhenTransfom
     const QVector2 POINT_C = QVector2(SQFloat::_7, SQFloat::_5);
     const QVector2 POINT_D = QVector2(SQFloat::_2, SQFloat::_0);
 
-    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetNullMatrix();
+    const QTransformationMatrix3x3 TRANSFORMATION = QMatrix3x3::GetZeroMatrix();
 
     const QQuadrilateral QUAD = QQuadrilateral(POINT_A, POINT_B, POINT_C, POINT_D);
     const QVector2 PIVOT = QVector2(SQFloat::_1, SQFloat::_2);
@@ -2176,17 +2174,9 @@ QTEST_CASE ( ToString_ReturnedFormatMatchesExpected_Test )
                                          QVector2(SQFloat::_1, -SQFloat::_0));
 
 #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("QL(a(V2(0.25,-1.99999999e-06)),b(V2(40000,0)),c(V2(3,2)),d(V2(1,-0)))");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("QL(a(V2(0.25,-1.99999999e-006)),b(V2(40000,0)),c(V2(3,2)),d(V2(1,-0)))");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("QL(a(V2(0.25,-1.99999999e-006)),b(V2(40000,0)),c(V2(3,2)),d(V2(1,-0)))");
 #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("QL(a(V2(0.25,-1.9999999999999999e-06)),b(V2(40000,0)),c(V2(3,2)),d(V2(1,-0)))");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("QL(a(V2(0.25,-1.9999999999999999e-006)),b(V2(40000,0)),c(V2(3,2)),d(V2(1,-0)))");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("QL(a(V2(0.25,-1.9999999999999999e-006)),b(V2(40000,0)),c(V2(3,2)),d(V2(1,-0)))");
 #endif
 
 	// [Execution]

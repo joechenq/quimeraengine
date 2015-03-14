@@ -31,6 +31,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QBasePlane.h"
 #include "QPlane.h"
 #include "QVector3.h"
@@ -43,12 +45,10 @@ using namespace boost::unit_test;
 #include "SQVF32.h"
 #include "SQAngle.h"
 #include "QSpaceConversionMatrix.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 using Kinesis::QuimeraEngine::Tools::Math::QPlane;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 using Kinesis::QuimeraEngine::Tools::Math::QVector4;
@@ -238,9 +238,9 @@ QTEST_CASE ( Constructor6_AssertionFailsWhenPointerIsNull_Test )
 
     try
     {
-        QPlane planeUT(NULL_ARRAY);
+        QPlane planeUT = QPlane(NULL_ARRAY);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -257,8 +257,8 @@ QTEST_CASE ( Constructor6_AssertionFailsWhenPointerIsNull_Test )
 QTEST_CASE ( Constructor7_VectorComponentsAreSetToValidVF32PackedValues_Test )
 {
     // [Preparation]
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-    using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
     const float_q EXPECTED_VALUE_FOR_A = SQFloat::_1;
     const float_q EXPECTED_VALUE_FOR_B = SQFloat::_2;
@@ -327,7 +327,7 @@ QTEST_CASE ( Constructor8_AssertionFailsWhenAnyOfThePointsCoincide_Test )
     {
         QPlane(SAME_POINT, SAME_POINT, DIFFERENT_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed1 = true;
     }
@@ -338,7 +338,7 @@ QTEST_CASE ( Constructor8_AssertionFailsWhenAnyOfThePointsCoincide_Test )
     {
         QPlane(DIFFERENT_POINT, SAME_POINT, SAME_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed2 = true;
     }
@@ -349,7 +349,7 @@ QTEST_CASE ( Constructor8_AssertionFailsWhenAnyOfThePointsCoincide_Test )
     {
         QPlane(SAME_POINT, DIFFERENT_POINT, SAME_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed3 = true;
     }
@@ -381,7 +381,7 @@ QTEST_CASE ( Constructor8_AssertionFailsWhenPointsAreCollinear_Test )
     {
         QPlane(POINT1, POINT2, POINT3);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed = true;
     }
@@ -508,7 +508,7 @@ QTEST_CASE ( Constructor9_AssertionFailsWhenAnyOfThePointsCoincides_Test )
     {
         QPlane(SAME_POINT, SAME_POINT, DIFFERENT_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed1 = true;
     }
@@ -519,7 +519,7 @@ QTEST_CASE ( Constructor9_AssertionFailsWhenAnyOfThePointsCoincides_Test )
     {
         QPlane(DIFFERENT_POINT, SAME_POINT, SAME_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed2 = true;
     }
@@ -530,7 +530,7 @@ QTEST_CASE ( Constructor9_AssertionFailsWhenAnyOfThePointsCoincides_Test )
     {
         QPlane(SAME_POINT, DIFFERENT_POINT, SAME_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed3 = true;
     }
@@ -562,7 +562,7 @@ QTEST_CASE ( Constructor9_AssertionFailsWhenPointsAreCollinear_Test )
     {
         QPlane(POINT1, POINT2, POINT3);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined
     {
         bAssertionFailed = true;
     }
@@ -643,7 +643,7 @@ QTEST_CASE ( Constructor9_OrderOfPointsAffectsResult_Test )
 /// <summary>
 /// Checks that the expected value is returned.
 /// </summary>
-QTEST_CASE_TEMPLATE ( GetNullPlane_ExpectedValueIsReturned_Test, TQVectorTypes )
+QTEST_CASE_TEMPLATE ( GetZeroPlane_ExpectedValueIsReturned_Test, TQVectorTypes )
 {
     // [Preparation]
     const float_q EXPECTED_VALUE_FOR_A = SQFloat::_0;
@@ -652,7 +652,7 @@ QTEST_CASE_TEMPLATE ( GetNullPlane_ExpectedValueIsReturned_Test, TQVectorTypes )
     const float_q EXPECTED_VALUE_FOR_D = SQFloat::_0;
 
 	// [Execution]
-    QPlane planeUT = QPlane::GetNullPlane();
+    QPlane planeUT = QPlane::GetZeroPlane();
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreEqual(planeUT.a, EXPECTED_VALUE_FOR_A) );
@@ -908,7 +908,7 @@ QTEST_CASE ( Normalize_AssertionFailsWhenNullPlaneIsToBeNormalized_Test )
     {
         PLANE.Normalize();
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -968,10 +968,10 @@ QTEST_CASE ( DotProduct1_ReturnsZeroWhenAOperandIsNull_Test )
     const float_q EXPECTED_RESULT = SQFloat::_0;
 
     const QPlane NONNULL_PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
 
     const QVector3 NONNULL_VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
-    const QVector3 NULL_VECTOR = QVector3::GetNullVector();
+    const QVector3 NULL_VECTOR = QVector3::GetZeroVector();
 
 	// [Execution]
     float_q fResult1UT = NONNULL_PLANE.DotProduct(NULL_VECTOR);
@@ -1031,10 +1031,10 @@ QTEST_CASE ( DotProduct2_ReturnsZeroWhenAOperandIsNull_Test )
     const float_q EXPECTED_RESULT = SQFloat::_0;
 
     const QPlane NONNULL_PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
 
     const QVector4 NONNULL_VECTOR = QVector4(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
-    const QVector4 NULL_VECTOR = QVector4::GetNullVector();
+    const QVector4 NULL_VECTOR = QVector4::GetZeroVector();
 
 	// [Execution]
     float_q fResult1UT = NONNULL_PLANE.DotProduct(NULL_VECTOR);
@@ -1130,7 +1130,7 @@ QTEST_CASE ( DotProduct3_ReturnsZeroWhenAOperandIsNullplane_Test )
     const float_q EXPECTED_RESULT = SQFloat::_0;
 
     const QPlane NONNULL_PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
 
 	// [Execution]
     float_q fResult1UT = NONNULL_PLANE.DotProduct(NULL_PLANE);
@@ -1144,7 +1144,7 @@ QTEST_CASE ( DotProduct3_ReturnsZeroWhenAOperandIsNullplane_Test )
 /// <summary>
 /// Checks that the returned angle result for a common vector and a plane equals the expected value.
 /// </summary>
-QTEST_CASE ( AngleBetween1_ReturnsAngleBetweenCommonVectorAndPlane_Test )
+QTEST_CASE ( DotProductAngle1_ReturnsAngleBetweenCommonVectorAndPlane_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1161,7 +1161,7 @@ QTEST_CASE ( AngleBetween1_ReturnsAngleBetweenCommonVectorAndPlane_Test )
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_1, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreEqual(fResultUT, EXPECTED_RESULT) );
@@ -1170,7 +1170,7 @@ QTEST_CASE ( AngleBetween1_ReturnsAngleBetweenCommonVectorAndPlane_Test )
 /// <summary>
 /// Checks that the angle equals zero when the normal of the plane and the vector are parallel.
 /// </summary>
-QTEST_CASE ( AngleBetween1_AngleEqualsZeroWhenVectorAndPlaneNormalAreParallel_Test )
+QTEST_CASE ( DotProductAngle1_AngleEqualsZeroWhenVectorAndPlaneNormalAreParallel_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1181,16 +1181,16 @@ QTEST_CASE ( AngleBetween1_AngleEqualsZeroWhenVectorAndPlaneNormalAreParallel_Te
     const QVector3 VECTOR = QVector3(SQFloat::_9, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
-/// Checks that the angle equals PI/2 (or 90ยบ) when the normal of the plane and the vector are orthogonal.
+/// Checks that the angle equals PI/2 (or 90บ) when the normal of the plane and the vector are orthogonal.
 /// </summary>
-QTEST_CASE ( AngleBetween1_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorAndPlaneNormalAreOrthogonal_Test )
+QTEST_CASE ( DotProductAngle1_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorAndPlaneNormalAreOrthogonal_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1207,16 +1207,16 @@ QTEST_CASE ( AngleBetween1_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorAndPlane
     const QVector3 VECTOR = QVector3(SQFloat::_0, SQFloat::_5, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
-/// Checks that the angle equals Pi (or 180ยบ) when vector and the normal of the plane are opposite.
+/// Checks that the angle equals Pi (or 180บ) when vector and the normal of the plane are opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween1_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreOpposite_Test )
+QTEST_CASE ( DotProductAngle1_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreOpposite_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1233,7 +1233,7 @@ QTEST_CASE ( AngleBetween1_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNor
     const QVector3 VECTOR = QVector3(-SQFloat::_1, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
@@ -1242,18 +1242,18 @@ QTEST_CASE ( AngleBetween1_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNor
 /// <summary>
 /// Checks that the angle is always positive.
 /// </summary>
-QTEST_CASE ( AngleBetween1_AngleIsAlwaysPositive_Test )
+QTEST_CASE ( DotProductAngle1_AngleIsAlwaysPositive_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
     // [Preparation]
     const QPlane REFERENCE_OPERAND = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);                       // _
     const QVector3 OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, SQFloat::_1, SQFloat::_0);  // \_
-    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /ยจ
+    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsGreaterOrEquals(fResult1UT, SQFloat::_0) );
@@ -1261,9 +1261,9 @@ QTEST_CASE ( AngleBetween1_AngleIsAlwaysPositive_Test )
 }
 
 /// <summary>
-/// Checks that the angle is lower than Pi (or 180ยบ) when vector and the normal of the plane are not opposite.
+/// Checks that the angle is lower than Pi (or 180บ) when vector and the normal of the plane are not opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween1_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreNotOpposite_Test )
+QTEST_CASE ( DotProductAngle1_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreNotOpposite_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1278,11 +1278,11 @@ QTEST_CASE ( AngleBetween1_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPla
 
     const QPlane REFERENCE_OPERAND = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);                       // _
     const QVector3 OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, SQFloat::_1, SQFloat::_0);  // \_
-    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /ยจ
+    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsLessThan(fResult1UT, HALF_CIRCUMFERENCE_ANGLE) );
@@ -1292,7 +1292,7 @@ QTEST_CASE ( AngleBetween1_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPla
 /// <summary>
 /// Checks that the operation returns a different angle when the plane is not normalized.
 /// </summary>
-QTEST_CASE ( AngleBetween1_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
+QTEST_CASE ( DotProductAngle1_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1304,8 +1304,8 @@ QTEST_CASE ( AngleBetween1_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_1, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultWhenNormalized = NORMALIZED_PLANE.AngleBetween(VECTOR);
-    float_q fResultWhenNotNormalized = NOT_NORMALIZED_PLANE.AngleBetween(VECTOR);
+    float_q fResultWhenNormalized = NORMALIZED_PLANE.DotProductAngle(VECTOR);
+    float_q fResultWhenNotNormalized = NOT_NORMALIZED_PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreNotEqual(fResultWhenNormalized, fResultWhenNotNormalized) );
@@ -1316,7 +1316,7 @@ QTEST_CASE ( AngleBetween1_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
 /// <summary>
 /// Checks that an assertion fails when either the plane or the vector is null.
 /// </summary>
-QTEST_CASE ( AngleBetween1_AssertionFailsWhenPlaneOrVectorIsNull_Test )
+QTEST_CASE ( DotProductAngle1_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
@@ -1332,9 +1332,9 @@ QTEST_CASE ( AngleBetween1_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 
     try
     {
-        NULL_PLANE.AngleBetween(NONNULL_VECTOR);
+        NULL_PLANE.DotProductAngle(NONNULL_VECTOR);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed1 = true;
     }
@@ -1343,9 +1343,9 @@ QTEST_CASE ( AngleBetween1_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 
     try
     {
-        NONNULL_PLANE.AngleBetween(NULL_VECTOR);
+        NONNULL_PLANE.DotProductAngle(NULL_VECTOR);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed2 = true;
     }
@@ -1362,7 +1362,7 @@ QTEST_CASE ( AngleBetween1_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 /// <summary>
 /// Checks that the returned angle result for a common vector and a plane equals the expected value.
 /// </summary>
-QTEST_CASE ( AngleBetween2_ReturnsAngleBetweenCommonVectorAndPlane_Test )
+QTEST_CASE ( DotProductAngle2_ReturnsAngleBetweenCommonVectorAndPlane_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1379,7 +1379,7 @@ QTEST_CASE ( AngleBetween2_ReturnsAngleBetweenCommonVectorAndPlane_Test )
     const QVector4 VECTOR = QVector4(SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_1);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreEqual(fResultUT, EXPECTED_RESULT) );
@@ -1388,7 +1388,7 @@ QTEST_CASE ( AngleBetween2_ReturnsAngleBetweenCommonVectorAndPlane_Test )
 /// <summary>
 /// Checks that the angle equals zero when the normal of the plane and the vector are parallel.
 /// </summary>
-QTEST_CASE ( AngleBetween2_AngleEqualsZeroWhenVectorAndPlaneNormalAreParallel_Test )
+QTEST_CASE ( DotProductAngle2_AngleEqualsZeroWhenVectorAndPlaneNormalAreParallel_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1399,16 +1399,16 @@ QTEST_CASE ( AngleBetween2_AngleEqualsZeroWhenVectorAndPlaneNormalAreParallel_Te
     const QVector4 VECTOR = QVector4(SQFloat::_9, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
-/// Checks that the angle equals PI/2 (or 90ยบ) when the normal of the plane and the vector are orthogonal.
+/// Checks that the angle equals PI/2 (or 90บ) when the normal of the plane and the vector are orthogonal.
 /// </summary>
-QTEST_CASE ( AngleBetween2_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorAndPlaneNormalAreOrthogonal_Test )
+QTEST_CASE ( DotProductAngle2_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorAndPlaneNormalAreOrthogonal_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1425,16 +1425,16 @@ QTEST_CASE ( AngleBetween2_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorAndPlane
     const QVector4 VECTOR = QVector4(SQFloat::_0, SQFloat::_5, SQFloat::_0, SQFloat::_1);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
-/// Checks that the angle equals Pi (or 180ยบ) when vector and the normal of the plane are opposite.
+/// Checks that the angle equals Pi (or 180บ) when vector and the normal of the plane are opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween2_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreOpposite_Test )
+QTEST_CASE ( DotProductAngle2_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreOpposite_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1451,7 +1451,7 @@ QTEST_CASE ( AngleBetween2_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNor
     const QVector4 VECTOR = QVector4(-SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_1);
 
 	// [Execution]
-    float_q fResultUT = PLANE.AngleBetween(VECTOR);
+    float_q fResultUT = PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
@@ -1460,18 +1460,18 @@ QTEST_CASE ( AngleBetween2_AngleEqualsPiRadiansOr180DegreesWhenVectorAndPlaneNor
 /// <summary>
 /// Checks that the angle is always positive.
 /// </summary>
-QTEST_CASE ( AngleBetween2_AngleIsAlwaysPositive_Test )
+QTEST_CASE ( DotProductAngle2_AngleIsAlwaysPositive_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
     // [Preparation]
     const QPlane REFERENCE_OPERAND = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);                                    // _
     const QVector4 OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QVector4(-SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_1);  // \_
-    const QVector4 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector4(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_1); // /ยจ
+    const QVector4 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector4(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_1); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsGreaterOrEquals(fResult1UT, SQFloat::_0) );
@@ -1479,9 +1479,9 @@ QTEST_CASE ( AngleBetween2_AngleIsAlwaysPositive_Test )
 }
 
 /// <summary>
-/// Checks that the angle is lower than Pi (or 180ยบ) when vector and the normal of the plane are not opposite.
+/// Checks that the angle is lower than Pi (or 180บ) when vector and the normal of the plane are not opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween2_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreNotOpposite_Test )
+QTEST_CASE ( DotProductAngle2_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPlaneNormalAreNotOpposite_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1496,11 +1496,11 @@ QTEST_CASE ( AngleBetween2_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPla
 
     const QPlane REFERENCE_OPERAND = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);                                    // _
     const QVector4 OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QVector4(-SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_1);  // \_
-    const QVector4 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector4(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_1); // /ยจ
+    const QVector4 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector4(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_1); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsLessThan(fResult1UT, HALF_CIRCUMFERENCE_ANGLE) );
@@ -1510,7 +1510,7 @@ QTEST_CASE ( AngleBetween2_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorAndPla
 /// <summary>
 /// Checks that the operation returns a different angle when the plane is not normalized.
 /// </summary>
-QTEST_CASE ( AngleBetween2_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
+QTEST_CASE ( DotProductAngle2_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1522,8 +1522,8 @@ QTEST_CASE ( AngleBetween2_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
     const QVector4 VECTOR = QVector4(SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_1);
 
 	// [Execution]
-    float_q fResultWhenNormalized = NORMALIZED_PLANE.AngleBetween(VECTOR);
-    float_q fResultWhenNotNormalized = NOT_NORMALIZED_PLANE.AngleBetween(VECTOR);
+    float_q fResultWhenNormalized = NORMALIZED_PLANE.DotProductAngle(VECTOR);
+    float_q fResultWhenNotNormalized = NOT_NORMALIZED_PLANE.DotProductAngle(VECTOR);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreNotEqual(fResultWhenNormalized, fResultWhenNotNormalized) );
@@ -1534,7 +1534,7 @@ QTEST_CASE ( AngleBetween2_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
 /// <summary>
 /// Checks that an assertion fails when either the plane or the vector is null.
 /// </summary>
-QTEST_CASE ( AngleBetween2_AssertionFailsWhenPlaneOrVectorIsNull_Test )
+QTEST_CASE ( DotProductAngle2_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1550,9 +1550,9 @@ QTEST_CASE ( AngleBetween2_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 
     try
     {
-        NULL_PLANE.AngleBetween(NONNULL_VECTOR);
+        NULL_PLANE.DotProductAngle(NONNULL_VECTOR);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed1 = true;
     }
@@ -1561,9 +1561,9 @@ QTEST_CASE ( AngleBetween2_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 
     try
     {
-        NONNULL_PLANE.AngleBetween(NULL_VECTOR);
+        NONNULL_PLANE.DotProductAngle(NULL_VECTOR);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed2 = true;
     }
@@ -1580,7 +1580,7 @@ QTEST_CASE ( AngleBetween2_AssertionFailsWhenPlaneOrVectorIsNull_Test )
 /// <summary>
 /// Checks that the W component doesn't take part in the dot product operation.
 /// </summary>
-QTEST_CASE ( AngleBetween2_VectorsWComponentDoesntTakePartInTheOperation_Test )
+QTEST_CASE ( DotProductAngle2_VectorsWComponentDoesntTakePartInTheOperation_Test )
 {
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
@@ -1590,8 +1590,8 @@ QTEST_CASE ( AngleBetween2_VectorsWComponentDoesntTakePartInTheOperation_Test )
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResult1UT = PLANE.AngleBetween(VECTOR1);
-    float_q fResult2UT = PLANE.AngleBetween(VECTOR2);
+    float_q fResult1UT = PLANE.DotProductAngle(VECTOR1);
+    float_q fResult2UT = PLANE.DotProductAngle(VECTOR2);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, fResult2UT );
@@ -1600,7 +1600,7 @@ QTEST_CASE ( AngleBetween2_VectorsWComponentDoesntTakePartInTheOperation_Test )
 /// <summary>
 /// Checks that the returned angle result for 2 common planes equals the expected value.
 /// </summary>
-QTEST_CASE ( AngleBetween3_ReturnsAngleBetween2CommonPlanes_Test )
+QTEST_CASE ( DotProductAngle3_ReturnsAngleBetween2CommonPlanes_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1616,7 +1616,7 @@ QTEST_CASE ( AngleBetween3_ReturnsAngleBetween2CommonPlanes_Test )
     const QPlane OPERAND2 = QPlane(SQFloat::_0, SQFloat::_1, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreEqual(fResultUT, EXPECTED_RESULT) );
@@ -1625,7 +1625,7 @@ QTEST_CASE ( AngleBetween3_ReturnsAngleBetween2CommonPlanes_Test )
 /// <summary>
 /// Checks that the W component doesn't take part in the dot product operation.
 /// </summary>
-QTEST_CASE ( AngleBetween3_DComponentDoesNotTakePartInTheOperation_Test )
+QTEST_CASE ( DotProductAngle3_DComponentDoesNotTakePartInTheOperation_Test )
 {
     // [Preparation]
     QPlane OPERAND1 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
@@ -1636,8 +1636,8 @@ QTEST_CASE ( AngleBetween3_DComponentDoesNotTakePartInTheOperation_Test )
     OPERAND3 = OPERAND3.Normalize();
 
 	// [Execution]
-    float_q fResult1UT = OPERAND1.AngleBetween(OPERAND2);
-    float_q fResult2UT = OPERAND1.AngleBetween(OPERAND3);
+    float_q fResult1UT = OPERAND1.DotProductAngle(OPERAND2);
+    float_q fResult2UT = OPERAND1.DotProductAngle(OPERAND3);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, fResult2UT );
@@ -1646,7 +1646,7 @@ QTEST_CASE ( AngleBetween3_DComponentDoesNotTakePartInTheOperation_Test )
 /// <summary>
 /// Checks that the "get angle from dot product" is commutative.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
+QTEST_CASE ( DotProductAngle3_DotProductAngleIsCommutative_Test )
 {
     // [Preparation]
     QPlane OPERAND1 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
@@ -1655,8 +1655,8 @@ QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
     OPERAND2 = OPERAND2.Normalize();
 
 	// [Execution]
-    float_q fResult1UT = OPERAND1.AngleBetween(OPERAND2);
-    float_q fResult2UT = OPERAND2.AngleBetween(OPERAND1);
+    float_q fResult1UT = OPERAND1.DotProductAngle(OPERAND2);
+    float_q fResult2UT = OPERAND2.DotProductAngle(OPERAND1);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, fResult2UT );
@@ -1665,7 +1665,7 @@ QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
 /// <summary>
 /// Checks that the angle equals zero when planes are parallel.
 /// </summary>
-QTEST_CASE ( AngleBetween3_AngleEqualsZeroWhenPlanesAreParallel_Test )
+QTEST_CASE ( DotProductAngle3_AngleEqualsZeroWhenPlanesAreParallel_Test )
 {
     // [Preparation]
     const float_q EXPECTED_RESULT = SQFloat::_0;
@@ -1674,16 +1674,16 @@ QTEST_CASE ( AngleBetween3_AngleEqualsZeroWhenPlanesAreParallel_Test )
     const QPlane OPERAND2 = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_2);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
-/// Checks that the angle equals PI/2 (or 90ยบ) when planes are orthogonal.
+/// Checks that the angle equals PI/2 (or 90บ) when planes are orthogonal.
 /// </summary>
-QTEST_CASE ( AngleBetween3_AngleEqualsHalfPiRadiansOr90DegreesWhenPlanesAreOrthogonal_Test )
+QTEST_CASE ( DotProductAngle3_AngleEqualsHalfPiRadiansOr90DegreesWhenPlanesAreOrthogonal_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1699,8 +1699,8 @@ QTEST_CASE ( AngleBetween3_AngleEqualsHalfPiRadiansOr90DegreesWhenPlanesAreOrtho
     const QPlane OPERAND3 = QPlane(SQFloat::_0, SQFloat::_0, SQFloat::_1, SQFloat::_0);
 
 	// [Execution]
-    float_q fResult1UT = OPERAND1.AngleBetween(OPERAND2);
-    float_q fResult2UT = OPERAND2.AngleBetween(OPERAND3);
+    float_q fResult1UT = OPERAND1.DotProductAngle(OPERAND2);
+    float_q fResult2UT = OPERAND2.DotProductAngle(OPERAND3);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, EXPECTED_RESULT );
@@ -1708,9 +1708,9 @@ QTEST_CASE ( AngleBetween3_AngleEqualsHalfPiRadiansOr90DegreesWhenPlanesAreOrtho
 }
 
 /// <summary>
-/// Checks that the angle equals Pi (or 180ยบ) when plane normals are opposite.
+/// Checks that the angle equals Pi (or 180บ) when plane normals are opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween3_AngleEqualsPiRadiansOr180DegreesWhenPlaneNormalsAreOpposite_Test )
+QTEST_CASE ( DotProductAngle3_AngleEqualsPiRadiansOr180DegreesWhenPlaneNormalsAreOpposite_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1725,7 +1725,7 @@ QTEST_CASE ( AngleBetween3_AngleEqualsPiRadiansOr180DegreesWhenPlaneNormalsAreOp
     const QPlane OPERAND2 = QPlane(-SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
@@ -1734,16 +1734,16 @@ QTEST_CASE ( AngleBetween3_AngleEqualsPiRadiansOr180DegreesWhenPlaneNormalsAreOp
 /// <summary>
 /// Checks that the angle is always positive.
 /// </summary>
-QTEST_CASE ( AngleBetween3_AngleIsAlwaysPositive_Test )
+QTEST_CASE ( DotProductAngle3_AngleIsAlwaysPositive_Test )
 {
     // [Preparation]
     const QPlane REFERENCE_OPERAND = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);                                // _
     const QPlane OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QPlane(-SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_0);  // \_
-    const QPlane OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QPlane(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_0); // /ยจ
+    const QPlane OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QPlane(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_0); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsGreaterOrEquals(fResult1UT, SQFloat::_0) );
@@ -1751,9 +1751,9 @@ QTEST_CASE ( AngleBetween3_AngleIsAlwaysPositive_Test )
 }
 
 /// <summary>
-/// Checks that the angle is lower than Pi (or 180ยบ) when plane normals are not opposite.
+/// Checks that the angle is lower than Pi (or 180บ) when plane normals are not opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween3_AngleIsLowerThanPiRadiansOr180DegreesWhenPlaneNormalsAreNotOpposite_Test )
+QTEST_CASE ( DotProductAngle3_AngleIsLowerThanPiRadiansOr180DegreesWhenPlaneNormalsAreNotOpposite_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1766,13 +1766,13 @@ QTEST_CASE ( AngleBetween3_AngleIsLowerThanPiRadiansOr180DegreesWhenPlaneNormals
 
     const QPlane REFERENCE_OPERAND = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);                          // _
     QPlane OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QPlane(-SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_0);  // \_
-    QPlane OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QPlane(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_0); // /ยจ
+    QPlane OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QPlane(-SQFloat::_1, -SQFloat::_1, SQFloat::_0, SQFloat::_0); // /จ
     OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE.Normalize();
     OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE.Normalize();
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsLessThan(fResult1UT, HALF_CIRCUMFERENCE_ANGLE) );
@@ -1782,7 +1782,7 @@ QTEST_CASE ( AngleBetween3_AngleIsLowerThanPiRadiansOr180DegreesWhenPlaneNormals
 /// <summary>
 /// Checks that the operation returns a different angle when the plane is not normalized.
 /// </summary>
-QTEST_CASE ( AngleBetween3_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
+QTEST_CASE ( DotProductAngle3_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1792,8 +1792,8 @@ QTEST_CASE ( AngleBetween3_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultWhenNormalized = NORMALIZED_PLANE.AngleBetween(PLANE);
-    float_q fResultWhenNotNormalized = NOT_NORMALIZED_PLANE.AngleBetween(PLANE);
+    float_q fResultWhenNormalized = NORMALIZED_PLANE.DotProductAngle(PLANE);
+    float_q fResultWhenNotNormalized = NOT_NORMALIZED_PLANE.DotProductAngle(PLANE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreNotEqual(fResultWhenNormalized, fResultWhenNotNormalized) );
@@ -1804,7 +1804,7 @@ QTEST_CASE ( AngleBetween3_ReturnsDifferentAngleWhenPlaneIsNotNormalized_Test )
 /// <summary>
 /// Checks that an assertion fails when one of the planes is null.
 /// </summary>
-QTEST_CASE ( AngleBetween3_AssertionFailsWhenOnePlaneIsNull_Test )
+QTEST_CASE ( DotProductAngle3_AssertionFailsWhenOnePlaneIsNull_Test )
 {
     // [Preparation]
     const QPlane NOT_NULL_PLANE = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_0);
@@ -1816,9 +1816,9 @@ QTEST_CASE ( AngleBetween3_AssertionFailsWhenOnePlaneIsNull_Test )
 
     try
     {
-        NOT_NULL_PLANE.AngleBetween(NULL_PLANE);
+        NOT_NULL_PLANE.DotProductAngle(NULL_PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed1 = true;
     }
@@ -1827,9 +1827,9 @@ QTEST_CASE ( AngleBetween3_AssertionFailsWhenOnePlaneIsNull_Test )
 
     try
     {
-        NULL_PLANE.AngleBetween(NOT_NULL_PLANE);
+        NULL_PLANE.DotProductAngle(NOT_NULL_PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed2 = true;
     }
@@ -1908,7 +1908,7 @@ QTEST_CASE_TEMPLATE ( PointProjection_PointsBehindThePlaneAreCorrectlyProjected_
 QTEST_CASE_TEMPLATE ( PointProjection_AssertionFailsWhenPlaneIsNull_Test, TQVectorTypes )
 {
     // [Preparation]
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     const T POINT;
     const bool ASSERTION_FAILED = true;
 
@@ -1919,7 +1919,7 @@ QTEST_CASE_TEMPLATE ( PointProjection_AssertionFailsWhenPlaneIsNull_Test, TQVect
     {
         NULL_PLANE.PointProjection(POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2053,7 +2053,7 @@ QTEST_CASE_TEMPLATE ( Contains_PlaneNormalizationDoesNotAffectResult_Test, TQVec
 QTEST_CASE_TEMPLATE ( Contains_AssertionFailsWhenPlaneIsNull_Test, TQVectorTypes )
 {
     // [Preparation]
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     const T POINT;
     const bool ASSERTION_FAILED = true;
 
@@ -2064,7 +2064,7 @@ QTEST_CASE_TEMPLATE ( Contains_AssertionFailsWhenPlaneIsNull_Test, TQVectorTypes
     {
         NULL_PLANE.PointProjection(POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2131,7 +2131,7 @@ QTEST_CASE ( GetLength_ReturnsOneWhenPlaneIsNormalized_Test )
 QTEST_CASE ( GetLength_ReturnsZeroWhenPlaneIsNull_Test )
 {
     // [Preparation]
-    const QPlane PLANE = QPlane::GetNullPlane();
+    const QPlane PLANE = QPlane::GetZeroPlane();
     const float_q EXPECTED_LENGTH = SQFloat::_0;
 
 	// [Execution]
@@ -2196,7 +2196,7 @@ QTEST_CASE ( GetSquaredLength_ReturnsOneWhenPlaneIsNormalized_Test )
 QTEST_CASE ( GetSquaredLength_ReturnsZeroWhenPlaneIsNull_Test )
 {
     // [Preparation]
-    const QPlane PLANE = QPlane::GetNullPlane();
+    const QPlane PLANE = QPlane::GetZeroPlane();
     const float_q EXPECTED_LENGTH = SQFloat::_0;
 
 	// [Execution]
@@ -2354,7 +2354,7 @@ QTEST_CASE_TEMPLATE ( PointDistance_ResultIsTheSameWhenPlaneIsNotNormalized_Test
 QTEST_CASE_TEMPLATE ( PointDistance_AssertionFailsWhenPlaneIsNull_Test, TQVectorTypes )
 {
     // [Preparation]
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     const T POINT;
     const bool ASSERTION_FAILED = true;
 
@@ -2365,7 +2365,7 @@ QTEST_CASE_TEMPLATE ( PointDistance_AssertionFailsWhenPlaneIsNull_Test, TQVector
     {
         NULL_PLANE.PointDistance(POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2410,7 +2410,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenThreePlanesC
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4).Normalize();
     const QPlane PLANE2 = PLANE1;
     const QPlane PLANE3 = PLANE1;
@@ -2449,7 +2449,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsInfiniteWhenThreePlanesCoincide_T
     EQIntersections eResult = PLANE1.IntersectionPoint(PLANE2, PLANE3, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2466,7 +2466,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenTwoPlanesCoi
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4).Normalize();
     const QPlane PLANE2 = PLANE1;
     const QPlane PLANE3 = QPlane(SQFloat::_3, SQFloat::_2, SQFloat::_1, SQFloat::_4).Normalize();
@@ -2525,12 +2525,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsInfiniteWhenTwoPlanesCoincideAndT
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2547,7 +2547,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenTwoPlanesCoi
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4).Normalize();
     const QPlane PLANE2 = PLANE1;
     const QPlane PLANE3 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_5).Normalize();
@@ -2606,12 +2606,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsNoneWhenTwoPlanesCoincideAndTheOt
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2628,7 +2628,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenTheThreePlan
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4).Normalize();
     const QPlane PLANE2 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_5).Normalize();
     const QPlane PLANE3 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_6).Normalize();
@@ -2687,12 +2687,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsNoneTheThreePlanesAreParallel_Tes
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2709,7 +2709,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenTheThreePlan
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(-SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_1).Normalize();
     const QPlane PLANE2 = QPlane(SQFloat::_1, SQFloat::_1, SQFloat::_0, SQFloat::_1).Normalize();
     const QPlane PLANE3 = QPlane(SQFloat::_0, SQFloat::_1, SQFloat::_0, SQFloat::_0).Normalize();
@@ -2768,12 +2768,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsNoneWhenTheThreePlanesIntersectBu
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2790,7 +2790,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenTwoPlanesAre
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_1).Normalize();
     const QPlane PLANE2 = QPlane(SQFloat::_1, SQFloat::_0, SQFloat::_0, SQFloat::_2).Normalize();
     const QPlane PLANE3 = QPlane(SQFloat::_0, SQFloat::_1, SQFloat::_0, SQFloat::_3).Normalize();
@@ -2849,12 +2849,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsNoneWhenTwoPlanesAreParallelAndIn
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2869,6 +2869,8 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointIsCorrectlyCalculatedWhenTheT
     //       x P
     //      /|\
     //
+
+    // [Preparation]
     const float_q POINT_COMPONENTS[] = {SQFloat::_2, -SQFloat::_4, SQFloat::_3, SQFloat::_0};
     const T EXPECTED_POINT = T(POINT_COMPONENTS);
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_1, SQFloat::_1, -SQFloat::_1).Normalize();
@@ -2929,12 +2931,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsOneWhenTheThreePlanesShareOnePoin
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2951,7 +2953,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_OutputPointDoesNotChangeWhenTheThreePlan
     //
 
     // [Preparation]
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     const QPlane PLANE1 = QPlane(SQFloat::_1, -SQFloat::_1, SQFloat::_4, -SQFloat::_5).Normalize();
     const QPlane PLANE2 = QPlane(SQFloat::_3, SQFloat::_1, SQFloat::_1, -SQFloat::_3).Normalize();
     const QPlane PLANE3 = QPlane(SQFloat::_5, -SQFloat::_1, SQFloat::_9, (float_q)-13.0).Normalize();
@@ -3010,12 +3012,12 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnsInfiniteWhenTheThreePlanesShareOn
     EQIntersections eResult6 = PLANE3.IntersectionPoint(PLANE1, PLANE2, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult3 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult4 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult5 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult6 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult3, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult4, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult5, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult6, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -3075,7 +3077,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_ReturnedValueIsTheSameWhenPlanesAreNotNo
     EQIntersections eResultNotNormalizedPlane = PLANE1.IntersectionPoint(PLANE2, NORMALIZED_PLANE, vIntersection);
 
     // [Verification]
-    BOOST_CHECK(eResultNormalizedPlane == eResultNotNormalizedPlane);
+    BOOST_CHECK_EQUAL(eResultNormalizedPlane, eResultNotNormalizedPlane);
 }
 
 /// <summary>
@@ -3116,7 +3118,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_AssertionFailsWhenOnePlaneIsNull_Test, T
     // [Preparation]
     const QPlane PLANE1 = QPlane(SQFloat::_1, SQFloat::_1, SQFloat::_1, -SQFloat::_1).Normalize();
     const QPlane PLANE2 = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, -SQFloat::_3).Normalize();
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     T POINT;
     const bool ASSERTION_FAILED = true;
 
@@ -3127,7 +3129,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_AssertionFailsWhenOnePlaneIsNull_Test, T
     {
         PLANE1.IntersectionPoint(PLANE2, NULL_PLANE, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed1 = true;
     }
@@ -3138,7 +3140,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_AssertionFailsWhenOnePlaneIsNull_Test, T
     {
         PLANE1.IntersectionPoint(NULL_PLANE, PLANE2, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed2 = true;
     }
@@ -3149,7 +3151,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint_AssertionFailsWhenOnePlaneIsNull_Test, T
     {
         NULL_PLANE.IntersectionPoint(PLANE2, PLANE1, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed3 = true;
     }
@@ -3184,7 +3186,7 @@ QTEST_CASE( SpaceRelation_ReturnsPositiveSideWhenTheOtherPlaneIsParallelAndIsInT
     EQSpaceRelation eResult = PLANE_A.SpaceRelation(PLANE_B);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -3209,7 +3211,7 @@ QTEST_CASE( SpaceRelation_ReturnsNegativeSideWhenTheOtherPlaneIsParallelAndIsInT
     EQSpaceRelation eResult = PLANE_A.SpaceRelation(PLANE_B);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -3235,8 +3237,8 @@ QTEST_CASE( SpaceRelation_ReturnsBothSidesWhenPlanesIntersect_Test )
     EQSpaceRelation eResult2 = PLANE_B.SpaceRelation(PLANE_A);
 
     // [Verification]
-    BOOST_CHECK(eResult1 == EXPECTED_RESULT);
-    BOOST_CHECK(eResult2 == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult1, EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult2, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -3261,7 +3263,7 @@ QTEST_CASE( SpaceRelation_ReturnsContainedWhenPlanesCoincide_Test )
     EQSpaceRelation eResult = PLANE_A.SpaceRelation(PLANE_B);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -3280,7 +3282,7 @@ QTEST_CASE( SpaceRelation_ResultIsDifferentWhenOnePlaneIsNotNormalized_Test )
     EQSpaceRelation eResult2 = PLANE_NORMALIZED.SpaceRelation(PLANE_NOTNORMALIZED);
 
     // [Verification]
-    BOOST_CHECK(eResult1 != eResult2);
+    BOOST_CHECK_NE(eResult1, eResult2);
 }
 
 #if QE_CONFIG_ASSERTSBEHAVIOR_DEFAULT == QE_CONFIG_ASSERTSBEHAVIOR_THROWEXCEPTIONS
@@ -3292,7 +3294,7 @@ QTEST_CASE( SpaceRelation_AssertionFailsWhenOnePlaneIsNull_Test )
 {
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_1, SQFloat::_1, -SQFloat::_1).Normalize();
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
 
     const bool ASSERTION_FAILED = true;
 
@@ -3303,7 +3305,7 @@ QTEST_CASE( SpaceRelation_AssertionFailsWhenOnePlaneIsNull_Test )
     {
         PLANE.SpaceRelation(NULL_PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed1 = true;
     }
@@ -3314,7 +3316,7 @@ QTEST_CASE( SpaceRelation_AssertionFailsWhenOnePlaneIsNull_Test )
     {
         NULL_PLANE.SpaceRelation(PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed2 = true;
     }
@@ -3405,7 +3407,7 @@ QTEST_CASE ( Rotate1_PlaneIsNullWhenRotationMatrixIsNull_Test )
 
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
-    const QRotationMatrix3x3 NULL_MATRIX = QRotationMatrix3x3(QMatrix3x3::GetNullMatrix());
+    const QRotationMatrix3x3 NULL_MATRIX = QRotationMatrix3x3(QMatrix3x3::GetZeroMatrix());
 
     const QPlane EXPECTED_RESULT = QPlane(SQFloat::_0, SQFloat::_0, SQFloat::_0, PLANE.d);
 
@@ -3583,7 +3585,7 @@ QTEST_CASE ( Scale1_AssertionFailsWhenPlaneIsNull_Test )
     {
         NULL_PLANE.Scale(TRANSFORMATION);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3602,7 +3604,7 @@ QTEST_CASE ( Scale1_AssertionFailsWhenScaleMatrixIsNull_Test )
 
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QScalingMatrix3x3 NULL_MATRIX = QScalingMatrix3x3(QMatrix3x3::GetNullMatrix());
+    const QScalingMatrix3x3 NULL_MATRIX = QScalingMatrix3x3(QMatrix3x3::GetZeroMatrix());
 
     const bool ASSERTION_FAILED = true;
 
@@ -3613,7 +3615,7 @@ QTEST_CASE ( Scale1_AssertionFailsWhenScaleMatrixIsNull_Test )
     {
         PLANE.Scale(NULL_MATRIX);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3673,7 +3675,7 @@ QTEST_CASE ( Scale2_PlaneDoesNotChangeWhenScaledByAVectorOfOnes_Test )
 QTEST_CASE ( Scale2_AssertionFailsWhenPlaneIsNull_Test )
 {
     // [Preparation]
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     const QVector3 TRANSFORMATION = QVector3::GetVectorOfOnes();
 
     const bool ASSERTION_FAILED = true;
@@ -3685,7 +3687,7 @@ QTEST_CASE ( Scale2_AssertionFailsWhenPlaneIsNull_Test )
     {
         NULL_PLANE.Scale(TRANSFORMATION);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3701,7 +3703,7 @@ QTEST_CASE ( Scale2_AssertionFailsWhenVectorIsNull_Test )
 {
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QVector3 NULL_VECTOR = QVector3::GetNullVector();
+    const QVector3 NULL_VECTOR = QVector3::GetZeroVector();
 
     const bool ASSERTION_FAILED = true;
 
@@ -3712,7 +3714,7 @@ QTEST_CASE ( Scale2_AssertionFailsWhenVectorIsNull_Test )
     {
         PLANE.Scale(NULL_VECTOR);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3776,7 +3778,7 @@ QTEST_CASE ( Scale3_PlaneDoesntChangeWhenScaleValuesEqualOne_Test )
 QTEST_CASE ( Scale3_AssertionFailsWhenPlaneIsNull_Test )
 {
     // [Preparation]
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     const float_q SCALE_X = SQFloat::_1;
     const float_q SCALE_Y = SQFloat::_1;
     const float_q SCALE_Z = SQFloat::_1;
@@ -3790,7 +3792,7 @@ QTEST_CASE ( Scale3_AssertionFailsWhenPlaneIsNull_Test )
     {
         NULL_PLANE.Scale(SCALE_X, SCALE_Y, SCALE_Z);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3819,7 +3821,7 @@ QTEST_CASE ( Scale3_AssertionFailsWhenVectorIsNull_Test )
     {
         PLANE.Scale(ZERO_SCALE_X, ZERO_SCALE_Y, ZERO_SCALE_Z);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3884,7 +3886,7 @@ QTEST_CASE_TEMPLATE ( Translate1_PlaneDoesNotChangeWhenTranslationMatrixIsNull_T
 
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
-    const QTranslationMatrix<T> NULL_MATRIX = QTranslationMatrix<T>(T::GetNullMatrix());
+    const QTranslationMatrix<T> NULL_MATRIX = QTranslationMatrix<T>(T::GetZeroMatrix());
 
     const QPlane EXPECTED_RESULT = PLANE;
 
@@ -3950,7 +3952,7 @@ QTEST_CASE_TEMPLATE ( Translate2_PlaneDoesNotChangeWhenTranslationVectorIsNull_T
 {
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
-    const T NULL_VECTOR = T::GetNullVector();
+    const T NULL_VECTOR = T::GetZeroVector();
 
     const QPlane EXPECTED_RESULT = PLANE;
 
@@ -4151,7 +4153,7 @@ QTEST_CASE_TEMPLATE ( Transform1_AssertionFailsWhenTransformationMatrixIsNull_Te
 
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QTransformationMatrix<T> NULL_TRANSFORMATION = T::GetNullMatrix();
+    const QTransformationMatrix<T> NULL_TRANSFORMATION = T::GetZeroMatrix();
 
     const bool ASSERTION_FAILED = true;
 
@@ -4162,7 +4164,7 @@ QTEST_CASE_TEMPLATE ( Transform1_AssertionFailsWhenTransformationMatrixIsNull_Te
     {
         PLANE.Transform(NULL_TRANSFORMATION);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4249,7 +4251,7 @@ QTEST_CASE( Transform2_AssertionFailsWhenMatrixIsNull_Test )
 
     // [Preparation]
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QSpaceConversionMatrix NULL_TRANSFORMATION = QSpaceConversionMatrix::GetNullMatrix();
+    const QSpaceConversionMatrix NULL_TRANSFORMATION = QSpaceConversionMatrix::GetZeroMatrix();
 
     const bool ASSERTION_FAILED = true;
 
@@ -4260,7 +4262,7 @@ QTEST_CASE( Transform2_AssertionFailsWhenMatrixIsNull_Test )
     {
         PLANE.Transform(NULL_TRANSFORMATION);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4378,7 +4380,7 @@ QTEST_CASE_TEMPLATE ( RotateWithPivot1_ReturnsSameValueAsWithoutPivotWhenPivotIs
 #endif
 
     const QRotationMatrix3x3 TRANSFORMATION = QRotationMatrix3x3(EULER_ANGLE_X, EULER_ANGLE_Y, EULER_ANGLE_Z);
-    const T POINT = T::GetNullVector();
+    const T POINT = T::GetZeroVector();
 
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
     const QPlane EXPECTED_RESULT = PLANE.Rotate(TRANSFORMATION);
@@ -4467,7 +4469,7 @@ QTEST_CASE_TEMPLATE ( RotateWithPivot2_PlaneIsNullWhenRotationMatrixIsNull_Test,
     const float_q POINT_COMPONENTS[] = {-SQFloat::_3, SQFloat::_1, SQFloat::_2, SQFloat::_1};
     const T POINT = T(POINT_COMPONENTS);
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4);
-    const QRotationMatrix3x3 NULL_MATRIX = QRotationMatrix3x3(QMatrix3x3::GetNullMatrix());
+    const QRotationMatrix3x3 NULL_MATRIX = QRotationMatrix3x3(QMatrix3x3::GetZeroMatrix());
 
     const QPlane EXPECTED_RESULT = QPlane(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_9);
 
@@ -4501,7 +4503,7 @@ QTEST_CASE_TEMPLATE ( RotateWithPivot2_ReturnsSameValueAsWithoutPivotWhenPivotIs
 #endif
 
     const QRotationMatrix3x3 TRANSFORMATION = QRotationMatrix3x3(EULER_ANGLE_X, EULER_ANGLE_Y, EULER_ANGLE_Z);
-    const T POINT = T::GetNullVector();
+    const T POINT = T::GetZeroVector();
 
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
     const QPlane EXPECTED_RESULT = PLANE.Rotate(TRANSFORMATION);
@@ -4573,7 +4575,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_AssertionFailsWhenPlaneIsNull_Test, TQVect
     // [Preparation]
     const float_q POINT_COMPONENTS[] = {-SQFloat::_3, SQFloat::_1, SQFloat::_2, SQFloat::_1};
     const T POINT = T(POINT_COMPONENTS);
-    const QPlane NULL_PLANE = QPlane::GetNullPlane();
+    const QPlane NULL_PLANE = QPlane::GetZeroPlane();
     const QVector3 TRANSFORMATION = QVector3::GetVectorOfOnes();
 
     const bool ASSERTION_FAILED = true;
@@ -4585,7 +4587,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_AssertionFailsWhenPlaneIsNull_Test, TQVect
     {
         NULL_PLANE.ScaleWithPivot(TRANSFORMATION, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4603,7 +4605,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_AssertionFailsWhenVectorIsNull_Test, TQVec
     const float_q POINT_COMPONENTS[] = {-SQFloat::_3, SQFloat::_1, SQFloat::_2, SQFloat::_1};
     const T POINT = T(POINT_COMPONENTS);
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QVector3 NULL_VECTOR = QVector3::GetNullVector();
+    const QVector3 NULL_VECTOR = QVector3::GetZeroVector();
 
     const bool ASSERTION_FAILED = true;
 
@@ -4614,7 +4616,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_AssertionFailsWhenVectorIsNull_Test, TQVec
     {
         PLANE.ScaleWithPivot(NULL_VECTOR, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4631,7 +4633,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_AssertionFailsWhenVectorIsNull_Test, TQVec
 QTEST_CASE_TEMPLATE ( ScaleWithPivot1_ReturnsSameValueAsWithoutPivotWhenPivotIsNull_Test, TQVectorTypes )
 {
     // [Preparation]
-    const T POINT = T::GetNullVector();
+    const T POINT = T::GetZeroVector();
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
     const QVector3 TRANSFORMATION = QVector3(SQFloat::_0_25, SQFloat::_3, -SQFloat::_1);
 
@@ -4722,7 +4724,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot2_AssertionFailsWhenPlaneIsNull_Test, TQVect
     {
         NULL_PLANE.ScaleWithPivot(SCALE_X, SCALE_Y, SCALE_Z, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4753,7 +4755,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot2_AssertionFailsWhenScaleValuesEqualZero_Tes
     {
         PLANE.ScaleWithPivot(ZERO_SCALE_X, ZERO_SCALE_Y, ZERO_SCALE_Z, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4770,7 +4772,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot2_AssertionFailsWhenScaleValuesEqualZero_Tes
 QTEST_CASE_TEMPLATE ( ScaleWithPivot2_ReturnsSameValueAsWithoutPivotWhenPivotIsNull_Test, TQVectorTypes )
 {
     // [Preparation]
-    const T POINT = T::GetNullVector();
+    const T POINT = T::GetZeroVector();
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
     const QVector3 TRANSFORMATION = QVector3(SQFloat::_0_25, SQFloat::_3, -SQFloat::_1);
 
@@ -4861,7 +4863,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot3_AssertionFailsWhenPlaneIsNull_Test, TQVect
     {
         NULL_PLANE.ScaleWithPivot(TRANSFORMATION, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4882,7 +4884,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot3_AssertionFailsWhenVectorIsNull_Test, TQVec
     const float_q POINT_COMPONENTS[] = {-SQFloat::_3, SQFloat::_1, SQFloat::_2, SQFloat::_1};
     const T POINT = T(POINT_COMPONENTS);
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QScalingMatrix3x3 NULL_MATRIX = QScalingMatrix3x3(QMatrix3x3::GetNullMatrix());
+    const QScalingMatrix3x3 NULL_MATRIX = QScalingMatrix3x3(QMatrix3x3::GetZeroMatrix());
 
     const bool ASSERTION_FAILED = true;
 
@@ -4893,7 +4895,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot3_AssertionFailsWhenVectorIsNull_Test, TQVec
     {
         PLANE.ScaleWithPivot(NULL_MATRIX, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4937,7 +4939,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot3_PlaneIsCorrectlyScaledByCommonVector_Test,
 QTEST_CASE_TEMPLATE ( ScaleWithPivot3_ReturnsSameValueAsWithoutPivotWhenPivotIsNull_Test, TQVectorTypes )
 {
     // [Preparation]
-    const T POINT = T::GetNullVector();
+    const T POINT = T::GetZeroVector();
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
     const QVector3 TRANSFORMATION = QVector3(SQFloat::_0_25, SQFloat::_3, -SQFloat::_1);
 
@@ -5063,7 +5065,7 @@ void TransformWithPivot_AssertionFailsWhenTransformationMatrixIsNull_Template()
     const float_q POINT_COMPONENTS[] = {-SQFloat::_3, SQFloat::_1, SQFloat::_2, SQFloat::_1};
     const VectorType POINT = VectorType(POINT_COMPONENTS);
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5);
-    const QTransformationMatrix<T> NULL_TRANSFORMATION = T::GetNullMatrix();
+    const QTransformationMatrix<T> NULL_TRANSFORMATION = T::GetZeroMatrix();
 
     const bool ASSERTION_FAILED = true;
 
@@ -5074,7 +5076,7 @@ void TransformWithPivot_AssertionFailsWhenTransformationMatrixIsNull_Template()
     {
         PLANE.TransformWithPivot(NULL_TRANSFORMATION, POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5120,7 +5122,7 @@ void TransformWithPivot_ReturnsSameValueAsWithoutPivotWhenPivotIsNull_Template()
     const float_q EULER_ANGLE_Z = SQAngle::_45;
 #endif
 
-    const VectorType POINT = VectorType::GetNullVector();
+    const VectorType POINT = VectorType::GetZeroVector();
 
     const QPlane PLANE = QPlane(SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_5).Normalize();
     const QTranslationMatrix<T> TRANSLATION = QTranslationMatrix<T>(SQFloat::_2, SQFloat::_4, -SQFloat::_6);
@@ -5161,17 +5163,9 @@ QTEST_CASE ( ToString_ReturnedFormatMatchesExpected_Test )
     const QPlane PLANE = QPlane(SQFloat::_0_25, (float_q)-0.000002, (float_q)40000.0, SQFloat::_0 );
 
 #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("PL(0.25,-1.99999999e-06,40000,0)");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("PL(0.25,-1.99999999e-006,40000,0)");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("PL(0.25,-1.99999999e-006,40000,0)");
 #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("PL(0.25,-1.9999999999999999e-06,40000,0)");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("PL(0.25,-1.9999999999999999e-006,40000,0)");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("PL(0.25,-1.9999999999999999e-006,40000,0)");
 #endif
 
 	// [Execution]

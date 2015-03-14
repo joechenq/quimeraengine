@@ -27,13 +27,13 @@
 #ifndef __EQENUMERATION__
 #define __EQENUMERATION__
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
-#include "<LayerName>Definitions.h"
-#include "QArrayBasic.h"
-#include <cstring>
+#include <map>
+#include <vector>
 
-using Kinesis::QuimeraEngine::Common::DataTypes::enum_int_q;
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::enum_int_q;
 
 
 namespace Kinesis
@@ -42,11 +42,11 @@ namespace QuimeraEngine
 {
 namespace NAMESPACE
 {
-    
+
 /// <summary>
 /// [DOC]
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS EQEnumeration
+class EQEnumeration
 {
     // ENUMERATIONS
     // ---------------
@@ -57,22 +57,28 @@ public:
     /// </summary>
     enum EnumType
     {
-        E_<> = QE_ENUMERATION_MIN_VALUE, /*!< [DOC] */
-        , /*!< [DOC] */
+        E_<> = QE_ENUMERATION_MIN_VALUE ,/*!< [DOC] */
 
         _NotEnumValue = QE_ENUMERATION_MAX_VALUE /*!< Not valid value. */
     };
 
-
-    // METHODS
+    // TYPEDEFS
     // ---------------
+public:
+
+    typedef std::map<string_q, EQEnumeration::EnumType> TNameValueMap;
+    typedef std::pair<string_q, EQEnumeration::EnumType> TNameValuePair;
+
+
+	// CONSTRUCTORS
+	// ---------------
 public:
 
     /// <summary>
     /// Constructor that receives a valid enumeration value.
     /// </summary>
     /// <param name="eValue">[IN] A valid enumeration value.</param>
-    EQEnumeration(const EQEnumeration::EnumType eValue) : m_value(eValue)
+    inline EQEnumeration(const EQEnumeration::EnumType &eValue) : m_value(eValue)
     {
     }
 
@@ -80,92 +86,89 @@ public:
     /// Constructor that receives an integer number which must correspond to a valid enumeration value.
     /// </summary>
     /// <param name="nValue">[IN] An integer number.</param>
-    EQEnumeration(const enum_int_q nValue) : m_value(scast_q(nValue, const EQEnumeration::EnumType))
+    inline EQEnumeration(const enum_int_q &nValue) : m_value(scast_q(nValue, const EQEnumeration::EnumType))
     {
     }
 
     /// <summary>
-    /// Constructor that receives the name of a valid enumeration value. <br/>Note that enumeration value names don't include
+    /// Constructor that receives the name of a valid enumeration value. Note that enumeration value names don't include
     /// the enumeration prefix.
     /// </summary>
-    /// <param name="szValueName">[IN] The name of a valid enumeration value.</param>
-    EQEnumeration(const char* szValueName)
+    /// <param name="strValueName">[IN] The name of a valid enumeration value.</param>
+    inline explicit EQEnumeration(const string_q &strValueName)
     {
-        *this = szValueName;
+        *this = strValueName;
     }
     
     /// <summary>
     /// Copy constructor.
     /// </summary>
     /// <param name="eValue">[IN] Another enumeration.</param>
-    EQEnumeration(const EQEnumeration &eValue) : m_value(eValue.m_value)
+    inline EQEnumeration(const EQEnumeration &eValue) : m_value(eValue.m_value)
     {
     }
 
+
+	// METHODS
+	// ---------------
+public:
+
     /// <summary>
-    /// Assignation operator that accepts an integer number that corresponds to a valid enumeration value.
+    /// Assign operator that accepts an integer number that corresponds to a valid enumeration value.
     /// </summary>
     /// <param name="nValue">[IN] An integer number.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQEnumeration& operator=(const enum_int_q nValue)
+    inline EQEnumeration& operator=(const enum_int_q &nValue)
     {
         m_value = scast_q(nValue, const EQEnumeration::EnumType);
         return *this;
     }
 
     /// <summary>
-    /// Assignation operator that accepts a valid enumeration value name.
+    /// Assign operator that accepts a valid enumeration value name.
     /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
+    /// <param name="strValueName">[IN] The enumeration value name.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQEnumeration& operator=(const char* szValueName)
+    inline EQEnumeration& operator=(const string_q &strValueName)
     {
-        bool bMatchFound = false;
-        unsigned int uEnumStringIndex = 0;
-
-        while(!bMatchFound && uEnumStringIndex < EQEnumeration::_GetNumberOfValues())
-        {
-            bMatchFound = strcmp(sm_arStrings[uEnumStringIndex], szValueName) == 0;
-            ++uEnumStringIndex;
-        }
-
-        QE_ASSERT_ERROR(uEnumStringIndex < EQEnumeration::_GetNumberOfValues(), "The input string does not correspond to any valid enumeration value.");
-
-        m_value = sm_arValues[uEnumStringIndex - 1U];
+        if(EQEnumeration::sm_mapValueName.find(strValueName) != EQEnumeration::sm_mapValueName.end())
+            m_value = sm_mapValueName[strValueName];
+        else
+            m_value = EQEnumeration::_NotEnumValue;
 
         return *this;
     }
 
     /// <summary>
-    /// Assignation operator that accepts a valid enumeration value.
+    /// Assign operator that accepts a valid enumeration value.
     /// </summary>
     /// <param name="eValue">[IN] A valid enumeration value.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQEnumeration& operator=(const EQEnumeration::EnumType eValue)
+    inline EQEnumeration& operator=(const EQEnumeration::EnumType &eValue)
     {
         m_value = eValue;
         return *this;
     }
     
     /// <summary>
-    /// Assignation operator that accepts another enumeration.
+    /// Assign operator that accepts another enumeration.
     /// </summary>
     /// <param name="eValue">[IN] Another enumeration.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQEnumeration& operator=(const EQEnumeration &eValue)
+    inline EQEnumeration& operator=(const EQEnumeration &eValue)
     {
         m_value = eValue.m_value;
         return *this;
     }
-
+    
     /// <summary>
     /// Equality operator that receives another enumeration.
     /// </summary>
@@ -179,35 +182,29 @@ public:
     }
 
     /// <summary>
-    /// Equality operator that receives the name of a valid enumeration value.<br/>Note that enumeration value names do not include
+    /// Equality operator that accepts the name of a valid enumeration value. Note that enumeration value names don't include
     /// the enumeration prefix.
     /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
+    /// <param name="strValueName">[IN] The enumeration value name.</param>
     /// <returns>
     /// True if the name corresponds to a valid enumeration value and it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const char* szValueName) const
+    inline bool operator==(const string_q &strValueName) const
     {
-        bool bMatchFound = false;
-        unsigned int uEnumStringIndex = 0;
-
-        while(!bMatchFound && uEnumStringIndex < EQEnumeration::_GetNumberOfValues())
-        {
-            bMatchFound = strcmp(sm_arStrings[m_value], szValueName) == 0;
-            ++uEnumStringIndex;
-        }
-
-        return bMatchFound;
+        if(EQEnumeration::sm_mapValueName.find(strValueName) != EQEnumeration::sm_mapValueName.end())
+            return m_value == sm_mapValueName[strValueName];
+        else
+            return false;
     }
 
     /// <summary>
-    /// Equality operator that receives an integer number which must correspond to a valid enumeration value.
+    /// Equality operator that accepts an integer number which must correspond to a valid enumeration value.
     /// </summary>
     /// <param name="nValue">[IN] An integer number.</param>
     /// <returns>
     /// True if the number corresponds to a valid enumeration value and it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const enum_int_q nValue) const
+    inline bool operator==(const enum_int_q &nValue) const
     {
         return m_value == scast_q(nValue, const EQEnumeration::EnumType);
     }
@@ -219,58 +216,9 @@ public:
     /// <returns>
     /// True if it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const EQEnumeration::EnumType eValue) const
+    bool operator==(const EQEnumeration::EnumType &eValue) const
     {
         return m_value == eValue;
-    }
-    
-    /// <summary>
-    /// Inequality operator that receives another enumeration.
-    /// </summary>
-    /// <param name="eValue">[IN] The other enumeration.</param>
-    /// <returns>
-    /// False if it equals the enumeration value. True otherwise.
-    /// </returns>
-    bool operator!=(const EQEnumeration &eValue) const
-    {
-        return m_value != eValue.m_value;
-    }
-
-    /// <summary>
-    /// Inequality operator that receives the name of a valid enumeration value.<br/>Note that enumeration value names do not include
-    /// the enumeration prefix.
-    /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
-    /// <returns>
-    /// False if the name corresponds to a valid enumeration value and it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const char* szValueName) const
-    {
-        return !(*this == szValueName);
-    }
-
-    /// <summary>
-    /// Inequality operator that receives an integer number which must correspond to a valid enumeration value.
-    /// </summary>
-    /// <param name="nValue">[IN] An integer number.</param>
-    /// <returns>
-    /// False if the number corresponds to a valid enumeration value and it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const enum_int_q nValue) const
-    {
-        return m_value != scast_q(nValue, const EQEnumeration::EnumType);
-    }
-
-    /// <summary>
-    /// Inequality operator that receives a valid enumeration value.
-    /// </summary>
-    /// <param name="eValue">[IN] The enumeration value.</param>
-    /// <returns>
-    /// False if it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const EQEnumeration::EnumType eValue) const
-    {
-        return m_value != eValue;
     }
     
     /// <summary>
@@ -279,11 +227,23 @@ public:
     /// <returns>
     /// A list of all the values of the enumeration.
     /// </returns>
-    static const Kinesis::QuimeraEngine::Common::DataTypes::QArrayBasic<const EnumType> GetValues()
+    static const std::vector<EnumType>& GetValues()
     {
-        using Kinesis::QuimeraEngine::Common::DataTypes::QArrayBasic;
-        static const QArrayBasic<const EnumType> ARRAY_OF_VALUES(sm_arValues, EQEnumeration::_GetNumberOfValues());
-        return ARRAY_OF_VALUES;
+        static std::vector<EnumType> arValues;
+
+        // If it's not been initialized yet...
+        if(arValues.empty())
+        {
+            const size_t ENUM_ARRAY_COUNT = EQEnumeration::sm_mapValueName.size();
+
+            // An empty enumeration makes no sense
+            QE_ASSERT(ENUM_ARRAY_COUNT > 0);
+
+            for(size_t i = 0; i < ENUM_ARRAY_COUNT; ++i)
+                arValues.push_back(EQEnumeration::sm_arValueName[i].second);
+        }
+
+        return arValues;
     }
 
     /// <summary>
@@ -292,20 +252,20 @@ public:
     /// <returns>
     /// The contained enumeration value.
     /// </returns>
-    operator EQEnumeration::EnumType() const
+    inline operator EQEnumeration::EnumType() const
     {
         return m_value;
     }
-
+    
     /// <summary>
     /// Casting operator that converts the enumerated type value into its corresponding name.
     /// </summary>
     /// <returns>
     /// The contained enumeration value name. If the enumeration value is not valid, the returns an empty string.
     /// </returns>
-    operator const char*() const
+    operator const string_q() const
     {
-        return _ConvertToString(m_value);
+        return ConvertToString(m_value, EQEnumeration::sm_mapValueName);
     }
     
     /// <summary>
@@ -323,131 +283,77 @@ public:
     /// Converts the enumerated type value into its corresponding name.
     /// </summary>
     /// <returns>
-    /// The contained enumeration value name. If the enumeration value is not valid, then returns an empty string.
+    /// The contained enumeration value name. If the enumeration value is not valid, the returns an empty string.
     /// </returns>
-    const char* ToString() const
+    const string_q ToString() const
     {
-        return _ConvertToString(m_value);
+        return ConvertToString(m_value, EQEnumeration::sm_mapValueName);
     }
 
 private:
 
-    /// <summary>
-    /// Uses an enumerated value as a key to retrieve his own string representation from a dictionary.
-    /// </summary>
-    /// <param name="eValue">[IN] The enumeration value.</param>
-    /// <returns>
-    /// The enumerated value's string representation.
-    /// </returns>
-    inline static const char* _ConvertToString(const EQEnumeration::EnumType eValue)
+    // <summary>
+    // Uses an enumerated value as a key to retrieve his own string representation from a dictionary.
+    // </summary>
+    // <param name="eValue">[IN] The enumeration value.</param>
+    // <param name="nameValueDictionary">[IN] The dictionary where enumeration's string representations are stored.</param>
+    // <returns>
+    // The enumerated value's string representation.
+    // </returns>
+    const string_q& ConvertToString(const EQEnumeration::EnumType& eValue, const TNameValueMap& nameValueDictionary) const
     {
-        QE_ASSERT_ERROR(scast_q(eValue, unsigned int) < EQEnumeration::_GetNumberOfValues(), "The enumeration value is not valid.");
+        TNameValueMap::const_iterator itValueName = nameValueDictionary.begin();
+        TNameValueMap::const_iterator itValueNameEnd = nameValueDictionary.end();
 
-        return sm_arStrings[eValue];
+        while(itValueName != itValueNameEnd && itValueName->second != eValue)
+            ++itValueName;
+
+        if(itValueName != itValueNameEnd)
+            return itValueName->first;
+        else
+            { static const string_q EMPTY_STRING; return EMPTY_STRING; }// [TODO] Thund: This must be replaced by a QString constant.
     }
-        
-    /// <summary>
-    /// Gets the number of values available in the enumeration.
-    /// </summary>
-    /// <returns>
-    /// A number of values, without counting the _NotEnumValue value.
-    /// </returns>
-    static unsigned int _GetNumberOfValues();
 
 
     // ATTRIBUTES
-    // ---------------
+	// ---------------
 private:
 
     /// <summary>
-    /// The string representation of every enumeration value.
+    /// A list of enumeration values with their names.
     /// </summary>
-    static const char* sm_arStrings[];
+    static TNameValuePair sm_arValueName[];  REMEMBER TO INITIALIZE IT IN THE CPP FILE
 
     /// <summary>
-    /// A list with all enumeration values avalilable.
+    /// The dictionary which contains each enumeration value by its name.
     /// </summary>
-    static const EQEnumeration::EnumType sm_arValues[];
+    static TNameValueMap  sm_mapValueName;  REMEMBER TO INITIALIZE IT IN THE CPP FILE
 
     /// <summary>
     /// The contained enumeration value.
     /// </summary>
     EQEnumeration::EnumType m_value;
 
+};
+
+
+// CONSTANTS INITIALIZATION
+// ----------------------------
+THIS MUST BE PLACED IN THE CPP FILE
+EQEnumeration::TNameValuePair EQEnumeration::sm_arValueName[] =
+    {
+        std::pair<string_q, EQEnumeration::EnumType>(QE_L("<>"),    EQEnumeration::E_<>),
+    };
+
+EQEnumeration::TNameValueMap EQEnumeration::sm_mapValueName(
+        EQEnumeration::sm_arValueName ,
+        &EQEnumeration::sm_arValueName[0] + sizeof(EQEnumeration::sm_arValueName) / sizeof(EQEnumeration::sm_arValueName[0])
+    );
+
+
+
 } //namespace NAMESPACE
 } //namespace QuimeraEngine
 } //namespace Kinesis
 
 #endif // __EQENUMERATION__
-
-THIS MUST BE PLACED IN THE CPP FILE
-
-//-------------------------------------------------------------------------------//
-//                         QUIMERA ENGINE : LICENSE                              //
-//-------------------------------------------------------------------------------//
-// This file is part of Quimera Engine.                                          //
-// Quimera Engine is free software: you can redistribute it and/or modify        //
-// it under the terms of the Lesser GNU General Public License as published by   //
-// the Free Software Foundation, either version 3 of the License, or             //
-// (at your option) any later version.                                           //
-//                                                                               //
-// Quimera Engine is distributed in the hope that it will be useful,             //
-// but WITHOUT ANY WARRANTY; without even the implied warranty of                //
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the                  //
-// Lesser GNU General Public License for more details.                           //
-//                                                                               //
-// You should have received a copy of the Lesser GNU General Public License      //
-// along with Quimera Engine. If not, see <http://www.gnu.org/licenses/>.        //
-//                                                                               //
-// This license doesn't force you to put any kind of banner or logo telling      //
-// that you are using Quimera Engine in your project but we would appreciate     //
-// if you do so or, at least, if you let us know about that.                     //
-//                                                                               //
-// Enjoy!                                                                        //
-//                                                                               //
-// Kinesis Team                                                                  //
-//-------------------------------------------------------------------------------//
-
-#include "EQEnumeration.h"
-
-namespace Kinesis
-{
-namespace QuimeraEngine
-{
-namespace NAMESPACE
-{
-
-//##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |  ATTRIBUTES INITIALIZATION |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
-//##################=======================================================##################
-
-const char* EQEnumeration::sm_arStrings[] = { <"">,
-                                              <"">};
-
-const EQEnumeration::EnumType EQEnumeration::sm_arValues[] = { EQEnumeration::<>,
-                                                               EQEnumeration::<>};
-
-
-//##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
-//##################=======================================================##################
-
-unsigned int EQEnumeration::_GetNumberOfValues()
-{
-    return sizeof(sm_arValues) / sizeof(EQEnumeration::EnumType);
-}
-
-
-} //namespace NAMESPACE
-} //namespace QuimeraEngine
-} //namespace Kinesis

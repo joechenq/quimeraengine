@@ -27,10 +27,11 @@
 #ifndef __SQANGLE__
 #define __SQANGLE__
 
-#include "DataTypesDefinitions.h"
-#include "ToolsDefinitions.h"
+#include <string>
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 
 
 namespace Kinesis
@@ -45,7 +46,7 @@ namespace Math
 /// <summary>
 /// Helper class that offers functionality related to angles (radians and degrees).
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS SQAngle
+class QDllExport SQAngle
 {
     // CONSTANTS
     // ---------------
@@ -132,18 +133,18 @@ public:
     static const float_q RadiansPerDegree;
 
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 private:
 
-    // <summary>
-    // Default constructor (hidden).
-    // </summary>
-    SQAngle();
+	// <summary>
+	// Default constructor (hidden).
+	// </summary>
+	SQAngle();
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -153,7 +154,7 @@ public:
     /// <returns>
     /// The same angle converted to radians.
     /// </returns>
-    static float_q DegreesToRadians(const float_q fDegrees);
+    static float_q DegreesToRadians(const float_q &fDegrees);
 
     /// <summary>
     /// Computes the conversion from a value expressed in radians to its equivalent in degrees.
@@ -162,7 +163,7 @@ public:
     /// <returns>
     /// The same angle converted to degrees.
     /// </returns>
-    static float_q RadiansToDegrees(const float_q fRadians);
+    static float_q RadiansToDegrees(const float_q &fRadians);
 
     /// <summary>
     /// Truncates an angle which describes more than one revolution.
@@ -174,7 +175,7 @@ public:
     /// <returns>
     /// The truncated angle value.
     /// </returns>
-    static float_q Truncate(const float_q fAngle);
+    static float_q Truncate(const float_q &fAngle);
 
     /// <summary>
     /// Counts how many revolutions are represented by an angle, including fractions.
@@ -183,7 +184,7 @@ public:
     /// <returns>
     /// The number of revolutions (partial and complete).
     /// </returns>
-    static float_q CountRevolutions(const float_q fAngle);
+    static float_q CountRevolutions(const float_q &fAngle);
 
     /// <summary>
     /// Counts how many revolutions are represented by an angle, ignoring fractions.
@@ -192,7 +193,7 @@ public:
     /// <returns>
     /// The number of revolutions (only complete).
     /// </returns>
-    static float_q CountCompleteRevolutions(const float_q fAngle);
+    static float_q CountCompleteRevolutions(const float_q &fAngle);
 };
 
 } //namespace Math

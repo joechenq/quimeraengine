@@ -27,13 +27,13 @@
 #ifndef __EQINTERSECTIONS__
 #define __EQINTERSECTIONS__
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
-#include "ToolsDefinitions.h"
-#include "QArrayBasic.h"
-#include <cstring>
+#include <map>
+#include <vector>
 
-using Kinesis::QuimeraEngine::Common::DataTypes::enum_int_q;
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::enum_int_q;
 
 
 namespace Kinesis
@@ -48,7 +48,7 @@ namespace Math
 /// <summary>
 /// Enumerates the number of intersections between objects or entities.
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS EQIntersections
+class EQIntersections
 {
     // ENUMERATIONS
     // ---------------
@@ -68,24 +68,31 @@ public:
         _NotEnumValue = QE_ENUMERATION_MAX_VALUE /*!< Not valid value. */
     };
 
-
-    // METHODS
+    // TYPEDEFS
     // ---------------
+public:
+
+    typedef std::map<string_q, EQIntersections::EnumType> TNameValueMap;
+    typedef std::pair<string_q, EQIntersections::EnumType> TNameValuePair;
+
+
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
     /// Constructor that receives a valid enumeration value.
     /// </summary>
-    /// <param name="eValue">[IN] A valid enumeration value.</param>
-    EQIntersections(const EQIntersections::EnumType eValue) : m_value(eValue)
+    /// <param name="eValue">A valid enumeration value.</param>
+    EQIntersections(const EQIntersections::EnumType &eValue) : m_value(eValue)
     {
     }
 
     /// <summary>
     /// Constructor that receives an integer number which must correspond to a valid enumeration value.
     /// </summary>
-    /// <param name="nValue">[IN] An integer number.</param>
-    EQIntersections(const enum_int_q nValue) : m_value(scast_q(nValue, const EQIntersections::EnumType))
+    /// <param name="nValue">An integer number.</param>
+    EQIntersections(const enum_int_q &nValue) : m_value(scast_q(nValue, const EQIntersections::EnumType))
     {
     }
 
@@ -93,10 +100,10 @@ public:
     /// Constructor that receives the name of a valid enumeration value. <br/>Note that enumeration value names don't include
     /// the enumeration prefix.
     /// </summary>
-    /// <param name="szValueName">[IN] The name of a valid enumeration value.</param>
-    EQIntersections(const char* szValueName)
+    /// <param name="strValueName">The name of a valid enumeration value.</param>
+    EQIntersections(const string_q &strValueName)
     {
-        *this = szValueName;
+        *this = strValueName;
     }
     
     /// <summary>
@@ -110,11 +117,11 @@ public:
     /// <summary>
     /// Assignation operator that accepts an integer number that corresponds to a valid enumeration value.
     /// </summary>
-    /// <param name="nValue">[IN] An integer number.</param>
+    /// <param name="nValue">An integer number.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQIntersections& operator=(const enum_int_q nValue)
+    EQIntersections& operator=(const enum_int_q &nValue)
     {
         m_value = scast_q(nValue, const EQIntersections::EnumType);
         return *this;
@@ -123,24 +130,16 @@ public:
     /// <summary>
     /// Assignation operator that accepts a valid enumeration value name.
     /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
+    /// <param name="strValueName">The enumeration value name.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQIntersections& operator=(const char* szValueName)
+    EQIntersections& operator=(const string_q &strValueName)
     {
-        bool bMatchFound = false;
-        unsigned int uEnumStringIndex = 0;
-
-        while(!bMatchFound && uEnumStringIndex < EQIntersections::_GetNumberOfValues())
-        {
-            bMatchFound = strcmp(sm_arStrings[uEnumStringIndex], szValueName) == 0;
-            ++uEnumStringIndex;
-        }
-
-        QE_ASSERT_ERROR(uEnumStringIndex < EQIntersections::_GetNumberOfValues(), "The input string does not correspond to any valid enumeration value.");
-
-        m_value = sm_arValues[uEnumStringIndex - 1U];
+        if(EQIntersections::sm_mapValueName.find(strValueName) != EQIntersections::sm_mapValueName.end())
+            m_value = sm_mapValueName[strValueName];
+        else
+            m_value = EQIntersections::_NotEnumValue;
 
         return *this;
     }
@@ -148,11 +147,11 @@ public:
     /// <summary>
     /// Assignation operator that accepts a valid enumeration value.
     /// </summary>
-    /// <param name="eValue">[IN] A valid enumeration value.</param>
+    /// <param name="eValue">A valid enumeration value.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQIntersections& operator=(const EQIntersections::EnumType eValue)
+    EQIntersections& operator=(const EQIntersections::EnumType &eValue)
     {
         m_value = eValue;
         return *this;
@@ -170,7 +169,7 @@ public:
         m_value = eValue.m_value;
         return *this;
     }
-
+    
     /// <summary>
     /// Equality operator that receives another enumeration.
     /// </summary>
@@ -184,38 +183,34 @@ public:
     }
 
     /// <summary>
-    /// Equality operator that receives the name of a valid enumeration value.<br/>Note that enumeration value names do not include
+    /// Equality operator that accepts the name of a valid enumeration value. <br/>Note that enumeration value names don't include
     /// the enumeration prefix.
     /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
+    /// <param name="strValueName">[IN] The enumeration value name.</param>
     /// <returns>
     /// True if the name corresponds to a valid enumeration value and it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const char* szValueName) const
+    bool operator==(const string_q &strValueName) const
     {
-        bool bMatchFound = false;
-        unsigned int uEnumStringIndex = 0;
-
-        while(!bMatchFound && uEnumStringIndex < EQIntersections::_GetNumberOfValues())
-        {
-            bMatchFound = strcmp(sm_arStrings[m_value], szValueName) == 0;
-            ++uEnumStringIndex;
-        }
-
-        return bMatchFound;
+        if(EQIntersections::sm_mapValueName.find(strValueName) != EQIntersections::sm_mapValueName.end())
+            return m_value == sm_mapValueName[strValueName];
+        else
+            return false;
     }
 
+
     /// <summary>
-    /// Equality operator that receives an integer number which must correspond to a valid enumeration value.
+    /// Equality operator that accepts an integer number which must correspond to a valid enumeration value.
     /// </summary>
     /// <param name="nValue">[IN] An integer number.</param>
     /// <returns>
     /// True if the number corresponds to a valid enumeration value and it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const enum_int_q nValue) const
+    bool operator==(const enum_int_q &nValue) const
     {
         return m_value == scast_q(nValue, const EQIntersections::EnumType);
     }
+
 
     /// <summary>
     /// Equality operator that receives a valid enumeration value.
@@ -224,58 +219,9 @@ public:
     /// <returns>
     /// True if it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const EQIntersections::EnumType eValue) const
+    bool operator==(const EQIntersections::EnumType &eValue) const
     {
         return m_value == eValue;
-    }
-    
-    /// <summary>
-    /// Inequality operator that receives another enumeration.
-    /// </summary>
-    /// <param name="eValue">[IN] The other enumeration.</param>
-    /// <returns>
-    /// False if it equals the enumeration value. True otherwise.
-    /// </returns>
-    bool operator!=(const EQIntersections &eValue) const
-    {
-        return m_value != eValue.m_value;
-    }
-
-    /// <summary>
-    /// Inequality operator that receives the name of a valid enumeration value.<br/>Note that enumeration value names do not include
-    /// the enumeration prefix.
-    /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
-    /// <returns>
-    /// False if the name corresponds to a valid enumeration value and it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const char* szValueName) const
-    {
-        return !(*this == szValueName);
-    }
-
-    /// <summary>
-    /// Inequality operator that receives an integer number which must correspond to a valid enumeration value.
-    /// </summary>
-    /// <param name="nValue">[IN] An integer number.</param>
-    /// <returns>
-    /// False if the number corresponds to a valid enumeration value and it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const enum_int_q nValue) const
-    {
-        return m_value != scast_q(nValue, const EQIntersections::EnumType);
-    }
-
-    /// <summary>
-    /// Inequality operator that receives a valid enumeration value.
-    /// </summary>
-    /// <param name="eValue">[IN] The enumeration value.</param>
-    /// <returns>
-    /// False if it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const EQIntersections::EnumType eValue) const
-    {
-        return m_value != eValue;
     }
     
     /// <summary>
@@ -284,11 +230,23 @@ public:
     /// <returns>
     /// A list of all the values of the enumeration.
     /// </returns>
-    static const Kinesis::QuimeraEngine::Common::DataTypes::QArrayBasic<const EnumType> GetValues()
+    static const std::vector<EnumType>& GetValues()
     {
-        using Kinesis::QuimeraEngine::Common::DataTypes::QArrayBasic;
-        static const QArrayBasic<const EnumType> ARRAY_OF_VALUES(sm_arValues, EQIntersections::_GetNumberOfValues());
-        return ARRAY_OF_VALUES;
+        static std::vector<EnumType> arValues;
+
+        // If it's not been initialized yet...
+        if(arValues.empty())
+        {
+            const size_t ENUM_ARRAY_COUNT = EQIntersections::sm_mapValueName.size();
+
+            // An empty enumeration makes no sense
+            QE_ASSERT(ENUM_ARRAY_COUNT > 0);
+
+            for(size_t i = 0; i < ENUM_ARRAY_COUNT; ++i)
+                arValues.push_back(EQIntersections::sm_arValueName[i].second);
+        }
+
+        return arValues;
     }
 
     /// <summary>
@@ -308,9 +266,9 @@ public:
     /// <returns>
     /// The contained enumeration value name. If the enumeration value is not valid, the returns an empty string.
     /// </returns>
-    operator const char*() const
+    operator const string_q() const
     {
-        return _ConvertToString(m_value);
+        return ConvertToString(m_value, EQIntersections::sm_mapValueName);
     }
     
     /// <summary>
@@ -328,51 +286,49 @@ public:
     /// Converts the enumerated type value into its corresponding name.
     /// </summary>
     /// <returns>
-    /// The contained enumeration value name. If the enumeration value is not valid, then returns an empty string.
+    /// The contained enumeration value name. If the enumeration value is not valid, the returns an empty string.
     /// </returns>
-    const char* ToString() const
+    const string_q ToString()
     {
-        return _ConvertToString(m_value);
+        return ConvertToString(m_value, EQIntersections::sm_mapValueName);
     }
-
-private:
-
-    /// <summary>
-    /// Uses an enumerated value as a key to retrieve his own string representation from a dictionary.
-    /// </summary>
-    /// <param name="eValue">[IN] The enumeration value.</param>
-    /// <returns>
-    /// The enumerated value's string representation.
-    /// </returns>
-    inline static const char* _ConvertToString(const EQIntersections::EnumType eValue)
-    {
-        QE_ASSERT_ERROR(scast_q(eValue, unsigned int) < EQIntersections::_GetNumberOfValues(), "The enumeration value is not valid.");
-
-        return sm_arStrings[eValue];
-    }
-        
-    /// <summary>
-    /// Gets the number of values available in the enumeration.
-    /// </summary>
-    /// <returns>
-    /// A number of values, without counting the _NotEnumValue value.
-    /// </returns>
-    static unsigned int _GetNumberOfValues();
 
 
     // ATTRIBUTES
-    // ---------------
+	// ---------------
 private:
 
-    /// <summary>
-    /// The string representation of every enumeration value.
-    /// </summary>
-    static const char* sm_arStrings[];
+    // <summary>
+    // Uses an enumerated value as a key to retrieve his own string representation from a dictionary.
+    // </summary>
+    // <param name="eValue">[IN] The enumeration value.</param>
+    // <param name="nameValueDictionary">[IN] The dictionary where enumeration's string representations are stored.</param>
+    // <returns>
+    // The enumerated value's string representation.
+    // </returns>
+    const string_q& ConvertToString(const EQIntersections::EnumType& eValue, const TNameValueMap& nameValueDictionary) const
+    {
+        TNameValueMap::const_iterator itValueName = nameValueDictionary.begin();
+        TNameValueMap::const_iterator itValueNameEnd = nameValueDictionary.end();
+
+        while(itValueName != itValueNameEnd && itValueName->second != eValue)
+            ++itValueName;
+
+        if(itValueName != itValueNameEnd)
+            return itValueName->first;
+        else
+            { static const string_q EMPTY_STRING; return EMPTY_STRING; }// [TODO] Thund: This must be replaced by a QString constant.
+    }
 
     /// <summary>
-    /// A list with all enumeration values avalilable.
+    /// A list of enumeration values with their names.
     /// </summary>
-    static const EQIntersections::EnumType sm_arValues[];
+    static TNameValuePair sm_arValueName[];
+
+    /// <summary>
+    /// The dictionary which contains each enumeration value by its name.
+    /// </summary>
+    static TNameValueMap  sm_mapValueName;
 
     /// <summary>
     /// The contained enumeration value.

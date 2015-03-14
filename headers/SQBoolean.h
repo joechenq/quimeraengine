@@ -27,35 +27,45 @@
 #ifndef __SQBOOLEAN__
 #define __SQBOOLEAN__
 
-#include "CommonDefinitions.h"
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
 {
 namespace QuimeraEngine
 {
-namespace Common
+namespace Tools
 {
 namespace DataTypes
 {
 
 /// <summary>
-/// Helper class that offers functionality related to boolean types. Currently it is empty but it is expected to grow.
+/// Helper class that offers functionality related to boolean types.
 /// </summary>
-class QE_LAYER_COMMON_SYMBOLS SQBoolean
+class QDllExport SQBoolean
 {
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 private:
 
-    // Default constructor (hidden).
+	// Default constructor (hidden).
     SQBoolean();
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
+	/// <summary>
+	/// Converts an input boolean type to an output string type.
+	/// </summary>
+    /// <param name="bValue">[IN] The boolean value to be converted.</param>
+	/// <returns>
+	/// The strings "true" or "false".
+	/// </returns>
+	static string_q ToString(const bool& bValue);
 };
 
 

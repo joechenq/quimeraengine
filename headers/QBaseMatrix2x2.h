@@ -27,11 +27,12 @@
 #ifndef __QBASEMATRIX2X2__
 #define __QBASEMATRIX2X2__
 
-#include "DataTypesDefinitions.h"
-#include "ToolsDefinitions.h"
+#include <memory>
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
 
 namespace Kinesis
@@ -46,28 +47,28 @@ namespace Math
 /// <summary>
 /// Base class to represent a matrix of floating point values of 2 rows and 2 columns.
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS QBaseMatrix2x2
+class QDllExport QBaseMatrix2x2
 {
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor. Initializes each element in the matrix to 0.
-    /// </summary>
-    QBaseMatrix2x2();
+	/// <summary>
+	/// Default constructor. Initializes each element in the matrix to 0.
+	/// </summary>
+	QBaseMatrix2x2();
 
-    /// <summary>
-    /// Copy constructor. Copies attributes from given matrix.
-    /// </summary>
-    /// <param name="matrix">[IN] The 2x2 matrix from which we want to create a copy in the resident matrix.</param>
-    QBaseMatrix2x2(const QBaseMatrix2x2 &matrix);
+	/// <summary>
+	/// Copy constructor. Copies attributes from given matrix.
+	/// </summary>
+	/// <param name="matrix">[IN] The 2x2 matrix from which we want to create a copy in the resident matrix.</param>
+	QBaseMatrix2x2(const QBaseMatrix2x2 &matrix);
 
-    /// <summary>
-    /// Constructor that receives a floating point value for all elements of the matrix.
-    /// </summary>
-    /// <param name="fValueAll">[IN] Floating point value which to fill the matrix with.</param>
-    explicit QBaseMatrix2x2(const float_q fValueAll);
+	/// <summary>
+	/// Constructor that receives a floating point value for all elements of the matrix.
+	/// </summary>
+	/// <param name="fValueAll">[IN] Floating point value which to fill the matrix with.</param>
+	explicit QBaseMatrix2x2(const float_q &fValueAll);
 
     /// <summary>
     /// Constructor from a floating point value for each element of the matrix.
@@ -76,25 +77,25 @@ public:
     /// <param name="f01">[IN] Floating point value for element of row 0, column 1.</param>
     /// <param name="f10">[IN] Floating point value for element of row 1, column 0.</param>
     /// <param name="f11">[IN] Floating point value for element of row 1, column 1.</param>
-    QBaseMatrix2x2(const float_q f00, const float_q f01, const float_q f10, const float_q f11);
+    QBaseMatrix2x2(const float_q &f00, const float_q &f01, const float_q &f10, const float_q &f11);
 
-    /// <summary>
-    /// Constructor that receives a pointer to 4 floating point values.
-    /// </summary>
-    /// <remarks>
-    /// Keeps the convention rows x columns, so each chunck of 2 consecutive elements
-    /// corresponds to a row, where each element in the chunck is the column in the row.
-    /// </remarks>
-    /// <param name="arValues">[IN] A 4 length array of floating point values. If the pointer is null, the behavior  
+	/// <summary>
+	/// Constructor that receives a pointer to 4 floating point values.
+	/// </summary>
+	/// <remarks>
+	/// Keeps the convention rows x columns, so each chunck of 2 consecutive elements
+	/// corresponds to a row, where each element in the chunck is the column in the row.
+	/// </remarks>
+	/// <param name="arValues">[IN] A 4 length array of floating point values. If the pointer is null, the behavior  
     /// is undefined.</param>
-    QBaseMatrix2x2(const float_q* arValues);
+	QBaseMatrix2x2(const float_q* arValues);
 
     /// <summary>
-    /// Constructor from one 4x32 floating point packed values. Each value contains an element of the matrix.<br/>
+	/// Constructor from one 4x32 floating point packed values. Each value contains an element of the matrix.<br/>
     /// Each pack element is unpacked following the row x column convention.
-    /// </summary>
-    /// <param name="value">[IN] 4x32 values for the matrix.</param>
-    QBaseMatrix2x2(const vf32_q value);
+	/// </summary>
+	/// <param name="value">[IN] 4x32 values for the matrix.</param>
+	QBaseMatrix2x2(const vf32_q &value);
 
 
     // METHODS
@@ -124,10 +125,10 @@ public:
     // ---------------
 public:
 
-    /// <summary>
-    /// Array that holds the matrix.
-    /// </summary>
-    float_q ij[2][2];
+	/// <summary>
+	/// Array that holds the matrix.
+	/// </summary>
+	float_q ij[2][2];
 };
 
 } //namespace Math

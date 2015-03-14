@@ -28,11 +28,10 @@
 #define __QMATRIX2X2__
 
 #include "QBaseMatrix2x2.h"
-#include "StringsDefinitions.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
 namespace Kinesis
 {
@@ -59,7 +58,7 @@ namespace Math
 ///
 /// \f$ A = \begin{bmatrix} a_{00} & a_{01} \\ a_{10} & a_{11} \end{bmatrix}\f$
 /// </remarks>
-class QE_LAYER_TOOLS_SYMBOLS QMatrix2x2 : public QBaseMatrix2x2
+class QDllExport QMatrix2x2 : public QBaseMatrix2x2
 {
     // FRIENDS
     // ---------------
@@ -73,7 +72,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    friend QMatrix2x2 QE_LAYER_TOOLS_SYMBOLS operator*(const float_q fScalar, const QMatrix2x2 &matrix);
+    friend QMatrix2x2 QDllExport operator*(const float_q &fScalar, const QMatrix2x2 &matrix);
 
 
     // CONSTRUCTORS
@@ -97,11 +96,11 @@ public:
     /// <param name="matrix">[IN] The 2x2 base matrix in which we want the resident matrix to be based.</param>
     QMatrix2x2(const QBaseMatrix2x2 &matrix);
 
-    /// <summary>
+	/// <summary>
     /// Constructor from a floating point value which with fill all matrix's elements.
     /// </summary>
     /// <param name="fValueAll">[IN] The floating point value used to fill the matrix.</param>
-    explicit QMatrix2x2(const float_q fValueAll);
+    explicit QMatrix2x2(const float_q &fValueAll);
 
     /// <summary>
     /// Constructor from a floating point value for each element of the matrix.
@@ -110,7 +109,7 @@ public:
     /// <param name="f01">[IN] Floating point value for element of row 0, column 1.</param>
     /// <param name="f10">[IN] Floating point value for element of row 1, column 0.</param>
     /// <param name="f11">[IN] Floating point value for element of row 1, column 1.</param>
-    QMatrix2x2(const float_q f00, const float_q f01, const float_q f10, const float_q f11);
+    QMatrix2x2(const float_q &f00, const float_q &f01, const float_q &f10, const float_q &f11);
 
     /// <summary>
     /// Constructor that receives a pointer to 4 floating point values.
@@ -127,7 +126,7 @@ public:
     /// Constructor from one 4x32 floating point packed values. Each pack component contains an element of the matrix.
     /// </summary>
     /// <param name="value">[IN] 4x32 values for the matrix.</param>
-    QMatrix2x2(const vf32_q value);
+    QMatrix2x2(const vf32_q &value);
 
 
     // PROPERTIES
@@ -140,7 +139,7 @@ public:
     /// <returns>
     /// A matrix with all components set to 0.
     /// </returns>
-    static const QMatrix2x2& GetNullMatrix();
+    static const QMatrix2x2& GetZeroMatrix();
 
     /// <summary>
     /// Gets an identity matrix.
@@ -168,7 +167,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    QMatrix2x2 operator*(const float_q fScalar) const;
+    QMatrix2x2 operator*(const float_q &fScalar) const;
 
     /// <summary>
     /// Multiplies a 2x2 matrix by the resident matrix.
@@ -199,7 +198,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    QMatrix2x2 operator/(const float_q fScalar) const;
+    QMatrix2x2 operator/(const float_q &fScalar) const;
 
     /// <summary>
     /// Adds a 2x2 matrix to the resident matrix.
@@ -254,7 +253,7 @@ public:
     /// <returns>
     /// The modified matrix.
     /// </returns>
-    QMatrix2x2& operator/=(const float_q fScalar);
+    QMatrix2x2& operator/=(const float_q &fScalar);
 
     /// <summary>
     /// Addition and assign operator.

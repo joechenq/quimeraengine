@@ -31,13 +31,15 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QBaseOrb.h"
 #include "QVector2.h"
 #include "QVector3.h"
 #include "QVector4.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseOrb;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
@@ -113,8 +115,8 @@ QTEST_CASE_TEMPLATE ( Constructor3_ValuesAreSetProperly_Test, TQTemplateTypes )
 QTEST_CASE_TEMPLATE ( OperatorEquality_TrueWhenOperandsDifferTolerance_Test, TQTemplateTypes )
 {
     // [Preparation]
-    const QBaseOrb<T> LEFT_OPERAND = QBaseOrb<T>( T::GetNullVector(), SQFloat::_0 );
-    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetNullVector(), SQFloat::_0 );
+    const QBaseOrb<T> LEFT_OPERAND = QBaseOrb<T>( T::GetZeroVector(), SQFloat::_0 );
+    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetZeroVector(), SQFloat::_0 );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND == RIGHT_OPERAND);
@@ -127,7 +129,7 @@ QTEST_CASE_TEMPLATE ( OperatorEquality_TrueWhenOperandsDifferLessThanTolerance_T
 {
     // [Preparation]
     const QBaseOrb<T> LEFT_OPERAND = QBaseOrb<T>( T(SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5), SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5);
-    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetNullVector(), SQFloat::_0 );
+    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetZeroVector(), SQFloat::_0 );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND == RIGHT_OPERAND);
@@ -140,7 +142,7 @@ QTEST_CASE_TEMPLATE ( OperatorEquality_FalseWhenOperandsDifferGreaterThanToleran
 {
     // [Preparation]
     const QBaseOrb<T> LEFT_OPERAND = QBaseOrb<T>( T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5);
-    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetNullVector(), SQFloat::_0 );
+    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetZeroVector(), SQFloat::_0 );
 
 	// [Execution] / Verification
     BOOST_CHECK(!( LEFT_OPERAND == RIGHT_OPERAND ));
@@ -192,7 +194,7 @@ QTEST_CASE_TEMPLATE ( OperatorInequality_TrueWhenOperandsDifferGreaterThanTolera
 {
     // [Preparation]
     const QBaseOrb<T> LEFT_OPERAND = QBaseOrb<T>( T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5 );
-    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetNullVector(), SQFloat::_0 );
+    const QBaseOrb<T> RIGHT_OPERAND = QBaseOrb<T>( T::GetZeroVector(), SQFloat::_0 );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND != RIGHT_OPERAND);

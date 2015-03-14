@@ -26,12 +26,11 @@
 
 #include "QBaseVector4.h"
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
+
 #include "SQFloat.h"
 #include "SQVF32.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 namespace Kinesis
 {
@@ -43,12 +42,12 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QBaseVector4::QBaseVector4() : x(SQFloat::_0), y(SQFloat::_0), z(SQFloat::_0), w(SQFloat::_0)
@@ -57,48 +56,48 @@ QBaseVector4::QBaseVector4() : x(SQFloat::_0), y(SQFloat::_0), z(SQFloat::_0), w
 
 QBaseVector4::QBaseVector4(const QBaseVector4 &vVector)
 {
-    this->x = vVector.x;
-    this->y = vVector.y;
-    this->z = vVector.z;
-    this->w = vVector.w;
+	this->x = vVector.x;
+	this->y = vVector.y;
+	this->z = vVector.z;
+	this->w = vVector.w;
 }
 
-QBaseVector4::QBaseVector4(const float_q fValueX, const float_q fValueY, const float_q fValueZ, const float_q fValueW) :
+QBaseVector4::QBaseVector4(const float_q &fValueX, const float_q &fValueY, const float_q &fValueZ, const float_q &fValueW) :
                                 x(fValueX), y(fValueY), z(fValueZ), w(fValueW)
 {
 }
 
-QBaseVector4::QBaseVector4(const float_q fValueAll) : x(fValueAll), y(fValueAll), z(fValueAll), w(fValueAll)
+QBaseVector4::QBaseVector4(const float_q &fValueAll) : x(fValueAll), y(fValueAll), z(fValueAll), w(fValueAll)
 {
 }
 
 QBaseVector4::QBaseVector4(const float_q* arValues)
 {
-    // Null pointer checkout
-    QE_ASSERT_ERROR(arValues != null_q, "Input array must not be null");
+	// Null pointer checkout
+	QE_ASSERT(arValues != null_q)
 
-    // Assignments
-    x = arValues[0];
-    y = arValues[1];
-    z = arValues[2];
-    w = arValues[3];
+	// Assignments
+	x = arValues[0];
+	y = arValues[1];
+	z = arValues[2];
+	w = arValues[3];
 }
 
-QBaseVector4::QBaseVector4(const vf32_q value)
+QBaseVector4::QBaseVector4(const vf32_q &value)
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
 
     SQVF32::Unpack(value, this->x, this->y, this->z, this->w);
 }
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 bool QBaseVector4::operator==(const QBaseVector4 &vVector) const

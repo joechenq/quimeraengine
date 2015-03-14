@@ -35,12 +35,10 @@ using namespace boost::unit_test;
 #include "QBaseVector3.h"
 #include "QBaseVector4.h"
 #include "SQFloat.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QDualQuaternion;
 
 QTEST_SUITE_BEGIN( QDualQuaternion_TestSuite )
@@ -631,18 +629,18 @@ QTEST_CASE ( Constructor8_AssertionFailsWhenPointersAreNull_Test )
 
     try
     {
-        QDualQuaternion(arRealPartComponents, NULL_POINTER);
+        QDualQuaternion dualQuaternion = QDualQuaternion(arRealPartComponents, NULL_POINTER);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO avillalba: A concrete exception should be caoght when it's implemented
     {
         bAssertionFailedBecauseRealPartIsNull = true;
     }
 
     try
     {
-        QDualQuaternion(NULL_POINTER, arDualPartComponents);
+        QDualQuaternion dualQuaternion = QDualQuaternion(NULL_POINTER, arDualPartComponents);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO avillalba: A concrete exception should be caught when it's implemented
     {
         bAssertionFailedBecauseDualPartIsNull = true;
     }
@@ -874,9 +872,9 @@ QTEST_CASE ( OperatorDivision_AssertionFailsWhenScalarEqualsZero_Test )
 
     try
     {
-        DUALQUATERNION / SCALAR;
+        QDualQuaternion dualQuaternionUT = DUALQUATERNION / SCALAR;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO Thund: A concrete exception type should be caught when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -1049,9 +1047,9 @@ QTEST_CASE ( OperatorDivisionAssignation_AssertionFailsWhenScalarEqualsZero_Test
 
     try
     {
-        DUALQUATERNION / SCALAR;
+        QDualQuaternion dualQuaternionUT = DUALQUATERNION / SCALAR;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO Thund: A concrete exception type should be caught when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -1561,17 +1559,9 @@ QTEST_CASE ( ToString_ReturnedFormatMatchesExpected_Test )
                                                            QQuaternion(SQFloat::_0_25, (float_q)-0.000002, (float_q)40000.0, (float_q)1.0));
 
     #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
-        #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-            string_q EXPECTED_STRING_FORM = QE_L("DQ(r(Q(0.25,-1.99999999e-06,40000,1)),d(Q(0.25,-1.99999999e-06,40000,1)))");
-        #else
-            string_q EXPECTED_STRING_FORM = QE_L("DQ(r(Q(0.25,-1.99999999e-006,40000,1)),d(Q(0.25,-1.99999999e-006,40000,1)))");
-        #endif
+        const string_q EXPECTED_STRING_FORM = QE_L("DQ(r(Q(0.25,-1.99999999e-006,40000,1)),d(Q(0.25,-1.99999999e-006,40000,1)))");
     #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
-        #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-            string_q EXPECTED_STRING_FORM = QE_L("DQ(r(Q(0.25,-1.9999999999999999e-06,40000,1)),d(Q(0.25,-1.9999999999999999e-06,40000,1)))");
-        #else
-            string_q EXPECTED_STRING_FORM = QE_L("DQ(r(Q(0.25,-1.9999999999999999e-006,40000,1)),d(Q(0.25,-1.9999999999999999e-006,40000,1)))");
-        #endif
+        const string_q EXPECTED_STRING_FORM = QE_L("DQ(r(Q(0.25,-1.9999999999999999e-006,40000,1)),d(Q(0.25,-1.9999999999999999e-006,40000,1)))");
     #endif
 
 	// [Execution]

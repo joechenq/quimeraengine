@@ -31,13 +31,10 @@
 #include "QBaseRay.h"
 #include "QBaseOrb.h"
 #include "EQIntersections.h"
-#include "QVector2.h"
-#include "QVector3.h"
-#include "QVector4.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
@@ -55,36 +52,36 @@ namespace Math
 /// <remarks>
 /// The direction symbolizes a line with only one end (which coincides with the origin) and that extends to the infinite.
 /// </remarks>
-/// <typeparam name="VectorTOrigin">Allowed types: QVector2, QVector3, QVector4.</typeparam>
-/// <typeparam name="VectorTDirection">Allowed types: QVector2 (when VectorTOrigin is QVector2), QVector3 (when VectorTOrigin is QVector3 or QVector4).</typeparam>
-template<class VectorTOrigin, class VectorTDirection>
-class QRay : public QBaseRay<VectorTOrigin, VectorTDirection>
+/// <typeparam name="VectorTypeOrigin">Allowed types: QVector2, QVector3, QVector4.</typeparam>
+/// <typeparam name="VectorTypeDirection">Allowed types: QVector2 (when VectorTypeOrigin is QVector2), QVector3 (when VectorTypeOrigin is QVector3 or QVector4).</typeparam>
+template<class VectorTypeOrigin, class VectorTypeDirection>
+class QRay : public QBaseRay<VectorTypeOrigin, VectorTypeDirection>
 {
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    QRay()
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
+	QRay()
     {
     }
 
     /// <summary>
-    /// Copy constructor.
-    /// </summary>
-    /// <param name="ray">[IN] The ray from which we want to create a copy in the resident ray.</param>
-    QRay(const QRay<VectorTOrigin, VectorTDirection> &ray) : QBaseRay<VectorTOrigin, VectorTDirection>(ray)
-    {
-    }
+	/// Copy constructor.
+	/// </summary>
+	/// <param name="ray">[IN] The ray from which we want to create a copy in the resident ray.</param>
+	QRay(const QRay<VectorTypeOrigin, VectorTypeDirection> &ray) : QBaseRay<VectorTypeOrigin, VectorTypeDirection>(ray)
+	{
+	}
 
     /// <summary>
     /// Base type constructor.
     /// </summary>
     /// <param name="ray">[IN] The ray in which we want resident ray to be based.</param>
-    QRay(const QBaseRay<VectorTOrigin, VectorTDirection> &ray) : QBaseRay<VectorTOrigin, VectorTDirection>(ray)
+    QRay(const QBaseRay<VectorTypeOrigin, VectorTypeDirection> &ray) : QBaseRay<VectorTypeOrigin, VectorTypeDirection>(ray)
     {
     }
 
@@ -96,7 +93,7 @@ public:
     /// </remarks>
     /// <param name="vOrigin">[IN] Ray's position.</param>
     /// <param name="vDirection">[IN] Ray's direction.</param>
-    QRay(const VectorTOrigin &vOrigin, const VectorTDirection &vDirection) : QBaseRay<VectorTOrigin, VectorTDirection>(vOrigin, vDirection)
+    QRay(const VectorTypeOrigin &vOrigin, const VectorTypeDirection &vDirection) : QBaseRay<VectorTypeOrigin, VectorTypeDirection>(vOrigin, vDirection)
     {
     }
 
@@ -106,20 +103,20 @@ public:
 public:
 
     /// <summary>
-    /// Gets a ray placed at the coordinate origin and whose direction vector is null.
-    /// </summary>
-    /// <returns>
+	/// Gets a ray placed at the coordinate origin and whose direction vector is null.
+	/// </summary>
+	/// <returns>
     /// The null ray.
     /// </returns>
-    static const QRay<VectorTOrigin, VectorTDirection>& GetNullRay()
+    static const QRay<VectorTypeOrigin, VectorTypeDirection>& GetRayZero()
     {
-        static const QRay<VectorTOrigin, VectorTDirection> NULLRAY(VectorTOrigin::GetNullVector(), VectorTDirection::GetNullVector());
-        return NULLRAY;
+        static const QRay<VectorTypeOrigin, VectorTypeDirection> RAYZERO(VectorTypeOrigin::GetZeroVector(), VectorTypeDirection::GetZeroVector());
+        return RAYZERO;
     }
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -129,9 +126,9 @@ public:
     /// <returns>
     /// A reference to this ray, after assignation.
     /// </returns>
-    QRay<VectorTOrigin, VectorTDirection>& operator=(const QBaseRay<VectorTOrigin, VectorTDirection> &ray)
+    QRay<VectorTypeOrigin, VectorTypeDirection>& operator=(const QBaseRay<VectorTypeOrigin, VectorTypeDirection> &ray)
     {
-        QBaseRay<VectorTOrigin, VectorTDirection>::operator=(ray);
+        QBaseRay<VectorTypeOrigin, VectorTypeDirection>::operator=(ray);
         return *this;
     }
 
@@ -141,9 +138,9 @@ public:
     /// <returns>
     /// The inverse of the ray.
     /// </returns>
-    QRay<VectorTOrigin, VectorTDirection> Invert() const
+    QRay<VectorTypeOrigin, VectorTypeDirection> Invert() const
     {
-        return QRay<VectorTOrigin, VectorTDirection>(this->Origin, -this->Direction);
+        return QRay<VectorTypeOrigin, VectorTypeDirection>(this->Origin, -this->Direction);
     }
 
     /// <summary>
@@ -152,9 +149,9 @@ public:
     /// <returns>
     /// The normalized ray.
     /// </returns>
-    QRay<VectorTOrigin, VectorTDirection> Normalize() const
+    QRay<VectorTypeOrigin, VectorTypeDirection> Normalize() const
     {
-        return QRay<VectorTOrigin, VectorTDirection>(this->Origin, this->Direction.Normalize());
+        return QRay<VectorTypeOrigin, VectorTypeDirection>(this->Origin, this->Direction.Normalize());
     }
 
     /// <summary>
@@ -167,10 +164,10 @@ public:
     /// <returns>
     /// A point of the ray.
     /// </returns>
-    VectorTOrigin GetPoint(const float_q fDistance) const
+    VectorTypeOrigin GetPoint(const float_q &fDistance) const
     {
         // The direction vector must be normalized
-        QE_ASSERT_WARNING( SQFloat::AreEqual(this->Direction.GetLength(), SQFloat::_1), "The direction vector must be normalized" );
+        QE_ASSERT( SQFloat::AreEqual(this->Direction.GetLength(), SQFloat::_1) );
 
         // It's assumed that the ray's direction vector is normalized
         return this->Origin + this->Direction * fDistance;
@@ -184,7 +181,7 @@ public:
     /// </remarks>
     /// <param name="orb">[IN] The orb whose intersection with the ray will be checked.</param>
     /// <returns>
-    /// A boolean value that indicates whether the ray and the orb intersect or not.<br/>
+	/// A boolean value that indicates whether the ray and the orb intersect or not.<br/>
     /// <br/>
     /// <b>True</b><br/>
     /// The ray and the orb intersect, including the following cases:
@@ -195,20 +192,17 @@ public:
     ///
     /// <b>False</b><br/>
     /// The ray and the orb do not intersect.
-    /// </returns>
-    bool Intersection(const QBaseOrb<VectorTOrigin> &orb) const
+	/// </returns>
+    bool Intersection(const QBaseOrb<VectorTypeOrigin> &orb) const
     {
-        // [TODO] Thund: This method is easy to optimize.
-
         // The direction vector shouldn't be null and the radius of the orb shouldn't equal zero
-        QE_ASSERT_WARNING( SQFloat::IsNotZero(this->Direction.GetLength()) && SQFloat::IsNotZero(orb.Radius), 
-                   "The direction vector shouldn't be null and the radius of the orb shouldn't equal zero" );
+        QE_ASSERT( SQFloat::IsNotZero(this->Direction.GetLength()) && SQFloat::IsNotZero(orb.Radius) );
 
         // The direction vector must be normalized
-        QE_ASSERT_WARNING( SQFloat::AreEqual(this->Direction.GetLength(), SQFloat::_1), "The direction vector must be normalized" );
-        
-        // Converts all vectors to VectorTDirection, that always will be QVector2 or QVector3
-        VectorTDirection vNewRayOrigin(this->Origin - orb.Center);
+        QE_ASSERT( SQFloat::AreEqual(this->Direction.GetLength(), SQFloat::_1) );
+
+        // Converts all vectors to VectorTypeDirection, that always will be QVector2 or QVector3
+        VectorTypeDirection vNewRayOrigin(this->Origin - orb.Center);
 
         //  B/2 (instead of B) is calculed here to optimize comparison.
         const float_q &fB = vNewRayOrigin.DotProduct(this->Direction);
@@ -275,25 +269,25 @@ public:
     /// - The ray intersects with the orb in two points.
     /// - The origin of the ray lays on the surface / perimeter of the orb and the ray points to the orb.
     /// </returns>
-    EQIntersections IntersectionPoint(const QBaseOrb<VectorTOrigin> &orb, VectorTOrigin &vIntersection) const
-    {
-        VectorTOrigin vAux;
-        return this->IntersectionPoint(orb, vIntersection, vAux);
-    }
+	EQIntersections IntersectionPoint(const QBaseOrb<VectorTypeOrigin> &orb, VectorTypeOrigin &vIntersection) const
+	{
+		VectorTypeOrigin vAux;
+		return this->IntersectionPoint(orb, vIntersection, vAux);
+	}
 
 
     /// <summary>
-    /// Computes the intersection point between the ray and provided orb, if it exists.
-    /// </summary>
+	/// Computes the intersection point between the ray and provided orb, if it exists.
+	/// </summary>
     /// <remarks>
-    /// The ray must be normalized to obtain a correct result.<br/>
-    /// If there's no intersection point, the output parameters won't be modified.<br/>
+	/// The ray must be normalized to obtain a correct result.<br/>
+	/// If there's no intersection point, the output parameters won't be modified.<br/>
     /// Neither the length of the direction vector nor the radius of the orb should equal zero.
-    /// </remarks>
-    /// <param name="orb">[IN] The orb whose intersection with the ray will be checked.</param>
-    /// <param name="vIntersection1">[OUT] A vector where to store the closest intersection point to the origin of the ray.</param>
-    /// <param name="vIntersection2">[OUT] A vector where to store the furthest intersection point to the origin of the ray.</param>
-    /// <returns>
+	/// </remarks>
+	/// <param name="orb">[IN] The orb whose intersection with the ray will be checked.</param>
+	/// <param name="vIntersection1">[OUT] A vector where to store the closest intersection point to the origin of the ray.</param>
+	/// <param name="vIntersection2">[OUT] A vector where to store the furthest intersection point to the origin of the ray.</param>
+	/// <returns>
     /// An enumerated value that indicates how many intersections were found:<br/>
     /// <br/>
     /// <b>None</b><br/>
@@ -310,21 +304,20 @@ public:
     /// - The ray intersects with the orb in two points.
     /// - The origin of the ray lays on the surface / perimeter of the orb and the ray points to the orb.
     /// </returns>
-    EQIntersections IntersectionPoint(const QBaseOrb<VectorTOrigin> &orb, VectorTOrigin &vIntersection1, VectorTOrigin &vIntersection2) const
+    EQIntersections IntersectionPoint(const QBaseOrb<VectorTypeOrigin> &orb, VectorTypeOrigin &vIntersection1, VectorTypeOrigin &vIntersection2) const
     {
         // The direction vector shouldn't be null and the radius of the orb shouldn't equal zero
-        QE_ASSERT_WARNING( SQFloat::IsNotZero(this->Direction.GetLength()) && SQFloat::IsNotZero(orb.Radius), 
-                   "The direction vector shouldn't be null and the radius of the orb shouldn't equal zero" );
+        QE_ASSERT( SQFloat::IsNotZero(this->Direction.GetLength()) && SQFloat::IsNotZero(orb.Radius) );
 
         // The direction vector must be normalized
-        QE_ASSERT_WARNING( SQFloat::AreEqual(this->Direction.GetLength(), SQFloat::_1), "The direction vector must be normalized" );
+        QE_ASSERT( SQFloat::AreEqual(this->Direction.GetLength(), SQFloat::_1) );
 
         // We set all vectors to the same type that output parameters to allow operations
-        const VectorTDirection &DIRECTION(this->Direction);
+        const VectorTypeDirection &DIRECTION(this->Direction);
 
         // We reduce ray and orb to origin, in order to simplify orb equation, and we calculate
         // the new ray origin point
-        const VectorTOrigin &NEW_RAY_ORIGIN(this->Origin - orb.Center);
+        const VectorTypeOrigin &NEW_RAY_ORIGIN(this->Origin - orb.Center);
 
         // We replace then in the orb equation to force it to verify the ray equation
         // DIRECTION^2*T^2 + 2*vNewA*DIRECTION*T + vNewA^2 - r^2 = 0
@@ -336,7 +329,7 @@ public:
         // Since ray is normalized, A = 1
         // const float_q &fA = this->Direction.DotProduct(this->Direction);
 
-        const float_q &fB = SQFloat::_2 * VectorTDirection(NEW_RAY_ORIGIN).DotProduct(DIRECTION);
+        const float_q &fB = SQFloat::_2 * VectorTypeDirection(NEW_RAY_ORIGIN).DotProduct(DIRECTION);
         const float_q &fC = NEW_RAY_ORIGIN.DotProduct(NEW_RAY_ORIGIN) - orb.Radius * orb.Radius;
 
         // Remember that a = 1 -> D = B^2 - 4AC = B^2 - 4C
@@ -395,11 +388,11 @@ public:
     }
 
     /// <summary>
-    /// Converts ray into a string.
+	/// Converts ray into a string.
     /// </summary>
     /// <remarks>
     /// The format of the string is:<br/>
-    /// "RY(o($Origin),d($Direction))".<br/>
+	/// "RY(o($Origin),d($Direction))".<br/>
     /// Where "$" means "string representation of attribute".
     /// </summary>
     /// <returns>
@@ -407,21 +400,11 @@ public:
     /// </returns>
     string_q ToString() const
     {
-        return string_q("RY(o(") + this->Origin.ToString() + QE_L("),d(") + this->Direction.ToString() + QE_L("))");
+        return QE_L("RY(o(") + this->Origin.ToString() + QE_L("),d(") + this->Direction.ToString() + QE_L("))");
     }
 
 };
 
-
-// SPECIALIZATION EXPORTATIONS
-// -----------------------------
-#ifdef QE_EXPORT_TOOLS_TEMPLATE_SPECIALIZATION
-
-template class QE_LAYER_TOOLS_SYMBOLS QRay<Kinesis::QuimeraEngine::Tools::Math::QVector2, Kinesis::QuimeraEngine::Tools::Math::QVector2>;
-template class QE_LAYER_TOOLS_SYMBOLS QRay<Kinesis::QuimeraEngine::Tools::Math::QVector3, Kinesis::QuimeraEngine::Tools::Math::QVector3>;
-template class QE_LAYER_TOOLS_SYMBOLS QRay<Kinesis::QuimeraEngine::Tools::Math::QVector4, Kinesis::QuimeraEngine::Tools::Math::QVector3>;
-
-#endif // QE_EXPORT_TOOLS_TEMPLATE_SPECIALIZATION
 
 } //namespace Math
 } //namespace Tools

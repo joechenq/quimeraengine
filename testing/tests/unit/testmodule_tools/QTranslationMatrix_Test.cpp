@@ -31,6 +31,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QTranslationMatrix.h"
 #include "QMatrix4x3.h"
 #include "QMatrix4x4.h"
@@ -41,11 +43,11 @@ using namespace boost::unit_test;
 #include "QScalingMatrix3x3.h"
 #include "SQVF32.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 using Kinesis::QuimeraEngine::Tools::Math::QTranslationMatrix;
 using Kinesis::QuimeraEngine::Tools::Math::QMatrix4x3;
 using Kinesis::QuimeraEngine::Tools::Math::QMatrix4x4;
@@ -276,7 +278,7 @@ QTEST_CASE_TEMPLATE ( Constructor4_IdentityMatrixObtainedWhen3DVectorIsZeroVecto
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
-    const QVector3 ZERO_VECTOR = QVector3::GetNullVector();
+    const QVector3 ZERO_VECTOR = QVector3::GetZeroVector();
 	const T EXPECTED_VALUE = T::GetIdentity();
 
     // [Execution]
@@ -350,7 +352,7 @@ QTEST_CASE_TEMPLATE ( Constructor5_IdentityMatrixObtainedWhen4DVectorIsZeroVecto
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 
-    const QVector4 ZERO_VECTOR = QVector4::GetNullVector();
+    const QVector4 ZERO_VECTOR = QVector4::GetZeroVector();
 	const T EXPECTED_VALUE = T::GetIdentity();
 
     // [Execution]

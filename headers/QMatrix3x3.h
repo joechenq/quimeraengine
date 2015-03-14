@@ -29,9 +29,8 @@
 
 #include "QBaseMatrix3x3.h"
 #include "QBaseMatrix3x4.h"
-#include "StringsDefinitions.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
@@ -59,7 +58,7 @@ namespace Math
 /// <br/>
 /// \f$ A = \begin{bmatrix} a_{00} & a_{01} & a_{02}\\ a_{10} & a_{11} & a_{12}\\ a_{20} & a_{21} & a_{22}\end{bmatrix}\f$
 /// </remarks>
-class QE_LAYER_TOOLS_SYMBOLS QMatrix3x3 : public QBaseMatrix3x3
+class QDllExport QMatrix3x3 : public QBaseMatrix3x3
 {
     // FRIENDS
     // ---------------
@@ -72,7 +71,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    friend QMatrix3x3 QE_LAYER_TOOLS_SYMBOLS operator*(const float_q fScalar, const QMatrix3x3 &matrix);
+    friend QMatrix3x3 QDllExport operator*(const float_q &fScalar, const QMatrix3x3 &matrix);
 
 
     // CONSTRUCTORS
@@ -100,7 +99,7 @@ public:
     /// Constructor from a floating point value which with fill all matrix's elements.
     /// </summary>
     /// <param name="fValueAll">[IN] The floating point value used to fill the matrix.</param>
-    explicit QMatrix3x3(const float_q fValueAll);
+    explicit QMatrix3x3(const float_q &fValueAll);
 
     /// <summary>
     /// Constructor from a floating point value for each element of the matrix.
@@ -114,9 +113,9 @@ public:
     /// <param name="f20">[IN] Floating point value for element of row 2, column 0.</param>
     /// <param name="f21">[IN] Floating point value for element of row 2, column 1.</param>
     /// <param name="f22">[IN] Floating point value for element of row 2, column 2.</param>
-    QMatrix3x3(const float_q f00, const float_q f01, const float_q f02,
-               const float_q f10, const float_q f11, const float_q f12,
-               const float_q f20, const float_q f21, const float_q f22);
+    QMatrix3x3(const float_q &f00, const float_q &f01, const float_q &f02,
+               const float_q &f10, const float_q &f11, const float_q &f12,
+               const float_q &f20, const float_q &f21, const float_q &f22);
 
     /// <summary>
     /// Constructor that receives a pointer to 9 floating point values.
@@ -138,7 +137,7 @@ public:
     /// <param name="row0">[IN] 4x32 values for row 0, columns 0 to 3 unpacked in this order.</param>
     /// <param name="row1">[IN] 4x32 values for row 1, columns 0 to 3 unpacked in this order.</param>
     /// <param name="row2">[IN] 4x32 values for row 2, columns 0 to 3 unpacked in this order.</param>
-    QMatrix3x3(const vf32_q row0, const vf32_q row1, const vf32_q row2);
+    QMatrix3x3(const vf32_q &row0, const vf32_q &row1, const vf32_q &row2);
 
 
     // PROPERTIES
@@ -151,7 +150,7 @@ public:
     /// <returns>
     /// A matrix with all components set to 0.
     /// </returns>
-    static const QMatrix3x3& GetNullMatrix();
+    static const QMatrix3x3& GetZeroMatrix();
 
     /// <summary>
     /// Gets an identity matrix.
@@ -179,7 +178,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    QMatrix3x3 operator*(const float_q fScalar) const;
+    QMatrix3x3 operator*(const float_q &fScalar) const;
 
     /// <summary>
     /// Multiplies a 3x3 matrix by the resident matrix.
@@ -222,7 +221,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    QBaseMatrix3x4 operator*(const QBaseMatrix3x4& matrix) const;
+	QBaseMatrix3x4 operator*(const QBaseMatrix3x4& matrix) const;
 
     /// <summary>
     /// Divides current matrix by a floating point value.
@@ -232,7 +231,7 @@ public:
     /// <returns>
     /// The resultant matrix.
     /// </returns>
-    QMatrix3x3 operator/(const float_q fScalar) const;
+    QMatrix3x3 operator/(const float_q &fScalar) const;
 
     /// <summary>
     /// Adds a 3x3 matrix to the current matrix.
@@ -278,7 +277,7 @@ public:
     /// <returns>
     /// The modified matrix.
     /// </returns>
-    QMatrix3x3& operator/=(const float_q fScalar);
+    QMatrix3x3& operator/=(const float_q &fScalar);
 
     /// <summary>
     /// Addition and assign operator. Current matrix stores the result of the addition.

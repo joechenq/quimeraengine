@@ -67,19 +67,17 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <ClCompile>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DLL;WIN32;_DEBUG;_WINDOWS;BOOST_NO_RTTI;BOOST_NO_TYPEID;BOOST_NO_EXCEPTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DLL;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\3rdparty\ICU\include;$(SolutionDir)..\..\..\headers;$(SolutionDir)..\..\..\3rdparty\Boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\headers;$(SolutionDir)..\..\..\3rdparty\Boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <StringPooling>false</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <DisableSpecificWarnings>4530;</DisableSpecificWarnings>
-      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -91,8 +89,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\bin\VS2010\$(Configuration);$(SolutionDir)..\..\..\3rdparty\Boost\bin\Win32\DebugSharedrtStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>libboost_thread-vc100-mt-gd.lib;QuimeraEngineCore.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 /ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <ProjectReference>
@@ -110,25 +107,23 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <ClCompile>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DLL;WIN32;_DEBUG;_WINDOWS;QE_PREPROCESSOR_EXPORTLIB_TOOLS;QE_PREPROCESSOR_IMPORTLIB_COMMON;BOOST_NO_RTTI;BOOST_NO_TYPEID;BOOST_NO_EXCEPTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DLL;WIN32;_DEBUG;_WINDOWS;QE_PREPROCESSOR_COMPILER_SHAREDLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\3rdparty\ICU\include;$(SolutionDir)..\..\..\headers;$(SolutionDir)..\..\..\3rdparty\Boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\headers;$(SolutionDir)..\..\..\3rdparty\Boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <StringPooling>false</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <ExceptionHandling>false</ExceptionHandling>
-      <DisableSpecificWarnings>4530;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>NotSet</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\bin\VS2010\DebugWin32SharedrtDynamic;$(SolutionDir)..\..\..\3rdparty\Boost\bin\Win32\DebugSharedrtStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QuimeraEngineCommon.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\3rdparty\Boost\bin\Win32\DebugSharedrtStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libboost_thread-vc100-mt-gd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
       <ImportLibrary>
       </ImportLibrary>
@@ -171,13 +166,10 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\headers\DataTypesDefinitions.h" />
     <ClInclude Include="..\..\..\..\headers\EQIntersections.h" />
-    <ClInclude Include="..\..\..\..\headers\EQIterationDirection.h" />
     <ClInclude Include="..\..\..\..\headers\EQSpaceRelation.h" />
-    <ClInclude Include="..\..\..\..\headers\EQTreeTraversalOrder.h" />
     <ClInclude Include="..\..\..\..\headers\MathDefinitions.h" />
-    <ClInclude Include="..\..\..\..\headers\QArrayDynamic.h" />
-    <ClInclude Include="..\..\..\..\headers\QArrayFixed.h" />
     <ClInclude Include="..\..\..\..\headers\QBaseDualQuaternion.h" />
     <ClInclude Include="..\..\..\..\headers\QBaseHexahedron.h" />
     <ClInclude Include="..\..\..\..\headers\QBaseLineSegment.h" />
@@ -194,25 +186,17 @@
     <ClInclude Include="..\..\..\..\headers\QBaseTriangle.h" />
     <ClInclude Include="..\..\..\..\headers\QBaseVector2.h" />
     <ClInclude Include="..\..\..\..\headers\QBaseVector3.h" />
-    <ClInclude Include="..\..\..\..\headers\QBinarySearchTree.h" />
     <ClInclude Include="..\..\..\..\headers\QCircle.h" />
-    <ClInclude Include="..\..\..\..\headers\QDateTime.h" />
-    <ClInclude Include="..\..\..\..\headers\QDictionary.h" />
     <ClInclude Include="..\..\..\..\headers\QDualQuaternion.h" />
-    <ClInclude Include="..\..\..\..\headers\QEvent.h" />
-    <ClInclude Include="..\..\..\..\headers\QHashtable.h" />
     <ClInclude Include="..\..\..\..\headers\QHexahedron.h" />
-    <ClInclude Include="..\..\..\..\headers\QKeyValuePair.h" />
     <ClInclude Include="..\..\..\..\headers\QLineSegment.h" />
     <ClInclude Include="..\..\..\..\headers\QLineSegment2D.h" />
     <ClInclude Include="..\..\..\..\headers\QLineSegment3D.h" />
-    <ClInclude Include="..\..\..\..\headers\QList.h" />
     <ClInclude Include="..\..\..\..\headers\QMatrix2x2.h" />
     <ClInclude Include="..\..\..\..\headers\QMatrix3x3.h" />
     <ClInclude Include="..\..\..\..\headers\QMatrix3x4.h" />
     <ClInclude Include="..\..\..\..\headers\QMatrix4x3.h" />
     <ClInclude Include="..\..\..\..\headers\QMatrix4x4.h" />
-    <ClInclude Include="..\..\..\..\headers\QNTree.h" />
     <ClInclude Include="..\..\..\..\headers\QOrb.h" />
     <ClInclude Include="..\..\..\..\headers\QPlane.h" />
     <ClInclude Include="..\..\..\..\headers\QQuadrilateral.h" />
@@ -225,8 +209,6 @@
     <ClInclude Include="..\..\..\..\headers\QScalingMatrix3x3.h" />
     <ClInclude Include="..\..\..\..\headers\QSpaceConversionMatrix.h" />
     <ClInclude Include="..\..\..\..\headers\QSphere.h" />
-    <ClInclude Include="..\..\..\..\headers\QTimeSpan.h" />
-    <ClInclude Include="..\..\..\..\headers\QTimeZone.h" />
     <ClInclude Include="..\..\..\..\headers\QTransformationMatrix.h" />
     <ClInclude Include="..\..\..\..\headers\QTransformationMatrix3x3.h" />
     <ClInclude Include="..\..\..\..\headers\QTranslationMatrix.h" />
@@ -237,79 +219,55 @@
     <ClInclude Include="..\..\..\..\headers\QVector3.h" />
     <ClInclude Include="..\..\..\..\headers\QVector4.h" />
     <ClInclude Include="..\..\..\..\headers\SQAngle.h" />
-    <ClInclude Include="..\..\..\..\headers\SQComparatorDefault.h" />
-    <ClInclude Include="..\..\..\..\headers\SQEqualityComparator.h" />
-    <ClInclude Include="..\..\..\..\headers\SQIntegerHashProvider.h" />
-    <ClInclude Include="..\..\..\..\headers\SQKeyValuePairComparator.h" />
-    <ClInclude Include="..\..\..\..\headers\SQNoComparator.h" />
+    <ClInclude Include="..\..\..\..\headers\SQBoolean.h" />
+    <ClInclude Include="..\..\..\..\headers\SQFloat.h" />
+    <ClInclude Include="..\..\..\..\headers\SQInteger.h" />
     <ClInclude Include="..\..\..\..\headers\SQPoint.h" />
-    <ClInclude Include="..\..\..\..\headers\SQStringHashProvider.h" />
-    <ClInclude Include="..\..\..\..\headers\SQTimeZoneFactory.h" />
-    <ClInclude Include="..\..\..\..\headers\ToolsDefinitions.h" />
+    <ClInclude Include="..\..\..\..\headers\SQVF32.h" />
+    <ClInclude Include="..\..\..\..\headers\ToolsExports.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\EQIntersections.cpp" />
-    <ClCompile Include="..\..\..\..\source\EQIterationDirection.cpp" />
     <ClCompile Include="..\..\..\..\source\EQSpaceRelation.cpp" />
-    <ClCompile Include="..\..\..\..\source\EQTreeTraversalOrder.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseDualQuaternion.cpp" />
-    <ClCompile Include="..\..\..\..\source\QBaseHexahedron.cpp" />
-    <ClCompile Include="..\..\..\..\source\QBaseLineSegment.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseMatrix2x2.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseMatrix3x3.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseMatrix3x4.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseMatrix4x3.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseMatrix4x4.cpp" />
-    <ClCompile Include="..\..\..\..\source\QBaseOrb.cpp" />
     <ClCompile Include="..\..\..\..\source\QBasePlane.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseQuadrilateral.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseQuaternion.cpp" />
-    <ClCompile Include="..\..\..\..\source\QBaseRay.cpp" />
-    <ClCompile Include="..\..\..\..\source\QBaseTriangle.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseVector2.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseVector3.cpp" />
     <ClCompile Include="..\..\..\..\source\QBaseVector4.cpp" />
     <ClCompile Include="..\..\..\..\source\QCircle.cpp" />
-    <ClCompile Include="..\..\..\..\source\QDateTime.cpp" />
-    <ClCompile Include="..\..\..\..\source\QDstInformation.cpp" />
     <ClCompile Include="..\..\..\..\source\QDualQuaternion.cpp" />
-    <ClCompile Include="..\..\..\..\source\QHexahedron.cpp" />
-    <ClCompile Include="..\..\..\..\source\QLineSegment.cpp" />
     <ClCompile Include="..\..\..\..\source\QLineSegment2D.cpp" />
-    <ClCompile Include="..\..\..\..\source\QLineSegment3D.cpp" />
     <ClCompile Include="..\..\..\..\source\QMatrix2x2.cpp" />
     <ClCompile Include="..\..\..\..\source\QMatrix3x3.cpp" />
     <ClCompile Include="..\..\..\..\source\QMatrix3x4.cpp" />
     <ClCompile Include="..\..\..\..\source\QMatrix4x3.cpp" />
     <ClCompile Include="..\..\..\..\source\QMatrix4x4.cpp" />
-    <ClCompile Include="..\..\..\..\source\QOrb.cpp" />
     <ClCompile Include="..\..\..\..\source\QPlane.cpp" />
     <ClCompile Include="..\..\..\..\source\QQuadrilateral.cpp" />
     <ClCompile Include="..\..\..\..\source\QQuaternion.cpp" />
-    <ClCompile Include="..\..\..\..\source\QRay.cpp" />
     <ClCompile Include="..\..\..\..\source\QRay2D.cpp" />
-    <ClCompile Include="..\..\..\..\source\QRay3D.cpp" />
     <ClCompile Include="..\..\..\..\source\QRotationMatrix3x3.cpp" />
     <ClCompile Include="..\..\..\..\source\QScalingMatrix3x3.cpp" />
     <ClCompile Include="..\..\..\..\source\QSpaceConversionMatrix.cpp" />
-    <ClCompile Include="..\..\..\..\source\QTimeSpan.cpp" />
-    <ClCompile Include="..\..\..\..\source\QSphere.cpp" />
-    <ClCompile Include="..\..\..\..\source\QTimeZone.cpp" />
-    <ClCompile Include="..\..\..\..\source\QTransformationMatrix.cpp" />
     <ClCompile Include="..\..\..\..\source\QTransformationMatrix3x3.cpp" />
-    <ClCompile Include="..\..\..\..\source\QTranslationMatrix.cpp" />
-    <ClCompile Include="..\..\..\..\source\QTriangle.cpp" />
     <ClCompile Include="..\..\..\..\source\QTriangle2D.cpp" />
-    <ClCompile Include="..\..\..\..\source\QTriangle3D.cpp" />
     <ClCompile Include="..\..\..\..\source\QVector2.cpp" />
     <ClCompile Include="..\..\..\..\source\QVector3.cpp" />
     <ClCompile Include="..\..\..\..\source\QVector4.cpp" />
     <ClCompile Include="..\..\..\..\source\SQAngle.cpp" />
+    <ClCompile Include="..\..\..\..\source\SQBoolean.cpp" />
+    <ClCompile Include="..\..\..\..\source\SQFloat.cpp" />
+    <ClCompile Include="..\..\..\..\source\SQInteger.cpp" />
     <ClCompile Include="..\..\..\..\source\SQPoint.cpp" />
-    <ClCompile Include="..\..\..\..\source\SQStringHashProvider.cpp" />
-    <ClCompile Include="..\..\..\..\source\SQTimeZoneFactory.cpp" />
-    <ClCompile Include="..\..\..\..\source\TimeZoneDatabase.cpp" />
-    <ClCompile Include="..\..\..\..\source\Workarounds\Boost_ThrowException.cpp" />
+    <ClCompile Include="..\..\..\..\source\SQVF32.cpp" />
+    <ClCompile Include="..\..\..\..\source\ToolsExports.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

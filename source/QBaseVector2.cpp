@@ -26,12 +26,10 @@
 
 #include "QBaseVector2.h"
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
 #include "SQFloat.h"
 #include "SQVF32.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -44,12 +42,12 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QBaseVector2::QBaseVector2() : x(SQFloat::_0), y(SQFloat::_0)
@@ -58,45 +56,45 @@ QBaseVector2::QBaseVector2() : x(SQFloat::_0), y(SQFloat::_0)
 
 QBaseVector2::QBaseVector2(const QBaseVector2 &vVector)
 {
-    this->x = vVector.x;
-    this->y = vVector.y;
+	this->x = vVector.x;
+	this->y = vVector.y;
 }
 
-QBaseVector2::QBaseVector2(const float_q fValueX, const float_q fValueY) : x(fValueX), y(fValueY)
+QBaseVector2::QBaseVector2(const float_q &fValueX, const float_q &fValueY) : x(fValueX), y(fValueY)
 {
 }
 
-QBaseVector2::QBaseVector2(const float_q fValueAll) : x(fValueAll), y(fValueAll)
+QBaseVector2::QBaseVector2(const float_q &fValueAll) : x(fValueAll), y(fValueAll)
 {
 }
 
 QBaseVector2::QBaseVector2(const float_q* arValues)
 {
-    // Null pointer checkout
-    QE_ASSERT_ERROR(arValues != null_q, "The input array must not be null");
+	// Null pointer checkout
+	QE_ASSERT(arValues != null_q)
 
-    // Assignments
-    x = arValues[0];
-    y = arValues[1];
+	// Assignments
+	x = arValues[0];
+	y = arValues[1];
 }
 
-QBaseVector2::QBaseVector2(const vf32_q value)
+QBaseVector2::QBaseVector2(const vf32_q &value)
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
 
-    float_q fAux;
+	float_q fAux;
 
-    SQVF32::Unpack(value, this->x, this->y, fAux, fAux);
+	SQVF32::Unpack(value, this->x, this->y, fAux, fAux);
 }
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 bool QBaseVector2::operator==(const QBaseVector2 &vVector) const

@@ -34,42 +34,28 @@ namespace Tools
 {
 namespace Math
 {
-    
-//##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |  ATTRIBUTES INITIALIZATION |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
-//##################=======================================================##################
-
-const char* EQIntersections::sm_arStrings[] = { "None", 
-                                                "One", 
-                                                "Two", 
-                                                "More",
-                                                "Infinite"};
-
-const EQIntersections::EnumType EQIntersections::sm_arValues[] = { EQIntersections::E_None,
-                                                                   EQIntersections::E_One,
-                                                                   EQIntersections::E_Two,
-                                                                   EQIntersections::E_More,
-                                                                   EQIntersections::E_Infinite};
-
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |  ATTRIBUTES INITIALIZATION |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
+EQIntersections::TNameValuePair EQIntersections::sm_arValueName[] =
+    {
+        std::pair<string_q, EQIntersections::EnumType>(QE_L("None"),    EQIntersections::E_None),
+        std::pair<string_q, EQIntersections::EnumType>(QE_L("One"), EQIntersections::E_One),
+        std::pair<string_q, EQIntersections::EnumType>(QE_L("Two"), EQIntersections::E_Two),
+        std::pair<string_q, EQIntersections::EnumType>(QE_L("More"), EQIntersections::E_More),
+        std::pair<string_q, EQIntersections::EnumType>(QE_L("Infinite"),    EQIntersections::E_Infinite)
+    };
 
-unsigned int EQIntersections::_GetNumberOfValues()
-{
-    return sizeof(sm_arValues) / sizeof(EQIntersections::EnumType);
-}
+EQIntersections::TNameValueMap EQIntersections::sm_mapValueName(
+        EQIntersections::sm_arValueName ,
+        &EQIntersections::sm_arValueName[0] + sizeof(EQIntersections::sm_arValueName) / sizeof(EQIntersections::sm_arValueName[0])
+    );
 
 
 } //namespace Math

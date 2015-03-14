@@ -31,16 +31,16 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QOrb.h"
 #include "QVector2.h"
 #include "QVector3.h"
 #include "QVector4.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseOrb;
 using Kinesis::QuimeraEngine::Tools::Math::QOrb;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
@@ -143,6 +143,7 @@ QTEST_CASE_TEMPLATE ( GetUnitOrb_ValueHasNotChanged_Test, TQTemplateTypes )
     const T EXPECTED_VALUE_FOR_CENTER(VECTOR_COMPONENTS);
     const float_q EXPECTED_VALUE_FOR_RADIUS = SQFloat::_1;
 
+    const QOrb<T> EXPECTED_ORB = QOrb<T>(EXPECTED_VALUE_FOR_CENTER, EXPECTED_VALUE_FOR_RADIUS);
 
 	// [Execution]
     QOrb<T> orbUT = QOrb<T>::GetUnitOrb();
@@ -256,7 +257,7 @@ QTEST_CASE_TEMPLATE ( Contains_AssertionFailsWhenRadiusEqualsZero_Test, TQTempla
     {
         ORB.Contains(POINT);
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -434,7 +435,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenRadiusEqualsZero_Test, TQTe
     {
         ORB1.Intersection(ORB2);
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed1 = true;
     }
@@ -445,7 +446,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenRadiusEqualsZero_Test, TQTe
     {
         ORB2.Intersection(ORB1);
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed2 = true;
     }
@@ -492,8 +493,6 @@ QTEST_CASE_TEMPLATE ( Intersection_ReturnsExpectedResultWhenRadiusEqualsZero_Tes
 /// </summary>
 QTEST_CASE_TEMPLATE ( ToString_ExpectedOutputIsReturned_Test, TQTemplateTypes )
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-
     // [Preparation]
     float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4 };
     const T VECTOR_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
@@ -501,7 +500,7 @@ QTEST_CASE_TEMPLATE ( ToString_ExpectedOutputIsReturned_Test, TQTemplateTypes )
     const QOrb<T> ORB( VECTOR_FOR_CENTER, RADIUS );
 
     const string_q CENTER_STRING = VECTOR_FOR_CENTER.ToString();
-    const string_q EXPECTED_STRING = string_q("OB(c(") + CENTER_STRING + QE_L("),r(") + string_q::FromFloat(RADIUS) + QE_L("))");
+    const string_q EXPECTED_STRING = QE_L("OB(c(") + CENTER_STRING + QE_L("),r(") + SQFloat::ToString(RADIUS) + QE_L("))");
 
 	// [Execution]
     string_q strReturnedString = ORB.ToString();

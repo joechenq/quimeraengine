@@ -26,7 +26,6 @@
 
 #include "QSpaceConversionMatrix.h"
 
-#include "Assertions.h"
 #include "QBaseQuaternion.h"
 #include "QTranslationMatrix.h"
 #include "QRotationMatrix3x3.h"
@@ -39,7 +38,7 @@
 #include "SQFloat.h"
 #include "SQAngle.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -52,12 +51,12 @@ namespace Math
 {
     
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
     
 QSpaceConversionMatrix::QSpaceConversionMatrix()
@@ -74,12 +73,12 @@ QSpaceConversionMatrix::QSpaceConversionMatrix(const QBaseMatrix4x4 &matrix) : Q
 }
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QSpaceConversionMatrix& QSpaceConversionMatrix::operator=(const QBaseMatrix4x4 &matrix)
@@ -90,12 +89,12 @@ QSpaceConversionMatrix& QSpaceConversionMatrix::operator=(const QBaseMatrix4x4 &
 
 QSpaceConversionMatrix QSpaceConversionMatrix::operator*(const QSpaceConversionMatrix &matrix) const
 {
-    return scast_q(*this, const QMatrix4x4&) * scast_q(matrix, const QMatrix4x4&);
+    return rcast_q(*this, const QMatrix4x4&) * rcast_q(matrix, const QMatrix4x4&);
 }
 
 QSpaceConversionMatrix& QSpaceConversionMatrix::operator*=(const QSpaceConversionMatrix &matrix)
 {
-    scast_q(*this, QMatrix4x4&) *= scast_q(matrix, const QMatrix4x4&);
+    rcast_q(*this, QMatrix4x4&) *= rcast_q(matrix, const QMatrix4x4&);
     return *this;
 }
 
@@ -175,17 +174,17 @@ void QSpaceConversionMatrix::SetViewSpaceMatrix(const QVector4 &vPointOfView, co
                              QVector3(vUpDirection));
 }
 
-void QSpaceConversionMatrix::SetProjectionSpaceMatrix(const float_q fNearClipPlane, const float_q fFarClipPlane,
-                                                      const float_q fAspectRatio, const float_q fVerticalFOV)
+void QSpaceConversionMatrix::SetProjectionSpaceMatrix(const float_q &fNearClipPlane, const float_q &fFarClipPlane,
+                                                      const float_q &fAspectRatio, const float_q &fVerticalFOV)
 {
     // The clipping planes should not coincide
-    QE_ASSERT_WARNING(SQFloat::AreNotEqual(fNearClipPlane, fFarClipPlane), "The clipping planes should not coincide");
+    QE_ASSERT(SQFloat::AreNotEqual(fNearClipPlane, fFarClipPlane))
 
     // The aspect ratio must be positive and not equal zero
-    QE_ASSERT_WARNING(SQFloat::IsGreaterThan(fAspectRatio, SQFloat::_0), "The aspect ratio must be positive and not equal zero");
+    QE_ASSERT(SQFloat::IsGreaterThan(fAspectRatio, SQFloat::_0))
 
     // The vertical field of view must be positive and not equal zero
-    QE_ASSERT_WARNING(SQFloat::IsGreaterThan(fVerticalFOV, SQFloat::_0), "The vertical field of view must be positive and not equal zero");
+    QE_ASSERT(SQFloat::IsGreaterThan(fVerticalFOV, SQFloat::_0))
 
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles are specified in degrees, then converts it to radians
@@ -194,7 +193,7 @@ void QSpaceConversionMatrix::SetProjectionSpaceMatrix(const float_q fNearClipPla
         const float_q& HALF_VERT_FOV = fVerticalFOV * SQFloat::_0_5;
     #endif
 
-    QE_ASSERT_WARNING( SQFloat::AreNotEqual(HALF_VERT_FOV, SQAngle::_HalfPi), "Input vertical FOV must not equal a plain angle" );
+    QE_ASSERT( SQFloat::AreNotEqual(HALF_VERT_FOV, SQAngle::_HalfPi) )
 
     const float_q& SCALE_Y  = float_q((double)SQFloat::_1 / tan_q((double)HALF_VERT_FOV));
     const float_q& SCALE_X  = float_q((double)SCALE_Y / (double)fAspectRatio);
@@ -256,8 +255,8 @@ QSpaceConversionMatrix QSpaceConversionMatrix::SwitchHandConventionProjectionSpa
     return switchedMatrix;
 }
 
-template <class MatrixT>
-void QSpaceConversionMatrix::SetWorldSpaceMatrixImp(const QTranslationMatrix<MatrixT> &translation, const QRotationMatrix3x3 &rotation, const QScalingMatrix3x3 &scale)
+template <class MatrixType>
+void QSpaceConversionMatrix::SetWorldSpaceMatrixImp(const QTranslationMatrix<MatrixType> &translation, const QRotationMatrix3x3 &rotation, const QScalingMatrix3x3 &scale)
 {
     QTransformationMatrix<QMatrix4x4> aux(translation, rotation, scale);
 
@@ -266,7 +265,7 @@ void QSpaceConversionMatrix::SetWorldSpaceMatrixImp(const QTranslationMatrix<Mat
 
 QSpaceConversionMatrix QSpaceConversionMatrix::SwitchHandConventionWorldSpaceMatrix() const
 {
-    return QSpaceConversionMatrix(scast_q(*this, const QTransformationMatrix<QMatrix4x4>&).SwitchHandConvention());
+    return QSpaceConversionMatrix(rcast_q(*this, const QTransformationMatrix<QMatrix4x4>&).SwitchHandConvention());
 }
 
 } //namespace Math

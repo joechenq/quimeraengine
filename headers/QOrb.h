@@ -27,15 +27,11 @@
 #ifndef __QORB__
 #define __QORB__
 
-#include "Assertions.h"
 #include "QBaseOrb.h"
-#include "QVector2.h"
-#include "QVector3.h"
-#include "QVector4.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
@@ -56,43 +52,43 @@ namespace Math
 /// Radius is expressed as a floating point value which is always nonnegative.<br/>
 /// Remember that an orb is the sum of equidistant points from a given one.
 /// </remarks>
-/// <typeparam name="VectorT">Allowed types: QVector3, QVector4.</typeparam>
-template <class VectorT>
-class QOrb : public QBaseOrb<VectorT>
+/// <typeparam name="VectorType">Allowed types: QVector3, QVector4.</typeparam>
+template <class VectorType>
+class QOrb : public QBaseOrb<VectorType>
 {
 
     // BASE CLASS USINGS
     // -------------------
 public:
 
-    using QBaseOrb<VectorT>::Center;
-    using QBaseOrb<VectorT>::Radius;
+    using QBaseOrb<VectorType>::Center;
+    using QBaseOrb<VectorType>::Radius;
 
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    QOrb()
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
+	QOrb()
     {
     }
 
-    /// <summary>
-    /// Copy constructor.
-    /// </summary>
-    /// <param name="orb">[IN] The orb from which we want to create a copy in the resident orb.</param>
-    QOrb(const QOrb<VectorT> &orb) : QBaseOrb<VectorT>(orb)
+	/// <summary>
+	/// Copy constructor.
+	/// </summary>
+	/// <param name="orb">[IN] The orb from which we want to create a copy in the resident orb.</param>
+	QOrb(const QOrb<VectorType> &orb) : QBaseOrb<VectorType>(orb)
     {
     }
 
-    /// <summary>
-    /// Base type constructor.
-    /// </summary>
-    /// <param name="orb">[IN] The orb in which we want resident orb to be based.</param>
-    QOrb(const QBaseOrb<VectorT> &orb) : QBaseOrb<VectorT>(orb)
+	/// <summary>
+	/// Base type constructor.
+	/// </summary>
+	/// <param name="orb">[IN] The orb in which we want resident orb to be based.</param>
+	QOrb(const QBaseOrb<VectorType> &orb) : QBaseOrb<VectorType>(orb)
     {
     }
 
@@ -102,7 +98,7 @@ public:
     /// </summary>
     /// <param name="vCenter">[IN] Vector to define the center of the orb.</param>
     /// <param name="fRadius">[IN] A floating point value to define the radius.</param>
-    QOrb(const VectorT &vCenter, const float_q fRadius) : QBaseOrb<VectorT>(vCenter, fRadius)
+    QOrb(const VectorType &vCenter, const float_q &fRadius) : QBaseOrb<VectorType>(vCenter, fRadius)
     {
     }
 
@@ -111,66 +107,66 @@ public:
     // ---------------
 public:
 
-    /// <summary>
+	/// <summary>
     /// Gets a "unit orb" placed in the center of coordinates and whose radius equals to 1.
-    /// </summary>
-    /// <returns>
-    /// A unit orb.
-    /// </returns>
-    static const QOrb<VectorT>& GetUnitOrb()
+	/// </summary>
+	/// <returns>
+	/// A unit orb.
+	/// </returns>
+    static const QOrb<VectorType>& GetUnitOrb()
     {
-        static const QOrb<VectorT> UNITORB(VectorT::GetNullVector(), SQFloat::_1);
+        static const QOrb<VectorType> UNITORB(VectorType::GetZeroVector(), SQFloat::_1);
         return UNITORB;
     }
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Assigning operator.
-    /// </summary>
+	/// <summary>
+	/// Assigning operator.
+	/// </summary>
     /// <param name="orb">[IN] The orb to be copied from.</param>
     /// <returns>
-    /// A reference to the modified orb.
-    /// </returns>
-    QOrb& operator=(const QBaseOrb<VectorT> &orb)
+	/// A reference to the modified orb.
+	/// </returns>
+    QOrb& operator=(const QBaseOrb<VectorType> &orb)
     {
-        QBaseOrb<VectorT>::operator=(orb);
+        QBaseOrb<VectorType>::operator=(orb);
         return *this;
     }
 
-    /// <summary>
-    /// This method receives a point and determines if the point is contained into the orb.
-    /// </summary>
+	/// <summary>
+	/// This method receives a point and determines if the point is contained into the orb.
+	/// </summary>
     /// <remarks>
     /// If the radius of the orb equals zero, the orb will be considered as a point (which is wrong).
     /// </remarks>
     /// <param name="vPoint">[IN] The point to be tested.</param>
-    /// <returns>
-    /// True if the point is inside the orb (or if it belongs to its bounds). Otherwise returns false.
-    /// </returns>
-    bool Contains(const VectorT &vPoint) const
+	/// <returns>
+	/// True if the point is inside the orb (or if it belongs to its bounds). Otherwise returns false.
+	/// </returns>
+    bool Contains(const VectorType &vPoint) const
     {
         // If the radius of the orb equals zero, it doesn't exist
-        QE_ASSERT_WARNING( SQFloat::IsNotZero(this->Radius), "The radius of the orb must not equal zero to exist" );
+        QE_ASSERT( SQFloat::IsNotZero(this->Radius) );
 
         // The point is inside the orb whenever the minimum squared distance between the point and
         // the center point of the orb is lower or equals the whole square radius of the orb.
-        VectorT vDistance(vPoint - this->Center);
+        VectorType vDistance(vPoint - this->Center);
         return SQFloat::IsLessOrEquals(vDistance.GetSquaredLength(), Radius * Radius);
     }
 
-    /// <summary>
-    /// Receives another orb and computes whether this orb intersects with the resident one or not.
-    /// </summary>
+	/// <summary>
+	/// Receives another orb and computes whether this orb intersects with the resident one or not.
+	/// </summary>
     /// <remarks>
     /// If the radius of the orb equals zero, the orb will be considered as a point (which is wrong).
     /// </remarks>
     /// <param name="orb">[IN] The orb to be checked for intersections.</param>
-    /// <returns>
-    /// A boolean value that indicates whether the orbs intersect or not.<br/>
+	/// <returns>
+	/// A boolean value that indicates whether the orbs intersect or not.<br/>
     /// <br/>
     /// <b>True</b><br/>
     /// The orbs intersect, including the following cases:
@@ -181,47 +177,37 @@ public:
     ///
     /// <b>False</b><br/>
     /// The orbs do not intersect.
-    /// </returns>
-    bool Intersection(const QBaseOrb<VectorT> &orb) const
+	/// </returns>
+    bool Intersection(const QBaseOrb<VectorType> &orb) const
     {
         // If the radius of the orb equals zero, it doesn't exist
-        QE_ASSERT_WARNING( SQFloat::IsNotZero(this->Radius) && SQFloat::IsNotZero(orb.Radius), "The radius of the orbs must not equal zero to exist" );
+        QE_ASSERT( SQFloat::IsNotZero(this->Radius) && SQFloat::IsNotZero(orb.Radius) );
 
         // An intersection between the two orbs is considered if the minimum squared distance
-        // between their center points is lower or equals the square sum of their radius.
-        VectorT vDistance(orb.Center - this->Center);
+		// between their center points is lower or equals the square sum of their radius.
+        VectorType vDistance(orb.Center - this->Center);
         float_q    fRadiusSum = Radius + orb.Radius;
         return SQFloat::IsLessOrEquals(vDistance.GetSquaredLength(), fRadiusSum * fRadiusSum);
     }
 
-    /// <summary>
-    /// Converts the orb into a string.
+	/// <summary>
+	/// Converts the orb into a string.
     /// </summary>
     /// <remarks>
     /// The format of the string is:<br/>
-    /// "OB(c($Center),r($Radius))".<br/>
+	/// "OB(c($Center),r($Radius))".<br/>
     /// Where "$" means "string representation of attribute".
-    /// </remarks>
-    /// <returns>
-    /// The string with the specified format.
-    /// </returns>
-    string_q ToString() const
-    {
-        return string_q("OB(c(") + this->Center.ToString() + QE_L("),r(") + string_q::FromFloat(this->Radius) + QE_L("))");
-    }
+	/// </remarks>
+	/// <returns>
+	/// The string with the specified format.
+	/// </returns>
+	string_q ToString() const
+	{
+		return QE_L("OB(c(") + this->Center.ToString() + QE_L("),r(") + SQFloat::ToString(this->Radius) + QE_L("))");
+	}
 
 };
 
-
-// SPECIALIZATION EXPORTATIONS
-// -----------------------------
-#ifdef QE_EXPORT_TOOLS_TEMPLATE_SPECIALIZATION
-
-template class QE_LAYER_TOOLS_SYMBOLS QOrb<Kinesis::QuimeraEngine::Tools::Math::QVector2>;
-template class QE_LAYER_TOOLS_SYMBOLS QOrb<Kinesis::QuimeraEngine::Tools::Math::QVector3>;
-template class QE_LAYER_TOOLS_SYMBOLS QOrb<Kinesis::QuimeraEngine::Tools::Math::QVector4>;
-
-#endif // QE_EXPORT_TOOLS_TEMPLATE_SPECIALIZATION
 
 } //namespace Math
 } //namespace Tools

@@ -35,12 +35,14 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QBaseRay.h"
 #include "QVector4.h"
 #include "QVector3.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseRay;
 using Kinesis::QuimeraEngine::Tools::Math::QVector4;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;

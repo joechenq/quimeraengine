@@ -30,6 +30,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QQuaternion.h"
 
 #include "QVector3.h"
@@ -42,14 +44,12 @@ using namespace boost::unit_test;
 #include "QScalingMatrix3x3.h"
 #include "SQVF32.h"
 #include "SQAngle.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
 using Kinesis::QuimeraEngine::Tools::Math::QQuaternion;
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES && QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
@@ -353,7 +353,7 @@ QTEST_CASE ( Constructor6_AssertionFailsWhenPointerIsNull_Test )
     {
         QQuaternion qQuaternionUT(NULL_ARRAY);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -462,7 +462,7 @@ QTEST_CASE ( Constructor8_NoRotationStoredInQuaternionWhenUsingNullVectorAsAxis_
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QVector3 AXIS = QVector3::GetNullVector();
+    const QVector3 AXIS = QVector3::GetZeroVector();
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS
     const float_q ANGLE = SQAngle::_QuarterPi;
@@ -527,7 +527,7 @@ QTEST_CASE ( Constructor8_ResultIsNotNormalizedWhenUsingNullVectorAsAxis_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QVector3 AXIS = QVector3::GetNullVector();
+    const QVector3 AXIS = QVector3::GetZeroVector();
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS
     const float_q ANGLE = SQAngle::_QuarterPi;
@@ -643,7 +643,7 @@ QTEST_CASE ( Constructor9_NoRotationStoredInQuaternionWhenUsingNullVectorAsAxis_
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QVector4 AXIS = QVector4::GetNullVector();
+    const QVector4 AXIS = QVector4::GetZeroVector();
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS
     const float_q ANGLE = SQAngle::_QuarterPi;
@@ -712,7 +712,7 @@ QTEST_CASE ( Constructor9_ResultIsNotNormalizedWhenUsingNullVectorAsAxis_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QVector4;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QVector4 AXIS = QVector4::GetNullVector();
+    const QVector4 AXIS = QVector4::GetZeroVector();
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS
     const float_q ANGLE = SQAngle::_QuarterPi;
@@ -860,7 +860,7 @@ QTEST_CASE ( Constructor10_AssertionFailsWhenUsingNullMatrix_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix4x3;
     using Kinesis::QuimeraEngine::Tools::Math::QTransformationMatrix;
 
-    const QTransformationMatrix<QMatrix4x3> NULL_MATRIX(QTransformationMatrix<QMatrix4x3>::GetNullMatrix());
+    const QTransformationMatrix<QMatrix4x3> ZERO_MATRIX(QTransformationMatrix<QMatrix4x3>::GetZeroMatrix());
     const QQuaternion EXPECTED_RESULT(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
@@ -868,9 +868,9 @@ QTEST_CASE ( Constructor10_AssertionFailsWhenUsingNullMatrix_Test )
 
     try
     {
-        QQuaternion qQuaternionUT(NULL_MATRIX);
+        QQuaternion qQuaternionUT(ZERO_MATRIX);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -1005,7 +1005,7 @@ QTEST_CASE ( Constructor11_AssertionFailsWhenUsingNullMatrix_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix4x4;
     using Kinesis::QuimeraEngine::Tools::Math::QTransformationMatrix;
 
-    const QTransformationMatrix<QMatrix4x4> NULL_MATRIX(QTransformationMatrix<QMatrix4x4>::GetNullMatrix());
+    const QTransformationMatrix<QMatrix4x4> ZERO_MATRIX(QTransformationMatrix<QMatrix4x4>::GetZeroMatrix());
     const QQuaternion EXPECTED_RESULT(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
@@ -1013,9 +1013,9 @@ QTEST_CASE ( Constructor11_AssertionFailsWhenUsingNullMatrix_Test )
 
     try
     {
-        QQuaternion qQuaternionUT(NULL_MATRIX);
+        QQuaternion qQuaternionUT(ZERO_MATRIX);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -1084,7 +1084,7 @@ QTEST_CASE ( Constructor12_AssertionFailsWhenUsingNullMatrix_Test )
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::QRotationMatrix3x3;
 
-    const QRotationMatrix3x3 NULL_MATRIX(QRotationMatrix3x3::GetNullMatrix());
+    const QRotationMatrix3x3 ZERO_MATRIX(QRotationMatrix3x3::GetZeroMatrix());
     const QQuaternion EXPECTED_RESULT(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
@@ -1092,9 +1092,9 @@ QTEST_CASE ( Constructor12_AssertionFailsWhenUsingNullMatrix_Test )
 
     try
     {
-        QQuaternion quat(NULL_MATRIX);
+        QQuaternion qQuaternionUT = QQuaternion(ZERO_MATRIX);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -2195,9 +2195,9 @@ QTEST_CASE ( Normalize_AssertionFailsWhenNullQuaternionIsToBeNormalized_Test )
 
     try
     {
-        QUATERNION.Normalize();
+        QQuaternion qQuaternionUT = QUATERNION.Normalize();
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -2369,7 +2369,7 @@ QTEST_CASE ( DotProduct_ReturnsZeroWhenAOperandIsNullQuaternion_Test )
 /// <summary>
 /// Checks that the returned angle result for 2 common quaternions equals the expected value.
 /// </summary>
-QTEST_CASE ( AngleBetween_ReturnsAngleBetween2CommonQuaternions_Test )
+QTEST_CASE ( DotProductAngle_ReturnsAngleBetween2CommonQuaternions_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -2387,7 +2387,7 @@ QTEST_CASE ( AngleBetween_ReturnsAngleBetween2CommonQuaternions_Test )
     const QQuaternion OPERAND2 = QQuaternion(ROTATION_AXIS, EXPECTED_RESULT);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreEqual(fResultUT, EXPECTED_RESULT, SMALLER_TOLERANCE) );
@@ -2396,7 +2396,7 @@ QTEST_CASE ( AngleBetween_ReturnsAngleBetween2CommonQuaternions_Test )
 /// <summary>
 /// Checks that the "get angle from dot product" is commutative.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
+QTEST_CASE ( DotProductAngle_DotProductAngleIsCommutative_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -2405,8 +2405,8 @@ QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
     const QQuaternion OPERAND2 = QQuaternion(SQFloat::_5, SQFloat::_6, SQFloat::_7, SQFloat::_8);
 
 	// [Execution]
-    float_q fResult1UT = OPERAND1.AngleBetween(OPERAND2);
-    float_q fResult2UT = OPERAND2.AngleBetween(OPERAND1);
+    float_q fResult1UT = OPERAND1.DotProductAngle(OPERAND2);
+    float_q fResult2UT = OPERAND2.DotProductAngle(OPERAND1);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, fResult2UT );
@@ -2415,7 +2415,7 @@ QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
 /// <summary>
 /// Checks that the angle equals zero when both quaternions are normalized and are the same.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleEqualsZeroWhenNormalizedQuaternionsAreTheSame_Test )
+QTEST_CASE ( DotProductAngle_AngleEqualsZeroWhenNormalizedQuaternionsAreTheSame_Test )
 {
     // [Preparation]
     const float_q EXPECTED_RESULT = SQFloat::_0;
@@ -2423,16 +2423,16 @@ QTEST_CASE ( AngleBetween_AngleEqualsZeroWhenNormalizedQuaternionsAreTheSame_Tes
     const QQuaternion OPERAND = QQuaternion(SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_4).Normalize();
 
 	// [Execution]
-    float_q fResultUT = OPERAND.AngleBetween(OPERAND);
+    float_q fResultUT = OPERAND.DotProductAngle(OPERAND);
 
     // [Verification]
-    BOOST_CHECK( SQFloat::AreEqual(fResultUT, EXPECTED_RESULT, (float_q)1e-05) ); // There is a big loss of precision so a greater tolerance must be used
+    BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
 /// Checks that the angle is always positive.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleIsAlwaysPositive_Test )
+QTEST_CASE ( DotProductAngle_AngleIsAlwaysPositive_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::QVector3;
@@ -2448,7 +2448,7 @@ QTEST_CASE ( AngleBetween_AngleIsAlwaysPositive_Test )
     const QQuaternion QUATERNION = QQuaternion(QVector3(SQFloat::_1, SQFloat::_0, SQFloat::_0), HALF_CIRCUMFERENCE_ANGLE);
 
 	// [Execution]
-    float_q fResultUT = REFERENCE_OPERAND.AngleBetween(QUATERNION);
+    float_q fResultUT = REFERENCE_OPERAND.DotProductAngle(QUATERNION);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsGreaterOrEquals(fResultUT, SQFloat::_0) );
@@ -2490,7 +2490,7 @@ QTEST_CASE ( Lerp_CorrectLerpedQuaternionIsObtainedForTwoCommonQuaternions_Test 
     const QQuaternion OPERAND1 = QQuaternion(QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3).Normalize(), ANGLE1).Normalize();
     const QQuaternion OPERAND2 = QQuaternion(QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3).Normalize(), ANGLE2).Normalize();
     //const QQuaternion EXPECTED_RESULT = QQuaternion(QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3).Normalize(), SQFloat::_0_25).Normalize();
-    // [TODO] Thund: There is a problem with imprecision, is it a matter of precision degradation or calculus error? It could be even an imprecision inherent to this Lerp process, reason to use Slerp
+    // [TODO] Thund: There is a problem with imprecission, is it a matter of precission degradation or calculus error? It could be even an imprecission inherent to this Lerp process, reason to use Slerp
     const QQuaternion EXPECTED_RESULT = QQuaternion((float_q)0.032794551514706963, (float_q)0.065589103029413925, (float_q)0.098383654544120888, (float_q)0.99244306812697791);
 
 	// [Execution]
@@ -2674,7 +2674,7 @@ QTEST_CASE ( Slerp_InterpolatingInTheMiddleOfQuaternionAndItsConjugatedGivesIden
     BOOST_CHECK_EQUAL(qQuaternionUT.x, EXPECTED_RESULT.x);
     BOOST_CHECK_EQUAL(qQuaternionUT.y, EXPECTED_RESULT.y);
     BOOST_CHECK_EQUAL(qQuaternionUT.z, EXPECTED_RESULT.z);
-    BOOST_CHECK( SQFloat::AreEqual(qQuaternionUT.w, EXPECTED_RESULT.w) );
+    BOOST_CHECK_EQUAL(qQuaternionUT.w, EXPECTED_RESULT.w);
 }
 
 /// <summary>
@@ -2827,7 +2827,7 @@ QTEST_CASE ( ToEulerAngles_AnglesEqualZeroWhenQuaternionIsNull_Test )
     BOOST_CHECK_EQUAL(fAngleZUT, EXPECTED_ANGLES);
 }
 
-// TODO Thund: There is a special case, when X = +-90ยบ. TEst it!
+// TODO Thund: There is a special case, when X = +-90บ. TEst it!
 
 /// <summary>
 /// Checks that the length of a common quaternion is what expected.
@@ -3010,7 +3010,7 @@ QTEST_CASE ( ToAxisAngle1_AxisIsUnitVectorPointingXAndAngleEqualsZeroWhenQuatern
 }
 
 /// <summary>
-/// Checks that obtained angle equals PI (or 180ยบ) and rotation axis equals null vector when the quaternion is null.
+/// Checks that obtained angle equals PI (or 180บ) and rotation axis equals null vector when the quaternion is null.
 /// </summary>
 QTEST_CASE ( ToAxisAngle1_AxisIsNullAndAngleEqualsPiOr180WhenQuaternionIsNull_Test )
 {
@@ -3024,7 +3024,7 @@ QTEST_CASE ( ToAxisAngle1_AxisIsNullAndAngleEqualsPiOr180WhenQuaternionIsNull_Te
     const float_q EXPECTED_ANGLE = SQAngle::_180;
 #endif
 
-    const QVector3 EXPECTED_AXIS = QVector3::GetNullVector();
+    const QVector3 EXPECTED_AXIS = QVector3::GetZeroVector();
 
     const QQuaternion NULL_QUATERNION = QQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
@@ -3039,7 +3039,7 @@ QTEST_CASE ( ToAxisAngle1_AxisIsNullAndAngleEqualsPiOr180WhenQuaternionIsNull_Te
 }
 
 /// <summary>
-/// Checks that correct results are obtained when the rotation angle equals Pi (or 180ยบ).
+/// Checks that correct results are obtained when the rotation angle equals Pi (or 180บ).
 /// </summary>
 QTEST_CASE ( ToAxisAngle1_CorrectValuesObtainedWhenRotationAngleEqualsPiOr180_Test )
 {
@@ -3175,7 +3175,7 @@ QTEST_CASE ( ToAxisAngle2_AxisIsUnitVectorPointingXAndAngleEqualsZeroWhenQuatern
 }
 
 /// <summary>
-/// Checks that obtained angle equals PI (or 180ยบ) and rotation axis equals null vector when the quaternion is null.
+/// Checks that obtained angle equals PI (or 180บ) and rotation axis equals null vector when the quaternion is null.
 /// </summary>
 QTEST_CASE ( ToAxisAngle2_AxisIsNullAndAngleEqualsPiOr180WhenQuaternionIsNull_Test )
 {
@@ -3189,7 +3189,7 @@ QTEST_CASE ( ToAxisAngle2_AxisIsNullAndAngleEqualsPiOr180WhenQuaternionIsNull_Te
     const float_q EXPECTED_ANGLE = SQAngle::_180;
 #endif
 
-    const QVector4 EXPECTED_AXIS = QVector4::GetNullVector();
+    const QVector4 EXPECTED_AXIS = QVector4::GetZeroVector();
 
     const QQuaternion NULL_QUATERNION = QQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0);
 
@@ -3204,7 +3204,7 @@ QTEST_CASE ( ToAxisAngle2_AxisIsNullAndAngleEqualsPiOr180WhenQuaternionIsNull_Te
 }
 
 /// <summary>
-/// Checks that correct results are obtained when the rotation angle equals Pi (or 180ยบ).
+/// Checks that correct results are obtained when the rotation angle equals Pi (or 180บ).
 /// </summary>
 QTEST_CASE ( ToAxisAngle2_CorrectValuesObtainedWhenRotationAngleEqualsPiOr180_Test )
 {
@@ -3296,17 +3296,9 @@ QTEST_CASE ( ToString_ReturnedFormatMatchesExpected_Test )
     const QQuaternion QUATERNION = QQuaternion(SQFloat::_0_25, (float_q)-0.000002, (float_q)40000.0, (float_q)1.0 );
 
 #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("Q(0.25,-1.99999999e-06,40000,1)");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("Q(0.25,-1.99999999e-006,40000,1)");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("Q(0.25,-1.99999999e-006,40000,1)");
 #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("Q(0.25,-1.9999999999999999e-06,40000,1)");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("Q(0.25,-1.9999999999999999e-006,40000,1)");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("Q(0.25,-1.9999999999999999e-006,40000,1)");
 #endif
 
 	// [Execution]

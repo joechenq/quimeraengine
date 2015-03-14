@@ -27,18 +27,21 @@
 #ifndef __SQFLOAT__
 #define __SQFLOAT__
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
-#include "CommonDefinitions.h"
+#include <string>
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+#include <boost/math/special_functions/trunc.hpp>
+
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 
 
 namespace Kinesis
 {
 namespace QuimeraEngine
 {
-namespace Common
+namespace Tools
 {
 namespace DataTypes
 {
@@ -47,7 +50,7 @@ namespace DataTypes
 /// Helper class that offers functionality related to floating point (IEEE 754) types.<br/>
 /// Use these constants and static methods extensively in your code, as far as you can.
 /// </summary>
-class QE_LAYER_COMMON_SYMBOLS SQFloat
+class QDllExport SQFloat
 {
     // CONSTANTS
     // ---------------
@@ -136,16 +139,16 @@ public:
 
 
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 private:
 
-    // Default constructor (hidden).
+	// Default constructor (hidden).
     SQFloat();
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -160,7 +163,7 @@ public:
     /// <returns>
     /// If the value is not a number, then returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsNaN(const float_q fValue);
+    static bool IsNaN(const float_q &fValue);
 
     /// <summary>
     /// Checks if the floating point value's state is Infinite.
@@ -174,7 +177,7 @@ public:
     /// <returns>
     /// If the value is infinite, then returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsInfinite(const float_q fValue);
+    static bool IsInfinite(const float_q &fValue);
 
     /// <summary>
     /// Checks if the floating point value's state is one of the special ones described in IEEE specification.
@@ -186,7 +189,7 @@ public:
     /// <returns>
     /// If the value is infinite or is not a number, then returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsNanOrInfinite(const float_q fValue);
+    static bool IsNanOrInfinite(const float_q &fValue);
 
     /// <summary>
     /// Performs an equality comparison between two floating point numbers, taking into account the system tolerance
@@ -197,7 +200,7 @@ public:
     /// <returns>
     /// If values are the same, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool AreEqual(const float_q fValueA, const float_q fValueB);
+    static bool AreEqual(const float_q &fValueA, const float_q &fValueB);
 
     /// <summary>
     /// Performs an equality comparison between two floating point numbers, using a custom tolerance.
@@ -208,7 +211,7 @@ public:
     /// <returns>
     /// If values are the same, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool AreEqual(const float_q fValueA, const float_q fValueB, const float_q fTolerance);
+    static bool AreEqual(const float_q &fValueA, const float_q &fValueB, const float_q &fTolerance);
 
     /// <summary>
     /// Performs an inequality comparison between two floating point numbers, taking into account the system tolerance
@@ -219,7 +222,7 @@ public:
     /// <returns>
     /// If values are not the same, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool AreNotEqual(const float_q fValueA, const float_q fValueB);
+    static bool AreNotEqual(const float_q &fValueA, const float_q &fValueB);
 
     /// <summary>
     /// Performs an inequality comparison between two floating point numbers, using a custom tolerance.
@@ -230,7 +233,7 @@ public:
     /// <returns>
     /// If values are not the same, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool AreNotEqual(const float_q fValueA, const float_q fValueB, const float_q fTolerance);
+    static bool AreNotEqual(const float_q &fValueA, const float_q &fValueB, const float_q &fTolerance);
 
     /// <summary>
     /// Checks if a floating point value is greater than a reference value, taking into account the system tolerance
@@ -241,7 +244,7 @@ public:
     /// <returns>
     /// If the first value is greater than the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsGreaterThan(const float_q fGreaterValue, const float_q fReferenceValue);
+    static bool IsGreaterThan(const float_q &fGreaterValue, const float_q &fReferenceValue);
 
     /// <summary>
     /// Checks if a floating point value is greater than a reference value, using a custom tolerance.
@@ -252,7 +255,7 @@ public:
     /// <returns>
     /// If the first value is greater than the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsGreaterThan(const float_q fGreaterValue, const float_q fReferenceValue, const float_q fTolerance);
+    static bool IsGreaterThan(const float_q &fGreaterValue, const float_q &fReferenceValue, const float_q &fTolerance);
 
     /// <summary>
     /// Checks if a floating point value is lower than a reference value, taking into account the system tolerance
@@ -263,7 +266,7 @@ public:
     /// <returns>
     /// If the first value is lower than the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsLessThan(const float_q fLowerValue, const float_q fReferenceValue);
+    static bool IsLessThan(const float_q &fLowerValue, const float_q &fReferenceValue);
 
     /// <summary>
     /// Checks if a floating point value is lower than a reference value, using a custom tolerance.
@@ -274,7 +277,7 @@ public:
     /// <returns>
     /// If the first value is lower than the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsLessThan(const float_q fLowerValue, const float_q fReferenceValue, const float_q fTolerance);
+    static bool IsLessThan(const float_q &fLowerValue, const float_q &fReferenceValue, const float_q &fTolerance);
 
     /// <summary>
     /// Checks if a floating point value is greater than or equals to a reference value, taking into account the
@@ -285,7 +288,7 @@ public:
     /// <returns>
     /// If the first value is greater than or equals to the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsGreaterOrEquals(const float_q fGreaterOrEqualsValue, const float_q fReferenceValue);
+    static bool IsGreaterOrEquals(const float_q &fGreaterOrEqualsValue, const float_q &fReferenceValue);
 
     /// <summary>
     /// Checks if a floating point value is greater than or equals to a reference value, using a custom tolerance.
@@ -296,7 +299,7 @@ public:
     /// <returns>
     /// If the first value is greater than or equals to the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsGreaterOrEquals(const float_q fGreaterOrEqualsValue, const float_q fReferenceValue, const float_q fTolerance);
+    static bool IsGreaterOrEquals(const float_q &fGreaterOrEqualsValue, const float_q &fReferenceValue, const float_q &fTolerance);
 
     /// <summary>
     /// Checks if a floating point value is lower than or equals to a reference value, taking into account the
@@ -307,7 +310,7 @@ public:
     /// <returns>
     /// If the first value is lower than or equals to the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsLessOrEquals(const float_q fLessOrEqualsValue, const float_q fReferenceValue);
+    static bool IsLessOrEquals(const float_q &fLessOrEqualsValue, const float_q &fReferenceValue);
 
     /// <summary>
     /// Checks if a floating point value is lower than or equals to a reference value, using a custom tolerance.
@@ -318,7 +321,7 @@ public:
     /// <returns>
     /// If the first value is lower than or equals to the reference one, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsLessOrEquals(const float_q fLessOrEqualsValue, const float_q fReferenceValue, const float_q fTolerance);
+    static bool IsLessOrEquals(const float_q &fLessOrEqualsValue, const float_q &fReferenceValue, const float_q &fTolerance);
 
     /// <summary>
     /// Checks whether a floating point number equals zero or is close to zero, taking into account the system tolerance
@@ -328,7 +331,7 @@ public:
     /// <returns>
     /// If the value equals zero, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsZero(const float_q fValue);
+    static bool IsZero(const float_q &fValue);
 
     /// <summary>
     /// Checks whether a floating point number equals zero or is close to zero, taking into account the system tolerance
@@ -339,7 +342,7 @@ public:
     /// <returns>
     /// If the value equals zero, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsZero(const float_q fValue, const float_q fTolerance);
+    static bool IsZero(const float_q &fValue, const float_q &fTolerance);
 
     /// <summary>
     /// Checks whether a floating point number doesn't equal zero or is close to zero, taking into account the system tolerance
@@ -349,7 +352,7 @@ public:
     /// <returns>
     /// If the value doesn't equal zero, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsNotZero(const float_q fValue);
+    static bool IsNotZero(const float_q &fValue);
 
     /// <summary>
     /// Checks whether a floating point number doesn't equal zero or is close to zero, taking into account the system tolerance
@@ -360,7 +363,19 @@ public:
     /// <returns>
     /// If the value doesn't equal zero, then it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsNotZero(const float_q fValue, const float_q fTolerance);
+    static bool IsNotZero(const float_q &fValue, const float_q &fTolerance);
+
+    /// <summary>
+    /// Converts the floating point number to a readable character string that represents it.
+    /// </summary>
+    /// <remarks>
+    /// String representation for NaN or Infinite values are not guaranteed to be the same for different compilers.
+    /// </remarks>
+    /// <param name="fValue">[IN] The floating point number to be converted.</param>
+    /// <returns>
+    /// The string that represents the number (using a dot as decimal separator).
+    /// </returns>
+    static string_q ToString(const float_q &fValue);
 
     /// <summary>
     /// Converts a floating point number type to an integer number type.
@@ -369,37 +384,37 @@ public:
     /// The result will be rounded (>0.5 --> 1.0).<br/>
     /// Expected template parameters are: int, long, long long, i32_q, i64_q.<br/>
     /// Integer type size should equals floating point type size or unexpected behavior will occur.<br/>
-    /// Depending on the configured precission, there is a performance overload due to standard conversion use when the value
+    /// Depending on the configured precission, there is a performance overload due to standard conversion use when the value<br/>
     /// is greater than the one representable by floating point type mantissa:<br/>
     /// - For 32-bits floating point type values:<br/>
     ///  - Must be greater than or equals to \f$ -2^{22} \f$ (-4194304) and lower than or equals to \f$ 2^{23} \f$ (8388608).<br/>
     /// - For 64-bits floating point type values:<br/>
     ///  - Must be greater than or equals to \f$ -2^{51} \f$ (-2251799813685248l) and lower than or equals to \f$ 2^{52} \f$ (4503599627370496l).<br/>
-    /// Use this method in case the values are expected to be between those ranges.
+    /// The behavior of this method when the size of the integer type and the size of the floating point number type are different is undefined.
     /// </remarks>
     /// <param name="fValue">[IN] Floating point number to be converted.</param>
     /// <returns>
     /// Integer value obtained.
     /// </returns>
-    template<typename IntegerT>
-    static IntegerT ToInteger(const float_q fValue)
+    template<typename IntegerType>
+    static IntegerType ToInteger(const float_q &fValue)
     {
-        IntegerT outInteger;
+        IntegerType outInteger;
 
         // Checks whether both input types have the same size
-        QE_ASSERT_ERROR( sizeof(fValue) == sizeof(outInteger), "Input float and output integer must have the same size in memory" );
+        QE_ASSERT( sizeof(fValue) == sizeof(outInteger) )
 
         #if   QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
 
-            const IntegerT LOWEST_EXPONENT_BIT_POS = 23;
-            const IntegerT EXPONENT = 127 + LOWEST_EXPONENT_BIT_POS;
+            const IntegerType LOWEST_EXPONENT_BIT_POS = 23;
+            const IntegerType EXPONENT = 127 + LOWEST_EXPONENT_BIT_POS;
             const float_q MAXIMUM_POSITIVE_CONVERTIBLE_VALUE_ALLOWED =  8388608; // Maximum convertible integer value = 2^23
             const float_q MAXIMUM_NEGATIVE_CONVERTIBLE_VALUE_ALLOWED = -4194304; // Maximum convertible integer negative value = 2^22
 
         #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
 
-            const IntegerT LOWEST_EXPONENT_BIT_POS = 52;
-            const IntegerT EXPONENT = 1023 + LOWEST_EXPONENT_BIT_POS;
+            const IntegerType LOWEST_EXPONENT_BIT_POS = 52;
+            const IntegerType EXPONENT = 1023 + LOWEST_EXPONENT_BIT_POS;
             const float_q MAXIMUM_POSITIVE_CONVERTIBLE_VALUE_ALLOWED =  4503599627370496l; // Maximum convertible integer value = 2^52
             const float_q MAXIMUM_NEGATIVE_CONVERTIBLE_VALUE_ALLOWED = -2251799813685248l; // Maximum convertible integer negative value = 2^51
 
@@ -408,18 +423,14 @@ public:
         if(fValue > MAXIMUM_POSITIVE_CONVERTIBLE_VALUE_ALLOWED ||
            fValue < MAXIMUM_NEGATIVE_CONVERTIBLE_VALUE_ALLOWED)
         {
-            // [TODO] Thund: Maybe, using assertions for notifying this fact is too hard since a user could think that
-            //               using this this method is worth for the majority of the cases, although several values are not inside the appropiate ranges.
-            //               In that case, getting assertion failures would be very annoying.
-
             // Checks whether the value is too big to be converted this way
-            QE_ASSERT_WARNING( fValue <= MAXIMUM_POSITIVE_CONVERTIBLE_VALUE_ALLOWED, "Input value is too big to be converted this way" );
+            QE_ASSERT( fValue <= MAXIMUM_POSITIVE_CONVERTIBLE_VALUE_ALLOWED )
 
             // Checks whether the value is too big (when it's negative) to be converted this way
-            QE_ASSERT_WARNING( fValue >= MAXIMUM_NEGATIVE_CONVERTIBLE_VALUE_ALLOWED, "Input value is too big to be converted this way" );
+            QE_ASSERT( fValue >= MAXIMUM_NEGATIVE_CONVERTIBLE_VALUE_ALLOWED )
 
             // When the value is out of the convertible bounds (using fast conversion), standard conversion is used
-            outInteger = scast_q(fValue, IntegerT);
+            outInteger = scast_q(fValue, IntegerType);
         }
         else
         {
@@ -428,7 +439,7 @@ public:
             union IntegerOrFloatUnion
             {
                 float_q _float;
-                IntegerT _integer;
+                IntegerType _integer;
             };
 
             IntegerOrFloatUnion biasValue;  // Used to manipulate the float mantissa
@@ -437,12 +448,12 @@ public:
             finalValue._float = fValue;
 
             if(finalValue._integer < 0)
-                biasValue._integer = (EXPONENT << LOWEST_EXPONENT_BIT_POS) + (IntegerT(1) << (LOWEST_EXPONENT_BIT_POS - IntegerT(1))); // Equivalent to 1 x 2 ^ LOWEST_EXPONENT_BIT_POS + 1 x 2 ^ (LOWEST_EXPONENT_BIT_POS - 1)
+                biasValue._integer = (EXPONENT << LOWEST_EXPONENT_BIT_POS) + (IntegerType(1) << (LOWEST_EXPONENT_BIT_POS - IntegerType(1))); // Equivalent to 1 x 2 ^ LOWEST_MANTISSA_BIT_POS + 1 x 2 ^ (LOWEST_MANTISSA_BIT_POS - 1)
             else
-                biasValue._integer = EXPONENT << LOWEST_EXPONENT_BIT_POS; // Equivalent to 1 x 2 ^ LOWEST_EXPONENT_BIT_POS
+                biasValue._integer = EXPONENT << LOWEST_EXPONENT_BIT_POS; // Equivalent to 1 x 2 ^ LOWEST_MANTISSA_BIT_POS
 
-            finalValue._float   += biasValue._float; // The mantissa is displaced N bits to the right (where N is bias exponent - original exponent). The exponent now equals bias exponent.
-            finalValue._integer -= biasValue._integer; // Removes the exponent bits so only the displaced
+            finalValue._float   += biasValue._float;
+            finalValue._integer -= biasValue._integer; // Removes the exponent bits
 
             outInteger = finalValue._integer;
         }
@@ -460,21 +471,21 @@ public:
     /// <returns>
     /// Value without fractional part.
     /// </returns>
-    static float_q Truncate(const float_q fValue);
+    static float_q Truncate(const float_q &fValue);
 
-    /// <summary>
-    /// This method clamps the input value to lie within the range [Min..Max].
-    /// </summary>
+	/// <summary>
+	/// This method clamps the input value to lie within the range [Min..Max].
+	/// </summary>
     /// <remarks>
     /// No tolerance is used for this operation.
     /// </remarks>
-    /// <param name="fValue">[IN] A floating point value; the value to be clamped, if neccesary.</param>
-    /// <param name="fMin">[IN] A floating point value; the minimum value into the range.</param>
-    /// <param name="fMax">[IN] A floating point value; the maximum value into the range.</param>
+	/// <param name="fValue">[IN] A floating point value; the value to be clamped, if neccesary.</param>
+	/// <param name="fMin">[IN] A floating point value; the minimum value into the range.</param>
+	/// <param name="fMax">[IN] A floating point value; the maximum value into the range.</param>
     /// <returns>
     /// The clamped value.
     /// </returns>
-    static float_q Clamp(const float_q fValue, const float_q fMin, const float_q fMax);
+	static float_q Clamp(const float_q& fValue, const float_q& fMin, const float_q& fMax);
 
     /// <summary>
     /// Inverts the order of bytes which compound a floating point number and returns the result as output parameter.
@@ -487,7 +498,7 @@ public:
     /// <returns>
     /// The transformed value.
     /// </returns>
-    static float_q SwapEndianess(const float_q fValue);
+    static float_q SwapEndianess(const float_q &fValue);
 
     /// <summary>
     /// Indicates whether the floating point number has negative sign.
@@ -499,7 +510,7 @@ public:
     /// <returns>
     /// If the number is lower than zero, it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsNegative(const float_q fValue);
+    static bool IsNegative(const float_q &fValue);
 
     /// <summary>
     /// Indicates whether the number is positive or not.
@@ -511,14 +522,14 @@ public:
     /// <returns>
     /// If the number is greater than zero, it returns True. Otherwise, it returns False.
     /// </returns>
-    static bool IsPositive(const float_q fValue);
+    static bool IsPositive(const float_q &fValue);
 
     /// <summary>
     /// Copies a floating point number sign to another one.
     /// </summary>
     /// <param name="fSignedValue">[IN] A floating point number whose sign is to be copied.</param>
     /// <param name="fValueToCopyTo">[OUT] A floating point number whose sign is to be replaced.</param>
-    static void CopySign(const float_q fSignedValue, float_q &fValueToCopyTo);
+    static void CopySign(const float_q &fSignedValue, float_q &fValueToCopyTo);
 
     /// <summary>
     /// Calculates the absolute value of the provided floating point number.
@@ -528,12 +539,12 @@ public:
     /// If the provided number is greater or equals to zero, it returns the same number,
     /// otherwise it returns the same number but with opposite sign.
     /// </returns>
-    static float_q Abs(const float_q fValue);
+    static float_q Abs(const float_q &fValue);
 
 };
 
 } //namespace DataTypes
-} //namespace Common
+} //namespace Tools
 } //namespace QuimeraEngine
 } //namespace Kinesis
 

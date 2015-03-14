@@ -34,13 +34,11 @@ using namespace boost::unit_test;
 
 #include "SQFloat.h"
 #include "SQVF32.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseMatrix2x2;
 
 QTEST_SUITE_BEGIN( QBaseMatrix2x2_TestSuite )
@@ -172,7 +170,7 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenPointerIsNull_Test )
     {
         QBaseMatrix2x2 vMatrixUT(NULL_ARRAY);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [jmartin]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }

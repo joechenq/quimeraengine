@@ -30,6 +30,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QRotationMatrix3x3.h"
 #include "SQAngle.h"
 #include "QVector3.h"
@@ -40,8 +42,8 @@ using namespace boost::unit_test;
 #include "QMatrix4x4.h"
 #include "QMatrix4x3.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QRotationMatrix3x3;
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES && QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
@@ -396,7 +398,7 @@ QTEST_CASE ( Constructor5_NeutralRotationIsObtainedWhenUsingNullVectorAndAngleEq
     // D3DXMATRIX rotm;
     // D3DXMatrixRotationAxis(&rotm, &vAxis, 0);
     const float_q ANGLE = SQFloat::_0;
-    const QVector3 AXIS = QVector3::GetNullVector();
+    const QVector3 AXIS = QVector3::GetZeroVector();
     const QRotationMatrix3x3 EXPECTED_VALUE = QRotationMatrix3x3::GetIdentity();
 
     // [Execution]
@@ -1294,7 +1296,7 @@ QTEST_CASE ( GetRotation3_NullVectorIsReturnedWhenRotationAngleEqualsZero_Test )
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
     const float_q EXPECTED_ANGLE = SQFloat::_0;
-    const QVector3 EXPECTED_AXIS = QVector3::GetNullVector();
+    const QVector3 EXPECTED_AXIS = QVector3::GetZeroVector();
 
     const QRotationMatrix3x3 ROTATION = QRotationMatrix3x3::GetIdentity(); // Identity is obtained when using zero as angle, it has nothing to do with the value of the axis
 

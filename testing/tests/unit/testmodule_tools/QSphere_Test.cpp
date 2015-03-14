@@ -31,6 +31,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QSphere.h"
 
 #include "SQAngle.h"
@@ -40,11 +42,9 @@ using namespace boost::unit_test;
 #include "QTranslationMatrix.h"
 #include "QTransformationMatrix.h"
 #include "QSpaceConversionMatrix.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QSphere;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 using Kinesis::QuimeraEngine::Tools::Math::QVector4;
@@ -59,7 +59,7 @@ QTEST_SUITE_BEGIN( QSphere_TestSuite )
 QTEST_CASE_TEMPLATE ( Constructor1_DefaultValuesHaveNotChanged_Test, TQTemplateTypes )
 {
     // [Preparation]
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
     const float_q EXPECTED_VALUE_FOR_RADIUS = SQFloat::_0;
 
 	// [Execution]
@@ -144,6 +144,8 @@ QTEST_CASE_TEMPLATE ( GetUnitSphere_ValueHasNotChanged_Test, TQTemplateTypes )
     const T EXPECTED_VALUE_FOR_CENTER(VECTOR_COMPONENTS);
     const float_q EXPECTED_VALUE_FOR_RADIUS = SQFloat::_1;
 
+    const QSphere<T> EXPECTED_ORB = QSphere<T>(EXPECTED_VALUE_FOR_CENTER, EXPECTED_VALUE_FOR_RADIUS);
+
 	// [Execution]
     QSphere<T> sphereUT = QSphere<T>::GetUnitSphere();
 
@@ -211,7 +213,7 @@ QTEST_CASE_TEMPLATE ( Translate1_SphereIsNotTranslatedWhenTranslationIsZero_Test
 
     const T EXPECTED_VALUE_FOR_CENTER = SPHERE.Center;
 
-    const QVector3 TRANSLATION = QVector3::GetNullVector();
+    const QVector3 TRANSLATION = QVector3::GetZeroVector();
 
 	// [Execution]
     QSphere<T> returnedSphere = SPHERE.Translate(TRANSLATION);
@@ -310,7 +312,7 @@ QTEST_CASE_TEMPLATE ( Rotate1_VerticesAreMovedToCoordinateOriginWhenQuaternionIs
     const float_q RADIUS = SQFloat::_5;
     const QSphere<T> SPHERE = QSphere<T>(T(VECTOR_COMPONENTS_CENTER), RADIUS);
 
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
 
 	// [Execution]
     QSphere<T> returnedSphere = SPHERE.Rotate(ROTATION);
@@ -472,14 +474,14 @@ QTEST_CASE_TEMPLATE ( Scale1_SphereIsNotScaledWhenVectorComponentsAndRadiusScale
 QTEST_CASE_TEMPLATE ( Scale1_VerticesAreMovedToCoordinateOriginWhenVectorIsNull_Test, TQTemplateTypes )
 {
     // [Preparation]
-    const QVector3 SCALE = QVector3::GetNullVector();
+    const QVector3 SCALE = QVector3::GetZeroVector();
     const float_q RADIUS_SCALE = SQFloat::_0;
 
     const float_q RADIUS = SQFloat::_5;
     const float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_0 };
     const QSphere<T> SPHERE = QSphere<T>(T(VECTOR_COMPONENTS_CENTER), RADIUS);
 
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
     const float_q EXPECTED_VALUE_FOR_RADIUS = SQFloat::_0;
 
 	// [Execution]
@@ -559,7 +561,7 @@ QTEST_CASE_TEMPLATE ( Scale2_VerticesAreMovedToCoordinateOriginWhenValuesEqualZe
     const float_q RADIUS = SQFloat::_5;
     const QSphere<T> SPHERE = QSphere<T>(T(VECTOR_COMPONENTS_CENTER), RADIUS);
 
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
     const float_q EXPECTED_VALUE_FOR_RADIUS = SQFloat::_0;
 
 	// [Execution]
@@ -632,7 +634,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_SphereIsNotTranslatedWhenVectorComponentsE
 QTEST_CASE_TEMPLATE ( ScaleWithPivot1_VerticesAreMovedToPivotPositionWhenVectorIsNull_Test, TQTemplateTypes )
 {
     // [Preparation]
-    const QVector3 SCALE = QVector3::GetNullVector();
+    const QVector3 SCALE = QVector3::GetZeroVector();
     const float_q RADIUS_SCALE = SQFloat::_0;
 
     const float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_0 };
@@ -819,13 +821,13 @@ QTEST_CASE_TEMPLATE ( Rotate2_VerticesAreMovedToCoordinateOriginWhenMatrixEquals
     using Kinesis::QuimeraEngine::Tools::Math::QRotationMatrix3x3;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetNullMatrix();
+    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetZeroMatrix();
 
     const float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_0 };
     const float_q RADIUS = SQFloat::_5;
     const QSphere<T> SPHERE = QSphere<T>(T(VECTOR_COMPONENTS_CENTER), RADIUS);
 
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
 
 	// [Execution]
     QSphere<T> returnedSphere = SPHERE.Rotate(ROTATION);
@@ -912,7 +914,7 @@ QTEST_CASE_TEMPLATE ( RotateWithPivot2_VerticesAreMovedToPivotPositionWhenMatrix
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
     using Kinesis::QuimeraEngine::Tools::Math::QRotationMatrix3x3;
 
-    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetNullMatrix();
+    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetZeroMatrix();
 
     const float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_0 };
     const float_q RADIUS = SQFloat::_5;
@@ -989,7 +991,7 @@ void Translate3_SphereIsNotTranslatedWhenTranslationIsZero_Template()
 
     const T EXPECTED_VALUE_FOR_CENTER = SPHERE.Center;
 
-    const QTranslationMatrix<MatrixType> TRANSLATION = MatrixType::GetNullMatrix();
+    const QTranslationMatrix<MatrixType> TRANSLATION = MatrixType::GetZeroMatrix();
 
 	// [Execution]
     QSphere<T> returnedSphere = SPHERE.Translate(TRANSLATION);
@@ -1116,14 +1118,14 @@ QTEST_CASE_TEMPLATE ( Scale3_VerticesAreMovedToCoordinateOriginWhenMatrixEqualsZ
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
     using Kinesis::QuimeraEngine::Tools::Math::QScalingMatrix3x3;
 
-    const QScalingMatrix3x3 SCALE = QMatrix3x3::GetNullMatrix();
+    const QScalingMatrix3x3 SCALE = QMatrix3x3::GetZeroMatrix();
     const float_q RADIUS_SCALE = SQFloat::_0;
 
     const float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_0 };
     const float_q RADIUS = SQFloat::_5;
     const QSphere<T> SPHERE = QSphere<T>(T(VECTOR_COMPONENTS_CENTER), RADIUS);
 
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
     const float_q EXPECTED_VALUE_FOR_RADIUS = SQFloat::_0;
 
 	// [Execution]
@@ -1201,7 +1203,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot3_VerticesAreMovedToPivotPositionWhenMatrixE
     using Kinesis::QuimeraEngine::Tools::Math::QScalingMatrix3x3;
 
     // [Preparation]
-    const QScalingMatrix3x3 SCALE = QScalingMatrix3x3::GetNullMatrix();
+    const QScalingMatrix3x3 SCALE = QScalingMatrix3x3::GetZeroMatrix();
     const float_q RADIUS_SCALE = SQFloat::_0;
 
     const float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_1, SQFloat::_2, SQFloat::_4, SQFloat::_0 };
@@ -1297,9 +1299,9 @@ void Transform1_SphereVerticesAreMovedToCoordinateOriginWhenTransformationIsZero
     const float_q RADIUS = SQFloat::_5;
     const QSphere<T> SPHERE = QSphere<T>(T(VECTOR_COMPONENTS_CENTER), RADIUS);
 
-    const T EXPECTED_VALUE_FOR_CENTER = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_CENTER = T::GetZeroVector();
 
-    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetNullMatrix();
+    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetZeroMatrix();
     const float_q RADIUS_SCALE = SQFloat::_0;
 
 	// [Execution]
@@ -1426,17 +1428,17 @@ QTEST_CASE_TEMPLATE ( Transform2_EndpointsAreNullifiedWhenMatrixIsZero_Test, TQT
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix4x4;
 
     // [Preparation]
-    const QSpaceConversionMatrix NULL_MATRIX = QMatrix4x4::GetNullMatrix();
+    const QSpaceConversionMatrix ZERO_MATRIX = QMatrix4x4::GetZeroMatrix();
 
 	const float_q CENTER_COMPONENTS[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T CENTER(CENTER_COMPONENTS);
     const float_q RADIUS = SQFloat::_5;
     const QSphere<T> SPHERE = QSphere<T>(CENTER, RADIUS);
 
-    const QSphere<T> EXPECTED_SPHERE = QSphere<T>(T::GetNullVector(), RADIUS);
+    const QSphere<T> EXPECTED_SPHERE = QSphere<T>(T::GetZeroVector(), RADIUS);
 
 	// [Execution]
-    QSphere<T> returnedSphere = SPHERE.Transform(NULL_MATRIX);
+    QSphere<T> returnedSphere = SPHERE.Transform(ZERO_MATRIX);
 
     // [Verification]
     BOOST_CHECK(returnedSphere == EXPECTED_SPHERE);
@@ -1525,7 +1527,7 @@ void TransformWithPivot_SphereVerticesAreMovedPivotPositionWhenTransformationIsZ
 
     const T EXPECTED_VALUE_FOR_CENTER = PIVOT_POINT;
 
-    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetNullMatrix();
+    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetZeroMatrix();
     const float_q RADIUS_SCALE = SQFloat::_0;
 
 	// [Execution]
@@ -1621,7 +1623,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_ReturnsNegativeSideWhenTheSphereIsBehindPlane
     EQSpaceRelation eResult = SPHERE.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1651,7 +1653,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_ReturnsPositiveSideWhenTheSphereIsInFrontPlan
     EQSpaceRelation eResult = SPHERE.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1682,7 +1684,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_ReturnsBothSidesWhenTheSphereIntersectsWithTh
     EQSpaceRelation eResult = SPHERE.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1714,7 +1716,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_ReturnsNegativeSideWhenTheSphereIsBehindPlane
     EQSpaceRelation eResult = SPHERE.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1746,7 +1748,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_ReturnsPositiveSideWhenTheSphereIsInFrontPlan
     EQSpaceRelation eResult = SPHERE.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1778,7 +1780,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_ResultIsNotDifferentWhenPlaneIsNotNormalized_
     EQSpaceRelation eResultNormalized = SPHERE.SpaceRelation(NORMALIZED_PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResultNonNotmalized == eResultNormalized);
+    BOOST_CHECK_EQUAL(eResultNonNotmalized, eResultNormalized);
 }
 
 #if QE_CONFIG_ASSERTSBEHAVIOR_DEFAULT == QE_CONFIG_ASSERTSBEHAVIOR_THROWEXCEPTIONS
@@ -1806,7 +1808,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_AssertionFailsWhenPlaneIsNull_Test, TQTemplat
     {
         SPHERE.SpaceRelation(NULL_PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1838,7 +1840,7 @@ QTEST_CASE_TEMPLATE( SpaceRelation_AssertionFailsWhenRadiusEqualsZero_Test, TQTe
     {
         SPHERE.SpaceRelation(PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1874,7 +1876,7 @@ QTEST_CASE_TEMPLATE ( ProjectToPlane_SphereIsProjectedWhenItIsInNegativeSide_Tes
     // [Verification]
     // [TODO] Thund: Uncomment when imprecision issues are resolved
     //EQSpaceRelation eResult = projectedSphere.SpaceRelation(PLANE);
-    //BOOST_CHECK(eResult == EQSpaceRelation::E_Contained);
+    //BOOST_CHECK_EQUAL(eResult, EQSpaceRelation::E_Contained);
     BOOST_CHECK(projectedSphere.Center == EXPECTED_SPHERE.Center);
     BOOST_CHECK(projectedSphere.Radius == EXPECTED_SPHERE.Radius);
 }
@@ -1903,7 +1905,7 @@ QTEST_CASE_TEMPLATE ( ProjectToPlane_SphereIsProjectedWhenItIsInPositiveSide_Tes
     // [Verification]
     // [TODO] Thund: Uncomment when imprecision issues are resolved
     //EQSpaceRelation eResult = projectedSphere.SpaceRelation(PLANE);
-    //BOOST_CHECK(eResult == EQSpaceRelation::E_Contained);
+    //BOOST_CHECK_EQUAL(eResult, EQSpaceRelation::E_Contained);
     BOOST_CHECK(projectedSphere.Center == EXPECTED_SPHERE.Center);
     BOOST_CHECK(projectedSphere.Radius == EXPECTED_SPHERE.Radius);
 }
@@ -1932,7 +1934,7 @@ QTEST_CASE_TEMPLATE ( ProjectToPlane_SphereIsProjectedWhenItIntersectsWithPlane_
     // [Verification]
     // [TODO] Thund: Uncomment when imprecision issues are resolved
     //EQSpaceRelation eResult = projectedSphere.SpaceRelation(PLANE);
-    //BOOST_CHECK(eResult == EQSpaceRelation::E_Contained);
+    //BOOST_CHECK_EQUAL(eResult, EQSpaceRelation::E_Contained);
     BOOST_CHECK(projectedSphere.Center == EXPECTED_SPHERE.Center);
     BOOST_CHECK(projectedSphere.Radius == EXPECTED_SPHERE.Radius);
 }
@@ -1986,7 +1988,7 @@ QTEST_CASE_TEMPLATE( ProjectToPlane_AssertionFailsWhenPlaneIsNull_Test, TQTempla
     {
         SPHERE.ProjectToPlane(NULL_PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be defined for this
     {
         bAssertionFailed = true;
     }

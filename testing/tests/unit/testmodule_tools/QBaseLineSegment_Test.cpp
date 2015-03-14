@@ -31,16 +31,18 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QBaseLineSegment.h"
 #include "QVector2.h"
 #include "QVector3.h"
 #include "QVector4.h"
 #include "SQVF32.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseLineSegment;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
@@ -119,8 +121,8 @@ QTEST_CASE_TEMPLATE ( Constructor3_ValuesAreSetProperly_Test, TQTemplateTypes )
 QTEST_CASE_TEMPLATE ( OperatorEquality_TrueWhenOperandsDifferTolerance_Test, TQTemplateTypes )
 {
     // [Preparation]
-    const QBaseLineSegment<T> LEFT_OPERAND = QBaseLineSegment<T>( T::GetNullVector(), T::GetNullVector() );
-    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetNullVector(), T::GetNullVector() );
+    const QBaseLineSegment<T> LEFT_OPERAND = QBaseLineSegment<T>( T::GetZeroVector(), T::GetZeroVector() );
+    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND == RIGHT_OPERAND);
@@ -133,7 +135,7 @@ QTEST_CASE_TEMPLATE ( OperatorEquality_TrueWhenOperandsDifferLessThanTolerance_T
 {
     // [Preparation]
     const QBaseLineSegment<T> LEFT_OPERAND = QBaseLineSegment<T>( T(SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5));
-    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetNullVector(), T::GetNullVector() );
+    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND == RIGHT_OPERAND);
@@ -146,7 +148,7 @@ QTEST_CASE_TEMPLATE ( OperatorEquality_FalseWhenOperandsDifferGreaterThanToleran
 {
     // [Preparation]
     const QBaseLineSegment<T> LEFT_OPERAND = QBaseLineSegment<T>( T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5) );
-    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetNullVector(), T::GetNullVector() );
+    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(!( LEFT_OPERAND == RIGHT_OPERAND ));
@@ -198,7 +200,7 @@ QTEST_CASE_TEMPLATE ( OperatorInequality_TrueWhenOperandsDifferGreaterThanTolera
 {
     // [Preparation]
     const QBaseLineSegment<T> LEFT_OPERAND = QBaseLineSegment<T>( T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5) );
-    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetNullVector(), T::GetNullVector() );
+    const QBaseLineSegment<T> RIGHT_OPERAND = QBaseLineSegment<T>( T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND != RIGHT_OPERAND);

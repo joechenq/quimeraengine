@@ -27,12 +27,13 @@
 #ifndef __EQSPACERELATION__
 #define __EQSPACERELATION__
 
-#include "Assertions.h"
-#include "StringsDefinitions.h"
-#include "ToolsDefinitions.h"
-#include "QArrayBasic.h"
+#include <map>
+#include <vector>
 
-using Kinesis::QuimeraEngine::Common::DataTypes::enum_int_q;
+#include "DataTypesDefinitions.h"
+
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::enum_int_q;
 
 
 namespace Kinesis
@@ -48,7 +49,7 @@ namespace Math
 /// Enumerated type that represents a space relation between a geometric element (a point, a triangle, a line, etc.) and another one,
 /// normally a plane.
 /// </summary>
-class QE_LAYER_TOOLS_SYMBOLS EQSpaceRelation
+class EQSpaceRelation
 {
     // ENUMERATIONS
     // ---------------
@@ -60,23 +61,30 @@ public:
     enum EnumType
     {
         E_Contained = QE_ENUMERATION_MIN_VALUE, /*!< The geometric element is fully contained in the plane. */
-        E_PositiveSide,                         /*!< The geometric element is in front of the plane. */
-        E_NegativeSide,                         /*!< The geometric element is in behind the plane. */
-        E_BothSides,                            /*!< The geometric element intersects the plane. Part of the element is in front of the plane and other part is behind it. */
+        E_PositiveSide, /*!< The geometric element is in front of the plane. */
+        E_NegativeSide, /*!< The geometric element is in behind the plane. */
+        E_BothSides, /*!< The geometric element intersects the plane. Part of the element is in front of the plane and other part is behind it. */
 
         _NotEnumValue = QE_ENUMERATION_MAX_VALUE /*!< Not valid value. */
     };
 
-
-    // METHODS
+    // TYPEDEFS
     // ---------------
+public:
+
+    typedef std::map<string_q, EQSpaceRelation::EnumType> TNameValueMap;
+    typedef std::pair<string_q, EQSpaceRelation::EnumType> TNameValuePair;
+
+
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
     /// Constructor that receives a valid enumeration value.
     /// </summary>
     /// <param name="eValue">[IN] A valid enumeration value.</param>
-    EQSpaceRelation(const EQSpaceRelation::EnumType eValue) : m_value(eValue)
+    EQSpaceRelation(const EQSpaceRelation::EnumType &eValue) : m_value(eValue)
     {
     }
 
@@ -84,7 +92,7 @@ public:
     /// Constructor that receives an integer number which must correspond to a valid enumeration value.
     /// </summary>
     /// <param name="nValue">[IN] An integer number.</param>
-    EQSpaceRelation(const enum_int_q nValue) : m_value(scast_q(nValue, const EQSpaceRelation::EnumType))
+    EQSpaceRelation(const enum_int_q &nValue) : m_value(scast_q(nValue, const EQSpaceRelation::EnumType))
     {
     }
 
@@ -92,10 +100,10 @@ public:
     /// Constructor that receives the name of a valid enumeration value. <br/>Note that enumeration value names don't include
     /// the enumeration prefix.
     /// </summary>
-    /// <param name="szValueName">[IN] The name of a valid enumeration value.</param>
-    EQSpaceRelation(const char* szValueName)
+    /// <param name="strValueName">[IN] The name of a valid enumeration value.</param>
+    EQSpaceRelation(const string_q &strValueName)
     {
-        *this = szValueName;
+        *this = strValueName;
     }
     
     /// <summary>
@@ -113,7 +121,7 @@ public:
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQSpaceRelation& operator=(const enum_int_q nValue)
+    EQSpaceRelation& operator=(const enum_int_q &nValue)
     {
         m_value = scast_q(nValue, const EQSpaceRelation::EnumType);
         return *this;
@@ -122,24 +130,16 @@ public:
     /// <summary>
     /// Assignation operator that accepts a valid enumeration value name.
     /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
+    /// <param name="strValueName">[IN] The enumeration value name.</param>
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQSpaceRelation& operator=(const char* szValueName)
+    EQSpaceRelation& operator=(const string_q &strValueName)
     {
-        bool bMatchFound = false;
-        unsigned int uEnumStringIndex = 0;
-
-        while(!bMatchFound && uEnumStringIndex < EQSpaceRelation::_GetNumberOfValues())
-        {
-            bMatchFound = strcmp(sm_arStrings[uEnumStringIndex], szValueName) == 0;
-            ++uEnumStringIndex;
-        }
-
-        QE_ASSERT_ERROR(uEnumStringIndex < EQSpaceRelation::_GetNumberOfValues(), "The input string does not correspond to any valid enumeration value.");
-
-        m_value = sm_arValues[uEnumStringIndex - 1U];
+        if(EQSpaceRelation::sm_mapValueName.find(strValueName) != EQSpaceRelation::sm_mapValueName.end())
+            m_value = sm_mapValueName[strValueName];
+        else
+            m_value = EQSpaceRelation::_NotEnumValue;
 
         return *this;
     }
@@ -151,7 +151,7 @@ public:
     /// <returns>
     /// The enumerated type itself.
     /// </returns>
-    EQSpaceRelation& operator=(const EQSpaceRelation::EnumType eValue)
+    EQSpaceRelation& operator=(const EQSpaceRelation::EnumType &eValue)
     {
         m_value = eValue;
         return *this;
@@ -183,35 +183,29 @@ public:
     }
 
     /// <summary>
-    /// Equality operator that receives the name of a valid enumeration value.<br/>Note that enumeration value names do not include
+    /// Equality operator that accepts the name of a valid enumeration value. <br/>Note that enumeration value names don't include
     /// the enumeration prefix.
     /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
+    /// <param name="strValueName">[IN] The enumeration value name.</param>
     /// <returns>
     /// True if the name corresponds to a valid enumeration value and it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const char* szValueName) const
+    bool operator==(const string_q &strValueName) const
     {
-        bool bMatchFound = false;
-        unsigned int uEnumStringIndex = 0;
-
-        while(!bMatchFound && uEnumStringIndex < EQSpaceRelation::_GetNumberOfValues())
-        {
-            bMatchFound = strcmp(sm_arStrings[m_value], szValueName) == 0;
-            ++uEnumStringIndex;
-        }
-
-        return bMatchFound;
+        if(EQSpaceRelation::sm_mapValueName.find(strValueName) != EQSpaceRelation::sm_mapValueName.end())
+            return m_value == sm_mapValueName[strValueName];
+        else
+            return false;
     }
 
     /// <summary>
-    /// Equality operator that receives an integer number which must correspond to a valid enumeration value.
+    /// Equality operator that accepts an integer number which must correspond to a valid enumeration value.
     /// </summary>
     /// <param name="nValue">[IN] An integer number.</param>
     /// <returns>
     /// True if the number corresponds to a valid enumeration value and it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const enum_int_q nValue) const
+    bool operator==(const enum_int_q &nValue) const
     {
         return m_value == scast_q(nValue, const EQSpaceRelation::EnumType);
     }
@@ -223,58 +217,9 @@ public:
     /// <returns>
     /// True if it equals the contained value. False otherwise.
     /// </returns>
-    bool operator==(const EQSpaceRelation::EnumType eValue) const
+    bool operator==(const EQSpaceRelation::EnumType &eValue) const
     {
         return m_value == eValue;
-    }
-    
-    /// <summary>
-    /// Inequality operator that receives another enumeration.
-    /// </summary>
-    /// <param name="eValue">[IN] The other enumeration.</param>
-    /// <returns>
-    /// False if it equals the enumeration value. True otherwise.
-    /// </returns>
-    bool operator!=(const EQSpaceRelation &eValue) const
-    {
-        return m_value != eValue.m_value;
-    }
-
-    /// <summary>
-    /// Inequality operator that receives the name of a valid enumeration value.<br/>Note that enumeration value names do not include
-    /// the enumeration prefix.
-    /// </summary>
-    /// <param name="szValueName">[IN] The enumeration value name.</param>
-    /// <returns>
-    /// False if the name corresponds to a valid enumeration value and it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const char* szValueName) const
-    {
-        return !(*this == szValueName);
-    }
-
-    /// <summary>
-    /// Inequality operator that receives an integer number which must correspond to a valid enumeration value.
-    /// </summary>
-    /// <param name="nValue">[IN] An integer number.</param>
-    /// <returns>
-    /// False if the number corresponds to a valid enumeration value and it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const enum_int_q nValue) const
-    {
-        return m_value != scast_q(nValue, const EQSpaceRelation::EnumType);
-    }
-
-    /// <summary>
-    /// Inequality operator that receives a valid enumeration value.
-    /// </summary>
-    /// <param name="eValue">[IN] The enumeration value.</param>
-    /// <returns>
-    /// False if it equals the contained value. True otherwise.
-    /// </returns>
-    bool operator!=(const EQSpaceRelation::EnumType eValue) const
-    {
-        return m_value != eValue;
     }
     
     /// <summary>
@@ -283,11 +228,23 @@ public:
     /// <returns>
     /// A list of all the values of the enumeration.
     /// </returns>
-    static const Kinesis::QuimeraEngine::Common::DataTypes::QArrayBasic<const EnumType> GetValues()
+    static const std::vector<EnumType>& GetValues()
     {
-        using Kinesis::QuimeraEngine::Common::DataTypes::QArrayBasic;
-        static const QArrayBasic<const EnumType> ARRAY_OF_VALUES(sm_arValues, EQSpaceRelation::_GetNumberOfValues());
-        return ARRAY_OF_VALUES;
+        static std::vector<EnumType> arValues;
+
+        // If it's not been initialized yet...
+        if(arValues.empty())
+        {
+            const size_t ENUM_ARRAY_COUNT = EQSpaceRelation::sm_mapValueName.size();
+
+            // An empty enumeration makes no sense
+            QE_ASSERT(ENUM_ARRAY_COUNT > 0);
+
+            for(size_t i = 0; i < ENUM_ARRAY_COUNT; ++i)
+                arValues.push_back(EQSpaceRelation::sm_arValueName[i].second);
+        }
+
+        return arValues;
     }
 
     /// <summary>
@@ -307,9 +264,9 @@ public:
     /// <returns>
     /// The contained enumeration value name. If the enumeration value is not valid, the returns an empty string.
     /// </returns>
-    operator const char*() const
+    operator const string_q() const
     {
-        return _ConvertToString(m_value);
+        return ConvertToString(m_value, EQSpaceRelation::sm_mapValueName);
     }
     
     /// <summary>
@@ -327,51 +284,52 @@ public:
     /// Converts the enumerated type value into its corresponding name.
     /// </summary>
     /// <returns>
-    /// The contained enumeration value name. If the enumeration value is not valid, then returns an empty string.
+    /// The contained enumeration value name. If the enumeration value is not valid, the returns an empty string.
     /// </returns>
-    const char* ToString() const
+    const string_q ToString()
     {
-        return _ConvertToString(m_value);
+        return ConvertToString(m_value, EQSpaceRelation::sm_mapValueName);
     }
-
-private:
-
-    /// <summary>
-    /// Uses an enumerated value as a key to retrieve his own string representation from a dictionary.
-    /// </summary>
-    /// <param name="eValue">[IN] The enumeration value.</param>
-    /// <returns>
-    /// The enumerated value's string representation.
-    /// </returns>
-    inline static const char* _ConvertToString(const EQSpaceRelation::EnumType eValue)
-    {
-        QE_ASSERT_ERROR(scast_q(eValue, unsigned int) < EQSpaceRelation::_GetNumberOfValues(), "The enumeration value is not valid.");
-
-        return sm_arStrings[eValue];
-    }
-        
-    /// <summary>
-    /// Gets the number of values available in the enumeration.
-    /// </summary>
-    /// <returns>
-    /// A number of values, without counting the _NotEnumValue value.
-    /// </returns>
-    static unsigned int _GetNumberOfValues();
 
 
     // ATTRIBUTES
-    // ---------------
+	// ---------------
 private:
 
-    /// <summary>
-    /// The string representation of every enumeration value.
-    /// </summary>
-    static const char* sm_arStrings[];
+
+private:
+
+    // <summary>
+    // Uses an enumerated value as a key to retrieve his own string representation from a dictionary.
+    // </summary>
+    // <param name="eValue">[IN] The enumeration value.</param>
+    // <param name="nameValueDictionary">[IN] The dictionary where enumeration's string representations are stored.</param>
+    // <returns>
+    // The enumerated value's string representation.
+    // </returns>
+    const string_q& ConvertToString(const EQSpaceRelation::EnumType& eValue, const TNameValueMap& nameValueDictionary) const
+    {
+        TNameValueMap::const_iterator itValueName = nameValueDictionary.begin();
+        TNameValueMap::const_iterator itValueNameEnd = nameValueDictionary.end();
+
+        while(itValueName != itValueNameEnd && itValueName->second != eValue)
+            ++itValueName;
+
+        if(itValueName != itValueNameEnd)
+            return itValueName->first;
+        else
+            { static const string_q EMPTY_STRING; return EMPTY_STRING; }// [TODO] Thund: This must be replaced by a QString constant.
+    }
 
     /// <summary>
-    /// A list with all enumeration values avalilable.
+    /// A list of enumeration values with their names.
     /// </summary>
-    static const EQSpaceRelation::EnumType sm_arValues[];
+    static TNameValuePair sm_arValueName[];
+
+    /// <summary>
+    /// The dictionary which contains each enumeration value by its name.
+    /// </summary>
+    static TNameValueMap  sm_mapValueName;
 
     /// <summary>
     /// The contained enumeration value.

@@ -31,6 +31,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QHexahedron.h"
 
 #include "QVector3.h"
@@ -41,12 +43,10 @@ using namespace boost::unit_test;
 #include "QTranslationMatrix.h"
 #include "QTransformationMatrix.h"
 #include "QSpaceConversionMatrix.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QHexahedron;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 using Kinesis::QuimeraEngine::Tools::Math::QVector4;
@@ -327,12 +327,12 @@ QTEST_CASE_TEMPLATE ( Constructor6_AllPointsCoincideWithCoordinateOriginWhenLeng
     //  H --- G
 
     // [Preparation]
-    const T EXPECTED_VALUE_FOR_ALL_POINTS = T::GetNullVector();
+    const T EXPECTED_VALUE_FOR_ALL_POINTS = T::GetZeroVector();
 
     const float_q INPUT_X = SQFloat::_0;
     const float_q INPUT_Y = SQFloat::_0;
     const float_q INPUT_Z = SQFloat::_0;
-    const T INPUT_CENTER = T::GetNullVector();
+    const T INPUT_CENTER = T::GetZeroVector();
 
 	// [Execution]
     QHexahedron<T> hexahedronUT(INPUT_CENTER, INPUT_X, INPUT_Y, INPUT_Z);
@@ -769,7 +769,7 @@ QTEST_CASE_TEMPLATE ( Translate1_HexahedronIsNotTranslatedWhenTranslationIsZero_
     const T EXPECTED_VALUE_FOR_G = HEXAHEDRON.G;
     const T EXPECTED_VALUE_FOR_H = HEXAHEDRON.H;
 
-    const QVector3 TRANSLATION = QVector3::GetNullVector();
+    const QVector3 TRANSLATION = QVector3::GetZeroVector();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.Translate(TRANSLATION);
@@ -982,7 +982,7 @@ QTEST_CASE_TEMPLATE ( Scale1_VerticesAreMovedToCoordinateOriginWhenVectorIsNull_
     const float_q NULL_VECTOR_COMPONENTS[] = {SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_1};
     const T COORDINATE_ORIGIN = T(NULL_VECTOR_COMPONENTS);
 
-    const QVector3 SCALE = QVector3::GetNullVector();
+    const QVector3 SCALE = QVector3::GetZeroVector();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.Scale(SCALE);
@@ -1230,7 +1230,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot1_VerticesAreMovedToCoordinateOriginWhenVect
     const float_q PIVOT_COMPONENTS[] = {SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_1};
     const T PIVOT_POINT = T(PIVOT_COMPONENTS);
 
-    const QVector3 SCALE = QVector3::GetNullVector();
+    const QVector3 SCALE = QVector3::GetZeroVector();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.ScaleWithPivot(SCALE, PIVOT_POINT);
@@ -1436,7 +1436,7 @@ QTEST_CASE_TEMPLATE ( GetPlanes_AssertionFailsWhenAllVerticesCoincide_Test, TQTe
     {
         HEXAHEDRON.GetPlanes(arOutputPlanes);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -1464,7 +1464,7 @@ QTEST_CASE_TEMPLATE ( GetPlanes_AssertionFailsWhenListOfPlanesIsNull_Test, TQTem
     {
         HEXAHEDRON.GetPlanes(pNullList);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -1774,7 +1774,7 @@ QTEST_CASE_TEMPLATE ( Contains_AssertionFailsWhenAllVerticesCoincide_Test, TQTem
     {
         HEXAHEDRON.Contains(POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -1820,7 +1820,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_ReturnsBothSidesWhenHexahedronAndPlaneInters
     EQSpaceRelation eResult = HEXAHEDRON.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1858,7 +1858,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_ReturnsPositiveSideWhenHexahedronIsInPositiv
     EQSpaceRelation eResult = HEXAHEDRON.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1896,7 +1896,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_ReturnsNegativeSideWhenHexahedronIsInNegativ
     EQSpaceRelation eResult = HEXAHEDRON.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1934,7 +1934,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_ReturnsContainedWhenHexahedronBelongsToPlane
     EQSpaceRelation eResult = HEXAHEDRON.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -1972,7 +1972,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_ReturnsPositiveSideWhenSomePartOfTheHexahedr
     EQSpaceRelation eResult = HEXAHEDRON.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 /// <summary>
@@ -2010,7 +2010,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_ReturnsNegativeSideWhenSomePartOfTheHexahedr
     EQSpaceRelation eResult = HEXAHEDRON.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
 }
 
 #if QE_CONFIG_ASSERTSBEHAVIOR_DEFAULT == QE_CONFIG_ASSERTSBEHAVIOR_THROWEXCEPTIONS
@@ -2037,7 +2037,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_AssertionFailsWhenAllVerticesCoincide_Test, 
     {
         HEXAHEDRON.SpaceRelation(PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -2083,7 +2083,7 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_AssertionFailsWhenThePlaneIsNull_Test, TQTem
     {
         HEXAHEDRON.SpaceRelation(PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -2130,9 +2130,9 @@ QTEST_CASE_TEMPLATE ( SpaceRelation_CorrectResultIsReturnedWhenAllVerticesCoinci
     EQSpaceRelation eResultContained = HEXAHEDRON_CONTAINED.SpaceRelation(PLANE);
 
     // [Verification]
-    BOOST_CHECK(eResultPositive == EXPECTED_RESULT_POSITIVE);
-    BOOST_CHECK(eResultNegative == EXPECTED_RESULT_NEGATIVE);
-    BOOST_CHECK(eResultContained == EXPECTED_RESULT_CONTAINED);
+    BOOST_CHECK_EQUAL(eResultPositive, EXPECTED_RESULT_POSITIVE);
+    BOOST_CHECK_EQUAL(eResultNegative, EXPECTED_RESULT_NEGATIVE);
+    BOOST_CHECK_EQUAL(eResultContained, EXPECTED_RESULT_CONTAINED);
 }
 
 #endif // QE_CONFIG_ASSERTSBEHAVIOR_DEFAULT == QE_CONFIG_ASSERTSBEHAVIOR_THROWEXCEPTIONS
@@ -2239,7 +2239,7 @@ QTEST_CASE_TEMPLATE ( Rotate2_VerticesAreMovedToCoordinateOriginWhenMatrixEquals
     using Kinesis::QuimeraEngine::Tools::Math::QRotationMatrix3x3;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetNullMatrix();
+    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetZeroMatrix();
 
     const QHexahedron<T> HEXAHEDRON = QHexahedron<T>::GetUnitCube();
 
@@ -2376,7 +2376,7 @@ QTEST_CASE_TEMPLATE ( RotateWithPivot2_VerticesAreMovedToPivotPointWhenMatrixEqu
     using Kinesis::QuimeraEngine::Tools::Math::QRotationMatrix3x3;
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
 
-    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetNullMatrix();
+    const QRotationMatrix3x3 ROTATION = QMatrix3x3::GetZeroMatrix();
 
     const QHexahedron<T> HEXAHEDRON = QHexahedron<T>::GetUnitCube();
 
@@ -2503,7 +2503,7 @@ void Translate3_HexahedronIsNotTranslatedWhenTranslationIsZero_Template()
     const T EXPECTED_VALUE_FOR_G = HEXAHEDRON.G;
     const T EXPECTED_VALUE_FOR_H = HEXAHEDRON.H;
 
-    const QTranslationMatrix<MatrixType> TRANSLATION = MatrixType::GetNullMatrix();
+    const QTranslationMatrix<MatrixType> TRANSLATION = MatrixType::GetZeroMatrix();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.Translate(TRANSLATION);
@@ -2689,7 +2689,7 @@ QTEST_CASE_TEMPLATE ( Scale3_VerticesAreMovedToCoordinateOriginWhenMatrixEqualsZ
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
     using Kinesis::QuimeraEngine::Tools::Math::QScalingMatrix3x3;
 
-    const QScalingMatrix3x3 SCALE = QMatrix3x3::GetNullMatrix();
+    const QScalingMatrix3x3 SCALE = QMatrix3x3::GetZeroMatrix();
 
     const QHexahedron<T> HEXAHEDRON = QHexahedron<T>::GetUnitCube();
 
@@ -2824,7 +2824,7 @@ QTEST_CASE_TEMPLATE ( ScaleWithPivot3_VerticesAreMovedToCoordinateOriginWhenVect
     const float_q PIVOT_COMPONENTS[] = {SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_1};
     const T PIVOT_POINT = T(PIVOT_COMPONENTS);
 
-    const QScalingMatrix3x3 SCALE = QScalingMatrix3x3::GetNullMatrix();
+    const QScalingMatrix3x3 SCALE = QScalingMatrix3x3::GetZeroMatrix();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.ScaleWithPivot(SCALE, PIVOT_POINT);
@@ -2941,7 +2941,7 @@ void Transform1_HexahedronVerticesAreMovedToCoordinateOriginWhenTransformationIs
     const T EXPECTED_VALUE_FOR_G = T(NULL_VECTOR_COMPONENTS);
     const T EXPECTED_VALUE_FOR_H = T(NULL_VECTOR_COMPONENTS);
 
-    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetNullMatrix();
+    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetZeroMatrix();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.Transform(TRANSFORMATION);
@@ -3102,14 +3102,14 @@ QTEST_CASE_TEMPLATE ( Transform2_EndpointsAreNullifiedWhenMatrixIsZero_Test, TQT
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix4x4;
 
     // [Preparation]
-    const QSpaceConversionMatrix NULL_MATRIX = QMatrix4x4::GetNullMatrix();
+    const QSpaceConversionMatrix ZERO_MATRIX = QMatrix4x4::GetZeroMatrix();
 
     const QHexahedron<T> HEXAHEDRON = QHexahedron<T>::GetUnitCube();
 
-    const QHexahedron<T> EXPECTED_HEXAHEDRON = QHexahedron<T>(T::GetNullVector(), T::GetNullVector());
+    const QHexahedron<T> EXPECTED_HEXAHEDRON = QHexahedron<T>(T::GetZeroVector(), T::GetZeroVector());
 
 	// [Execution]
-    QHexahedron<T> hexahedron = HEXAHEDRON.Transform(NULL_MATRIX);
+    QHexahedron<T> hexahedron = HEXAHEDRON.Transform(ZERO_MATRIX);
 
     // [Verification]
     BOOST_CHECK(hexahedron == EXPECTED_HEXAHEDRON);
@@ -3220,7 +3220,7 @@ void TransformWithPivot_HexahedronVerticesAreMovedToCoordinateOriginWhenTransfor
     const T EXPECTED_VALUE_FOR_G = PIVOT_POINT;
     const T EXPECTED_VALUE_FOR_H = PIVOT_POINT;
 
-    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetNullMatrix();
+    const QTransformationMatrix<MatrixType> TRANSFORMATION = MatrixType::GetZeroMatrix();
 
 	// [Execution]
     QHexahedron<T> returnedHexahedron = HEXAHEDRON.TransformWithPivot(TRANSFORMATION, PIVOT_POINT);
@@ -3938,7 +3938,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenAllVerticesCoincide_Test, T
     {
         HEXAHEDRON1.Intersection(HEXAHEDRON2);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed1 = true;
     }
@@ -3949,7 +3949,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenAllVerticesCoincide_Test, T
     {
         HEXAHEDRON2.Intersection(HEXAHEDRON1);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed2 = true;
     }
@@ -4209,7 +4209,7 @@ QTEST_CASE_TEMPLATE ( ProjectToPlane_AssertionFailsWhenAllVerticesCoincide_Test,
     {
         HEXAHEDRON.ProjectToPlane(PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -4255,7 +4255,7 @@ QTEST_CASE_TEMPLATE ( ProjectToPlane_AssertionFailsWhenThePlaneIsNull_Test, TQTe
     {
         HEXAHEDRON.ProjectToPlane(PLANE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: Use a concrete exception type when it's implemented
     {
         bAssertionFailed = true;
     }
@@ -4348,8 +4348,8 @@ QTEST_CASE_TEMPLATE ( ToString_ExpectedOutputIsReturned_Test, TQTemplateTypes )
     const string_q G_STRING = VALUE_FOR_G.ToString();
     const string_q H_STRING = VALUE_FOR_H.ToString();
 
-    const string_q EXPECTED_STRING = string_q("HX(a(") + A_STRING + QE_L("),b(") + B_STRING + QE_L("),c(") + C_STRING + QE_L("),d(") + D_STRING + QE_L("),") +
-                                         QE_L(   "e(") + E_STRING + QE_L("),f(") + F_STRING + QE_L("),g(") + G_STRING + QE_L("),h(") + H_STRING + QE_L("))");
+    const string_q EXPECTED_STRING = QE_L("HX(a(") + A_STRING + QE_L("),b(") + B_STRING + QE_L("),c(") + C_STRING + QE_L("),d(") + D_STRING + QE_L("),") +
+                                     QE_L(   "e(") + E_STRING + QE_L("),f(") + F_STRING + QE_L("),g(") + G_STRING + QE_L("),h(") + H_STRING + QE_L("))");
 
 	// [Execution]
     string_q strReturnedString = HEXAHEDRON.ToString();

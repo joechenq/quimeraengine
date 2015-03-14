@@ -36,16 +36,16 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QRay.h"
 #include "QVector3.h"
 #include "QVector4.h"
 #include "QBaseOrb.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QRay;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 using Kinesis::QuimeraEngine::Tools::Math::QVector4;
@@ -167,13 +167,13 @@ QTEST_CASE_TEMPLATE ( Constructor4_ConstructedRayIsNotNormalizedWhenDirectionVec
 /// <summary>
 /// Checks that it returns a null ray placed at the origin.
 /// </summary>
-QTEST_CASE_TEMPLATE ( GetNullRay_ReturnsWhatExpected_Test, TQTemplateTypes )
+QTEST_CASE_TEMPLATE ( GetRayZero_ReturnsWhatExpected_Test, TQTemplateTypes )
 {
     // [Preparation]
-    QRay<T, QVector3> EXPECTED_VALUE(T::GetNullVector(), QVector3::GetNullVector());
+    QRay<T, QVector3> EXPECTED_VALUE(T::GetZeroVector(), QVector3::GetZeroVector());
 
 	// [Execution]
-    QRay<T, QVector3> obtinedRay = QRay<T, QVector3>::GetNullRay();
+    QRay<T, QVector3> obtinedRay = QRay<T, QVector3>::GetRayZero();
 
     // [Verification]
     BOOST_CHECK(obtinedRay.Origin == EXPECTED_VALUE.Origin);
@@ -369,7 +369,7 @@ QTEST_CASE_TEMPLATE ( GetPoint_AssertionFailsWhenRayIsNotNormalized_Test, TQTemp
     {
         NOT_NORMALIZED_RAY.GetPoint(DISTANCE);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -588,7 +588,7 @@ QTEST_CASE_TEMPLATE ( Intersection_ReturnsFalseWhenRayDoesNotIntersectTheOrbButW
 {
     //             ___
     //            /   \
-    //  <-----o路路|路路路路路|路路
+    //  <-----o贩|贩贩穦贩
     //            \___/
     //
 
@@ -650,7 +650,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenRadiusOfTheOrbEqualsZero_Te
     {
         RAY.Intersection(ORB);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -692,7 +692,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenDirectionVectorIsNull_Test,
     {
         RAY.Intersection(ORB);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -728,7 +728,7 @@ QTEST_CASE_TEMPLATE ( Intersection_AssertionFailsWhenRayIsNotNormalized_Test, TQ
     {
         NOT_NORMALIZED_RAY.Intersection(ORB);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -765,7 +765,7 @@ QTEST_CASE_TEMPLATE ( Intersection_ReturnsExpectedResultWhenRadiusOfTheOrbEquals
 
     const float_q VECTOR_COMPONENTS_CENTER_NOT_CONTAINED[] = { SQFloat::_4, SQFloat::_3, SQFloat::_3 };
     const T VALUE_FOR_CENTER_NOT_CONTAINED(VECTOR_COMPONENTS_CENTER_NOT_CONTAINED);
-
+    const float_q RADIUS_NOT_CONTAINED = SQFloat::_0;
     const QBaseOrb<T> ORB_NOT_CONTAINED = QBaseOrb<T>(VALUE_FOR_CENTER_NOT_CONTAINED, RADIUS_CONTAINED);
 
     const bool EXPECTED_RESULT_CONTAINED = true;
@@ -809,14 +809,14 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_NoIntersectionPointsAreReturnedWhenRayD
     QBaseOrb<T> ORB = QBaseOrb<T>( T(VECTOR_COMPONENTS_CENTER), SQFloat::_1 );
 
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_None;
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     T OUTPUT_POINT = EXPECTED_POINT;
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -847,13 +847,13 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsTwoIntersectionPointsWhenRayInte
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_Two;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_1, SQFloat::_2, SQFloat::_2, SQFloat::_1 };
     const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -885,13 +885,13 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsOnePointWhenOriginLiesOnTheSurfa
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_One;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_3, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -923,13 +923,13 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsTwoPointsWhenOriginLiesOnTheSurf
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_Two;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_3, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -961,13 +961,13 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsOnePointWhenOriginIsContainedInT
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_One;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_3, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -999,13 +999,13 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsOnePointWhenRayIsTangentToTheOrb
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_One;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_2, SQFloat::_3, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -1016,7 +1016,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsNoPointsWhenRayDoesNotIntersectT
 {
     //             ___
     //            /   \
-    //  <-----o路路|路路路路路|路路
+    //  <-----o贩|贩贩穦贩
     //            \___/
     //
 
@@ -1035,14 +1035,14 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsNoPointsWhenRayDoesNotIntersectT
     QBaseOrb<T> ORB = QBaseOrb<T>( T(VECTOR_COMPONENTS_CENTER), SQFloat::_1 );
 
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_None;
-    const T EXPECTED_POINT = T::GetNullVector();
-    T OUTPUT_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
+    T OUTPUT_POINT = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -1071,7 +1071,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_AssertionFailsWhenRadiusOfTheOrbEqualsZ
     const T VALUE_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
     const float_q RADIUS = SQFloat::_0;
     const QBaseOrb<T> ORB = QBaseOrb<T>(VALUE_FOR_CENTER, RADIUS);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
     const bool ASSERTION_FAILED = true;
 
 	// [Execution]
@@ -1081,7 +1081,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_AssertionFailsWhenRadiusOfTheOrbEqualsZ
     {
         RAY.IntersectionPoint(ORB, OUTPUT_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -1106,14 +1106,14 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_AssertionFailsWhenDirectionVectorIsNull
     // [Preparation]
     float_q VECTOR_COMPONENTS_ORIGIN[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T VALUE_FOR_ORIGIN(VECTOR_COMPONENTS_ORIGIN);
-    const QVector3 VALUE_FOR_DIRECTION = QVector3::GetNullVector();
+    const QVector3 VALUE_FOR_DIRECTION = QVector3::GetZeroVector();
     QRay<T, QVector3> RAY = QRay<T, QVector3>(VALUE_FOR_ORIGIN, VALUE_FOR_DIRECTION);
 
     float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_2, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T VALUE_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
     const float_q RADIUS = SQFloat::_0;
     const QBaseOrb<T> ORB = QBaseOrb<T>(VALUE_FOR_CENTER, RADIUS);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
     const bool ASSERTION_FAILED = true;
 
 	// [Execution]
@@ -1123,7 +1123,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_AssertionFailsWhenDirectionVectorIsNull
     {
         RAY.IntersectionPoint(ORB, OUTPUT_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -1150,7 +1150,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_AssertionFailsWhenRayIsNotNormalized_Te
     const T VALUE_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
     const float_q RADIUS = SQFloat::_1;
     const QBaseOrb<T> ORB = QBaseOrb<T>(VALUE_FOR_CENTER, RADIUS);
-    T OUTPUT_POINT = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
     const bool ASSERTION_FAILED = true;
 
 	// [Execution]
@@ -1160,7 +1160,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_AssertionFailsWhenRayIsNotNormalized_Te
     {
         NOT_NORMALIZED_RAY.IntersectionPoint(ORB, OUTPUT_POINT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -1198,6 +1198,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsExpectedResultWhenRadiusOfTheOrb
 
     const float_q VECTOR_COMPONENTS_CENTER_NOT_CONTAINED[] = { SQFloat::_4, SQFloat::_3, SQFloat::_3, SQFloat::_1 };
     const T VALUE_FOR_CENTER_NOT_CONTAINED(VECTOR_COMPONENTS_CENTER_NOT_CONTAINED);
+    const float_q RADIUS_NOT_CONTAINED = SQFloat::_0;
     const QBaseOrb<T> ORB_NOT_CONTAINED = QBaseOrb<T>(VALUE_FOR_CENTER_NOT_CONTAINED, RADIUS_CONTAINED);
 
     const EQIntersections EXPECTED_RESULT_CONTAINED = EQIntersections::E_One;
@@ -1205,18 +1206,18 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsExpectedResultWhenRadiusOfTheOrb
 
     const float_q EXPECTED_POINT_COMPONENTS_CONTAINED[] = { SQFloat::_2, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT_CONTAINED = T(EXPECTED_POINT_COMPONENTS_CONTAINED);
-    const T EXPECTED_POINT_NOT_CONTAINED = T::GetNullVector();
+    const T EXPECTED_POINT_NOT_CONTAINED = T::GetZeroVector();
 
 	// [Execution]
-    T vPointContained = T::GetNullVector();
-    T vPointNotContained = T::GetNullVector();
+    T vPointContained = T::GetZeroVector();
+    T vPointNotContained = T::GetZeroVector();
 
     EQIntersections eResultContained = RAY.IntersectionPoint(ORB_CONTAINED, vPointContained);
     EQIntersections eResultNotContained = RAY.IntersectionPoint(ORB_NOT_CONTAINED, vPointNotContained);
 
     // [Verification]
-    BOOST_CHECK(eResultContained == EXPECTED_RESULT_CONTAINED);
-    BOOST_CHECK(eResultNotContained == EXPECTED_RESULT_NOT_CONTAINED);
+    BOOST_CHECK_EQUAL(eResultContained, EXPECTED_RESULT_CONTAINED);
+    BOOST_CHECK_EQUAL(eResultNotContained, EXPECTED_RESULT_NOT_CONTAINED);
     BOOST_CHECK(vPointContained == EXPECTED_POINT_CONTAINED);
     BOOST_CHECK(vPointNotContained == EXPECTED_POINT_NOT_CONTAINED);
 }
@@ -1246,9 +1247,13 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnsWrongResultWhenRayDirectionIsNot
     float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_2, SQFloat::_2, SQFloat::_2, SQFloat::_1 };
     QBaseOrb<T> ORB = QBaseOrb<T>( T(VECTOR_COMPONENTS_CENTER), SQFloat::_1 );
 
+    const EQIntersections EXPECTED_RESULT = EQIntersections::E_Two;
+    float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_1, SQFloat::_2, SQFloat::_2 };
+    const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
+
 	// [Execution]
-    T vNormalizedRayResult = T::GetNullVector();
-    T vNotNormalizedRayResult = T::GetNullVector();
+    T vNormalizedRayResult = T::GetZeroVector();
+    T vNotNormalizedRayResult = T::GetZeroVector();
 
     NORMALIZED_RAY.IntersectionPoint(ORB, vNormalizedRayResult);
     NOT_NORMALIZED_RAY.IntersectionPoint(ORB, vNotNormalizedRayResult);
@@ -1294,8 +1299,8 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint1_ReturnedPointIsTheClosestOneToRayOrigin
     float_q VECTOR_COMPONENTS_OUTPUT_POINT2[] = { SQFloat::_3, SQFloat::_2, SQFloat::_2, SQFloat::_1 };
     const T EXPECTED_POINT2 = T(VECTOR_COMPONENTS_OUTPUT_POINT2);
 
-    T OUTPUT_POINT = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    T OUTPUT_POINT = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     RAY.IntersectionPoint(ORB, OUTPUT_POINT);   // I
@@ -1333,14 +1338,14 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_NoIntersectionPointsAreReturnedWhenRayD
     QBaseOrb<T> ORB = QBaseOrb<T>( T(VECTOR_COMPONENTS_CENTER), SQFloat::_1 );
 
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_None;
-    const T EXPECTED_POINT = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
     T OUTPUT_POINT = EXPECTED_POINT;
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT == EXPECTED_POINT);
 }
 
@@ -1373,14 +1378,14 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsTwoIntersectionPointsWhenRayInte
     const T EXPECTED_POINT1 = T(VECTOR_COMPONENTS_OUTPUT_POINT1);
     float_q VECTOR_COMPONENTS_OUTPUT_POINT2[] = { SQFloat::_3, SQFloat::_2, SQFloat::_2, SQFloat::_1 };
     const T EXPECTED_POINT2 = T(VECTOR_COMPONENTS_OUTPUT_POINT2);
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT1 == EXPECTED_POINT1);
     BOOST_CHECK(OUTPUT_POINT2 == EXPECTED_POINT2);
 }
@@ -1413,15 +1418,15 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsOnePointWhenOriginLiesOnTheSurfa
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_One;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT1[] = { SQFloat::_3, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT1 = T(VECTOR_COMPONENTS_OUTPUT_POINT1);
-    const T EXPECTED_POINT2 = T::GetNullVector();
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    const T EXPECTED_POINT2 = T::GetZeroVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT1 == EXPECTED_POINT1);
     BOOST_CHECK(OUTPUT_POINT2 == EXPECTED_POINT2);
 }
@@ -1456,14 +1461,14 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsTwoPointsWhenOriginLiesOnTheSurf
     float_q VECTOR_COMPONENTS_OUTPUT_POINT2[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT1 = T(VECTOR_COMPONENTS_OUTPUT_POINT1);
     const T EXPECTED_POINT2 = T(VECTOR_COMPONENTS_OUTPUT_POINT2);
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT1 == EXPECTED_POINT1);
     BOOST_CHECK(OUTPUT_POINT2 == EXPECTED_POINT2);
 }
@@ -1496,15 +1501,15 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsOnePointWhenOriginIsContainedInT
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_One;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT1[] = { SQFloat::_3, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT1 = T(VECTOR_COMPONENTS_OUTPUT_POINT1);
-    const T EXPECTED_POINT2 = T::GetNullVector();
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    const T EXPECTED_POINT2 = T::GetZeroVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT1 == EXPECTED_POINT1);
     BOOST_CHECK(OUTPUT_POINT2 == EXPECTED_POINT2);
 }
@@ -1537,15 +1542,15 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsOnePointWhenRayIsTangentToTheOrb
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_One;
     float_q VECTOR_COMPONENTS_OUTPUT_POINT1[] = { SQFloat::_2, SQFloat::_3, SQFloat::_3, SQFloat::_1 };
     const T EXPECTED_POINT1 = T(VECTOR_COMPONENTS_OUTPUT_POINT1);
-    const T EXPECTED_POINT2 = T::GetNullVector();
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    const T EXPECTED_POINT2 = T::GetZeroVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT1 == EXPECTED_POINT1);
     BOOST_CHECK(OUTPUT_POINT2 == EXPECTED_POINT2);
 }
@@ -1557,7 +1562,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsNoPointsWhenRayDoesNotIntersectT
 {
     //             ___
     //            /   \
-    //  <-----o路路|路路路路路|路路
+    //  <-----o贩|贩贩穦贩
     //            \___/
     //
 
@@ -1576,15 +1581,15 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsNoPointsWhenRayDoesNotIntersectT
     QBaseOrb<T> ORB = QBaseOrb<T>( T(VECTOR_COMPONENTS_CENTER), SQFloat::_1 );
 
     const EQIntersections EXPECTED_RESULT = EQIntersections::E_None;
-    const T EXPECTED_POINT = T::GetNullVector();
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    const T EXPECTED_POINT = T::GetZeroVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
 
 	// [Execution]
     EQIntersections eResult = RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
 
     // [Verification]
-    BOOST_CHECK(eResult == EXPECTED_RESULT);
+    BOOST_CHECK_EQUAL(eResult, EXPECTED_RESULT);
     BOOST_CHECK(OUTPUT_POINT1 == EXPECTED_POINT);
     BOOST_CHECK(OUTPUT_POINT2 == EXPECTED_POINT);
 }
@@ -1614,8 +1619,8 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_AssertionFailsWhenRadiusOfTheOrbEqualsZ
     const T VALUE_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
     const float_q RADIUS = SQFloat::_0;
     const QBaseOrb<T> ORB = QBaseOrb<T>(VALUE_FOR_CENTER, RADIUS);
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
     const bool ASSERTION_FAILED = true;
 
 	// [Execution]
@@ -1625,7 +1630,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_AssertionFailsWhenRadiusOfTheOrbEqualsZ
     {
         RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -1650,15 +1655,15 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_AssertionFailsWhenDirectionVectorIsNull
     // [Preparation]
     float_q VECTOR_COMPONENTS_ORIGIN[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T VALUE_FOR_ORIGIN(VECTOR_COMPONENTS_ORIGIN);
-    const QVector3 VALUE_FOR_DIRECTION = QVector3::GetNullVector();
+    const QVector3 VALUE_FOR_DIRECTION = QVector3::GetZeroVector();
     QRay<T, QVector3> RAY = QRay<T, QVector3>(VALUE_FOR_ORIGIN, VALUE_FOR_DIRECTION);
 
     float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_2, SQFloat::_2, SQFloat::_3, SQFloat::_1 };
     const T VALUE_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
     const float_q RADIUS = SQFloat::_0;
     const QBaseOrb<T> ORB = QBaseOrb<T>(VALUE_FOR_CENTER, RADIUS);
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
     const bool ASSERTION_FAILED = true;
 
 	// [Execution]
@@ -1668,7 +1673,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_AssertionFailsWhenDirectionVectorIsNull
     {
         RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -1695,8 +1700,8 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_AssertionFailsWhenRayIsNotNormalized_Te
     const T VALUE_FOR_CENTER(VECTOR_COMPONENTS_CENTER);
     const float_q RADIUS = SQFloat::_1;
     const QBaseOrb<T> ORB = QBaseOrb<T>(VALUE_FOR_CENTER, RADIUS);
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
     const bool ASSERTION_FAILED = true;
 
 	// [Execution]
@@ -1706,7 +1711,7 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_AssertionFailsWhenRayIsNotNormalized_Te
     {
         NOT_NORMALIZED_RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete exception has to be used here when defined
     {
         bAssertionFailed = true;
     }
@@ -1744,27 +1749,28 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsExpectedResultWhenRadiusOfTheOrb
 
     const float_q VECTOR_COMPONENTS_CENTER_NOT_CONTAINED[] = { SQFloat::_4, SQFloat::_3, SQFloat::_3, SQFloat::_0 };
     const T VALUE_FOR_CENTER_NOT_CONTAINED(VECTOR_COMPONENTS_CENTER_NOT_CONTAINED);
+    const float_q RADIUS_NOT_CONTAINED = SQFloat::_0;
     const QBaseOrb<T> ORB_NOT_CONTAINED = QBaseOrb<T>(VALUE_FOR_CENTER_NOT_CONTAINED, RADIUS_CONTAINED);
 
     const EQIntersections EXPECTED_RESULT_CONTAINED = EQIntersections::E_One;
     const EQIntersections EXPECTED_RESULT_NOT_CONTAINED = EQIntersections::E_None;
 
     const T EXPECTED_FIRSTPOINT_CONTAINED = VALUE_FOR_CENTER_CONTAINED;
-    const T EXPECTED_SECONDPOINT_CONTAINED = T::GetNullVector();
-    const T EXPECTED_POINT_NOT_CONTAINED = T::GetNullVector();
+    const T EXPECTED_SECONDPOINT_CONTAINED = T::GetZeroVector();
+    const T EXPECTED_POINT_NOT_CONTAINED = T::GetZeroVector();
 
 	// [Execution]
-    T vFirstPointContained = T::GetNullVector();
-    T vFirstPointNotContained = T::GetNullVector();
-    T vSecondPointContained = T::GetNullVector();
-    T vSecondPointNotContained = T::GetNullVector();
+    T vFirstPointContained = T::GetZeroVector();
+    T vFirstPointNotContained = T::GetZeroVector();
+    T vSecondPointContained = T::GetZeroVector();
+    T vSecondPointNotContained = T::GetZeroVector();
 
     EQIntersections eResultContained = RAY.IntersectionPoint(ORB_CONTAINED, vFirstPointContained, vSecondPointContained);
     EQIntersections eResultNotContained = RAY.IntersectionPoint(ORB_NOT_CONTAINED, vFirstPointNotContained, vSecondPointNotContained);
 
     // [Verification]
-    BOOST_CHECK(eResultContained == EXPECTED_RESULT_CONTAINED);
-    BOOST_CHECK(eResultNotContained == EXPECTED_RESULT_NOT_CONTAINED);
+    BOOST_CHECK_EQUAL(eResultContained, EXPECTED_RESULT_CONTAINED);
+    BOOST_CHECK_EQUAL(eResultNotContained, EXPECTED_RESULT_NOT_CONTAINED);
     BOOST_CHECK(vFirstPointContained == EXPECTED_FIRSTPOINT_CONTAINED);
     BOOST_CHECK(vFirstPointNotContained == EXPECTED_SECONDPOINT_CONTAINED);
     BOOST_CHECK(vSecondPointContained == EXPECTED_POINT_NOT_CONTAINED);
@@ -1796,11 +1802,15 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_ReturnsWrongResultWhenRayDirectionIsNot
     float_q VECTOR_COMPONENTS_CENTER[] = { SQFloat::_2, SQFloat::_2, SQFloat::_2 };
     QBaseOrb<T> ORB = QBaseOrb<T>( T(VECTOR_COMPONENTS_CENTER), SQFloat::_1 );
 
+    const EQIntersections EXPECTED_RESULT = EQIntersections::E_Two;
+    float_q VECTOR_COMPONENTS_OUTPUT_POINT[] = { SQFloat::_1, SQFloat::_2, SQFloat::_2 };
+    const T EXPECTED_POINT = T(VECTOR_COMPONENTS_OUTPUT_POINT);
+
 	// [Execution]
-    T vFirstNormalizedRayResult = T::GetNullVector();
-    T vSecondNormalizedRayResult = T::GetNullVector();
-    T vFisrtNotNormalizedRayResult = T::GetNullVector();
-    T vSecondNotNormalizedRayResult = T::GetNullVector();
+    T vFirstNormalizedRayResult = T::GetZeroVector();
+    T vSecondNormalizedRayResult = T::GetZeroVector();
+    T vFisrtNotNormalizedRayResult = T::GetZeroVector();
+    T vSecondNotNormalizedRayResult = T::GetZeroVector();
 
     NORMALIZED_RAY.IntersectionPoint(ORB, vFirstNormalizedRayResult, vSecondNormalizedRayResult);
     NOT_NORMALIZED_RAY.IntersectionPoint(ORB, vFisrtNotNormalizedRayResult, vSecondNotNormalizedRayResult);
@@ -1847,10 +1857,10 @@ QTEST_CASE_TEMPLATE ( IntersectionPoint2_FirstReturnedPointIsTheClosestOneToRayO
     float_q VECTOR_COMPONENTS_OUTPUT_POINT2[] = { SQFloat::_3, SQFloat::_2, SQFloat::_2, SQFloat::_1 };
     const T EXPECTED_POINT2 = T(VECTOR_COMPONENTS_OUTPUT_POINT2);
 
-    T OUTPUT_POINT1 = T::GetNullVector();
-    T OUTPUT_POINT2 = T::GetNullVector();
-    T OUTPUT_POINT3 = T::GetNullVector();
-    T OUTPUT_POINT4 = T::GetNullVector();
+    T OUTPUT_POINT1 = T::GetZeroVector();
+    T OUTPUT_POINT2 = T::GetZeroVector();
+    T OUTPUT_POINT3 = T::GetZeroVector();
+    T OUTPUT_POINT4 = T::GetZeroVector();
 
 	// [Execution]
     RAY.IntersectionPoint(ORB, OUTPUT_POINT1, OUTPUT_POINT2);   // I
@@ -1873,7 +1883,7 @@ QTEST_CASE_TEMPLATE ( ToString_ExpectedOutputIsReturned_Test, TQTemplateTypes )
     const QVector3 VALUE_FOR_DIRECTION(VECTOR_COMPONENTS_DIRECTION);
     const QRay<T, QVector3> RAY = QRay<T, QVector3>(VALUE_FOR_ORIGIN, VALUE_FOR_DIRECTION);
 
-    const string_q EXPECTED_STRING = string_q("RY(o(") + VALUE_FOR_ORIGIN.ToString() + QE_L("),d(") + VALUE_FOR_DIRECTION.ToString() + QE_L("))");
+    const string_q EXPECTED_STRING = QE_L("RY(o(") + VALUE_FOR_ORIGIN.ToString() + QE_L("),d(") + VALUE_FOR_DIRECTION.ToString() + QE_L("))");
 
 	// [Execution]
     string_q strReturnedString = RAY.ToString();

@@ -27,13 +27,12 @@
 
 #include "QLineSegment2D.h"
 
-#include "Assertions.h"
 #include "QBaseTriangle.h"
 #include "QBaseQuadrilateral.h"
 #include "SQPoint.h"
 #include "QTransformationMatrix3x3.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -46,12 +45,12 @@ namespace Math
 {
     
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QLineSegment2D::QLineSegment2D()
@@ -72,12 +71,12 @@ QLineSegment2D::QLineSegment2D(const QVector2& vA, const QVector2& vB) : QLineSe
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QLineSegment2D& QLineSegment2D::operator=(const QBaseLineSegment<QVector2> &segment)
@@ -89,14 +88,14 @@ QLineSegment2D& QLineSegment2D::operator=(const QBaseLineSegment<QVector2> &segm
 bool QLineSegment2D::Intersection (const QBaseTriangle<QVector2>& triangle) const
 {
     // The endpoints of the line shouldn't coincide
-    QE_ASSERT_WARNING(this->A != this->B, "The endpoints of the line shouldn't coincide");
+    QE_ASSERT(this->A != this->B);
 
     // The vertices of the triangle shouldn't coincide
-    QE_ASSERT_WARNING(triangle.A != triangle.B && triangle.B != triangle.C && triangle.C != triangle.A, "The vertices of the triangle shouldn't coincide");
+    QE_ASSERT(triangle.A != triangle.B && triangle.B != triangle.C && triangle.C != triangle.A);
 
-    // Just checking if the segment instersects with any edge of the triangle.
+	// Just checking if the segment instersects with any edge of the triangle.
 
-    if ( this->Intersection(QLineSegment2D(triangle.A, triangle.B)) ||
+	if ( this->Intersection(QLineSegment2D(triangle.A, triangle.B)) ||
          this->Intersection(QLineSegment2D(triangle.B, triangle.C)) ||
          this->Intersection(QLineSegment2D(triangle.C, triangle.A)) )
         return true;
@@ -109,14 +108,14 @@ bool QLineSegment2D::Intersection (const QBaseTriangle<QVector2>& triangle) cons
 bool QLineSegment2D::Intersection (const QBaseQuadrilateral& quad) const
 {
     // The endpoints of the line shouldn't coincide
-    QE_ASSERT_WARNING(this->A != this->B, "The endpoints of the line shouldn't coincide");
+    QE_ASSERT(this->A != this->B);
 
     // The vertices of the quadrilateral shouldn't coincide
-    QE_ASSERT_WARNING(quad.A != quad.B && quad.A != quad.C && quad.A != quad.D && 
+    QE_ASSERT(quad.A != quad.B && quad.A != quad.C && quad.A != quad.D && 
               quad.B != quad.C && quad.B != quad.D &&
-              quad.C != quad.D, "The vertices of the quadrilateral shouldn't coincide");
+              quad.C != quad.D);
 
-    if ( this->Intersection(QLineSegment2D(quad.A, quad.B)) ||
+	if ( this->Intersection(QLineSegment2D(quad.A, quad.B)) ||
          this->Intersection(QLineSegment2D(quad.B, quad.C)) ||
          this->Intersection(QLineSegment2D(quad.C, quad.D)) ||
          this->Intersection(QLineSegment2D(quad.D, quad.A)))
@@ -127,7 +126,7 @@ bool QLineSegment2D::Intersection (const QBaseQuadrilateral& quad) const
         return false;
 }
 
-QLineSegment2D QLineSegment2D::Rotate(const float_q fRotationAngle) const
+QLineSegment2D QLineSegment2D::Rotate(const float_q &fRotationAngle) const
 {
     QLineSegment2D auxLineSegment = *this;
     SQPoint::Rotate(fRotationAngle, rcast_q(&auxLineSegment, QVector2*), 2);
@@ -137,79 +136,79 @@ QLineSegment2D QLineSegment2D::Rotate(const float_q fRotationAngle) const
 QLineSegment2D QLineSegment2D::Translate(const QBaseVector2 &vTranslation) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::Translate(vTranslation, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::Translate(vTranslation, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
-QLineSegment2D QLineSegment2D::Translate(const float_q fTranslationX, const float_q fTranslationY) const
+QLineSegment2D QLineSegment2D::Translate(const float_q &fTranslationX, const float_q &fTranslationY) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::Translate(fTranslationX, fTranslationY, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::Translate(fTranslationX, fTranslationY, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
 QLineSegment2D QLineSegment2D::Scale(const QBaseVector2 &vScale) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::Scale(vScale, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::Scale(vScale, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
-QLineSegment2D QLineSegment2D::Scale(const float_q fScaleX, const float_q fScaleY) const
+QLineSegment2D QLineSegment2D::Scale(const float_q &fScaleX, const float_q &fScaleY) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::Scale(fScaleX, fScaleY, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::Scale(fScaleX, fScaleY, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
 QLineSegment2D QLineSegment2D::Transform(const QTransformationMatrix3x3 &transformation) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::Transform(transformation, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::Transform(transformation, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
-QLineSegment2D QLineSegment2D::RotateWithPivot(const float_q fRotationAngle, const QVector2 &vPivot) const
+QLineSegment2D QLineSegment2D::RotateWithPivot(const float_q &fRotationAngle, const QVector2 &vPivot) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::RotateWithPivot(fRotationAngle, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::RotateWithPivot(fRotationAngle, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
 QLineSegment2D QLineSegment2D::ScaleWithPivot(const QBaseVector2 &vScale, const QBaseVector2 &vPivot) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::ScaleWithPivot(vScale, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::ScaleWithPivot(vScale, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
-QLineSegment2D QLineSegment2D::ScaleWithPivot(const float_q fScaleX, const float_q fScaleY, const QBaseVector2 &vPivot) const
+QLineSegment2D QLineSegment2D::ScaleWithPivot(const float_q &fScaleX, const float_q &fScaleY, const QBaseVector2 &vPivot) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::ScaleWithPivot(fScaleX, fScaleY, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::ScaleWithPivot(fScaleX, fScaleY, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
 QLineSegment2D QLineSegment2D::TransformWithPivot(const QTransformationMatrix3x3 &transformation, const QBaseVector2 &vPivot) const
 {
     QLineSegment2D auxLineSegment = *this;
-    SQPoint::TransformWithPivot(transformation, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
+	SQPoint::TransformWithPivot(transformation, vPivot, rcast_q(&auxLineSegment, QVector2*), 2);
     return auxLineSegment;
 }
 
 EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2> &triangle, QBaseVector2 &vIntersection) const
 {
-    QBaseVector2 vAux;
-    return this->IntersectionPoint(triangle, vIntersection, vAux);
+	QBaseVector2 vAux;
+	return this->IntersectionPoint(triangle, vIntersection, vAux);
 }
 
 EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2>& triangle, QBaseVector2& vIntersection1, QBaseVector2& vIntersection2) const
 {
     // The endpoints of the line shouldn't coincide
-    QE_ASSERT_WARNING(this->A != this->B, "The endpoints of the line shouldn't coincide");
+    QE_ASSERT(this->A != this->B);
 
     // The vertices of the triangle shouldn't coincide
-    QE_ASSERT_WARNING(triangle.A != triangle.B && triangle.B != triangle.C && triangle.C != triangle.A, "The vertices of the triangle shouldn't coincide");
+    QE_ASSERT(triangle.A != triangle.B && triangle.B != triangle.C && triangle.C != triangle.A);
 
     const bool &A_IS_INSIDE = PointInsideTriangle(triangle, this->A);
     const bool &B_IS_INSIDE = PointInsideTriangle(triangle, this->B);
@@ -509,8 +508,8 @@ EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2>&
                     return EQIntersections::E_Two;
                 }
             }
-            else                                                                                                   // Something is wrong: if end points of line segment are outside triangle,
-                QE_ASSERT_WARNING(false, "Something really wrong is happening, this code branch should never be reached");  // line segment must intersects none or two edges, never only one.
+            else                  // Something is wrong: if end points of line segment are outside triangle,
+                QE_ASSERT(false)  // line segment must intersects none or two edges, never only one.
         }
         else if (value2BC ==EQIntersections::E_One) // Line segment intersects BC edge of triangle
         {
@@ -538,8 +537,8 @@ EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2>&
                     return EQIntersections::E_Two;
                 }
             }
-            else                                                                                                    // Something is wrong: if end points of line segment are outside triangle,
-                QE_ASSERT_WARNING(false, "Something really wrong is happening, this code branch should never be reached");  // line segment must intersects none or two, never only one.
+            else                  // Something is wrong: if end points of line segment are outside triangle,
+                QE_ASSERT(false)  // line segment must intersects none or two, never only one.
         }
 
         // Line segment don't intersects triangle
@@ -675,8 +674,8 @@ EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2>&
                     vIntersection1 = vAux;
                 else if ((value2 = this->IntersectionPoint(QLineSegment2D(triangle.C, triangle.A), vAux)) == EQIntersections::E_One)
                     vIntersection1 = vAux;
-                else                                                                                                    // Something is wrong, if one point is inside and the other is outside,
-                    QE_ASSERT_WARNING(false, "Something really wrong is happening, this code branch should never be reached");  // there must be intersections.
+                else                  // Something is wrong, if one point is inside and the other is outside,
+                    QE_ASSERT(false)  // there must be intersections.
 
                 return EQIntersections::E_One;
             }
@@ -824,8 +823,8 @@ EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2>&
                     vIntersection1 = vAux;
                 else if ((value2 = this->IntersectionPoint(QLineSegment2D(triangle.C, triangle.A), vAux)) == EQIntersections::E_One)
                     vIntersection1 = vAux;
-                else                                                                                                    // Something is wrong, if one point is inside and the other is outside,
-                    QE_ASSERT_WARNING(false, "Something really wrong is happening, this code branch should never be reached");  // there must be intersections.
+                else                  // Something is wrong, if one point is inside and the other is outside,
+                    QE_ASSERT(false)  // there must be intersections.
 
                 return EQIntersections::E_One;
             }
@@ -837,12 +836,12 @@ EQIntersections QLineSegment2D::IntersectionPoint(const QBaseTriangle<QVector2>&
 EQIntersections QLineSegment2D::IntersectionPoint(const QBaseQuadrilateral& quad, QBaseVector2& vIntersection1, QBaseVector2& vIntersection2) const
 {
     // The endpoints of the line shouldn't coincide
-    QE_ASSERT_WARNING(this->A != this->B, "The endpoints of the line shouldn't coincide");
+    QE_ASSERT(this->A != this->B);
 
     // The vertices of the quadrilateral shouldn't coincide
-    QE_ASSERT_WARNING(quad.A != quad.B && quad.A != quad.C && quad.A != quad.D && 
+    QE_ASSERT(quad.A != quad.B && quad.A != quad.C && quad.A != quad.D && 
               quad.B != quad.C && quad.B != quad.D &&
-              quad.C != quad.D, "The vertices of the quadrilateral shouldn't coincide");
+              quad.C != quad.D);
 
     const bool &A_IS_INSIDE = PointInsideQuadrilateral(quad, this->A);
     const bool &B_IS_INSIDE = PointInsideQuadrilateral(quad, this->B);
@@ -1833,15 +1832,15 @@ EQIntersections QLineSegment2D::IntersectionPoint(const QBaseQuadrilateral& quad
     }
 
     // Something went wrong, this line should never be reached
-    QE_ASSERT_WARNING(false, "Something really wrong is happening, this code branch should never be reached");
+    QE_ASSERT(false)
 
     return EQIntersections::E_None;
 }
 
 EQIntersections QLineSegment2D::IntersectionPoint(const QBaseQuadrilateral &quad, QBaseVector2 &vIntersection) const
 {
-    QBaseVector2 vAux;
-    return this->IntersectionPoint(quad, vIntersection, vAux);
+	QBaseVector2 vAux;
+	return this->IntersectionPoint(quad, vIntersection, vAux);
 }
 
 bool QLineSegment2D::PointInsideTriangle(const QBaseTriangle<QVector2>& triangle, const QVector2& vPoint) const
@@ -1866,31 +1865,31 @@ bool QLineSegment2D::PointsInSameSideOfLine(const QVector2 &vP1, const QVector2 
 
 bool QLineSegment2D::PointInsideQuadrilateral(const QBaseQuadrilateral& quad, const QVector2& vPoint) const
 {
-    return ( PointsInSameSideOfLine(vPoint, quad.C, quad.A, quad.B) &&
+	return ( PointsInSameSideOfLine(vPoint, quad.C, quad.A, quad.B) &&
                 PointsInSameSideOfLine(vPoint, quad.A, quad.B, quad.C) &&
                 PointsInSameSideOfLine(vPoint, quad.A, quad.C, quad.D) &&
                 PointsInSameSideOfLine(vPoint, quad.C, quad.D, quad.A) );
 }
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 const QLineSegment2D& QLineSegment2D::GetUnitLine()
 {
-    static const QLineSegment2D UNITLINE(QVector2::GetNullVector(), QVector2::GetUnitVectorX());
-    return UNITLINE;
+	static const QLineSegment2D UNITLINE(QVector2::GetZeroVector(), QVector2::GetUnitVectorX());
+	return UNITLINE;
 }
 
 const QLineSegment2D& QLineSegment2D::GetLineZero()
 {
-    static const QLineSegment2D LINEZERO(QVector2::GetNullVector(), QVector2::GetNullVector());
-    return LINEZERO;
+	static const QLineSegment2D LINEZERO(QVector2::GetZeroVector(), QVector2::GetZeroVector());
+	return LINEZERO;
 }
 
 

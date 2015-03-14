@@ -26,13 +26,12 @@
 
 #include "QTransformationMatrix3x3.h"
 
-#include "Assertions.h"
 #include "QBaseVector2.h"
 #include "SQAngle.h"
 #include "SQFloat.h"
 #include "MathDefinitions.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -66,7 +65,7 @@ QTransformationMatrix3x3::QTransformationMatrix3x3(const QBaseMatrix3x3 &transfo
 {
 }
 
-QTransformationMatrix3x3::QTransformationMatrix3x3(const QBaseVector2 &vTranslation, const float_q fRotationAngle, const QBaseVector2 &vScale)
+QTransformationMatrix3x3::QTransformationMatrix3x3(const QBaseVector2 &vTranslation, const float_q &fRotationAngle, const QBaseVector2 &vScale)
 {
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles are specified in degrees, then converts it to radians
@@ -118,7 +117,7 @@ void QTransformationMatrix3x3::Decompose(QBaseVector2 &vOutDisp, float_q &fOutRo
     vOutScale.y = hypot_q(this->ij[1][0], this->ij[1][1]);
 
     // Checkout to avoid division by zero.
-    QE_ASSERT_WARNING(vOutScale.x != SQFloat::_0, "The scale in the X axis must not equal zero, this will cause a division by zero");
+    QE_ASSERT(vOutScale.x != SQFloat::_0)
 
     float_q COS_ROT = this->ij[0][0] / vOutScale.x;
 
@@ -130,7 +129,7 @@ void QTransformationMatrix3x3::Decompose(QBaseVector2 &vOutDisp, float_q &fOutRo
 
     fOutRot = acos_q(COS_ROT);
 
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fOutRot), "The resultant rotation angle is NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fOutRot) );
 
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles must be specified in degrees, then converts it.
@@ -143,13 +142,12 @@ void QTransformationMatrix3x3::GetTranslation(QBaseVector2 &vTranslation) const
     vTranslation.x = this->ij[2][0];
     vTranslation.y = this->ij[2][1];
 }
-
 void QTransformationMatrix3x3::GetRotation(float_q &fRotationAngle) const
 {
     const float_q &SCALE = hypot_q(this->ij[0][0], this->ij[0][1]);
 
     // Checkout to avoid division by zero.
-    QE_ASSERT_WARNING(SCALE != SQFloat::_0, "The scale must not be null, this will produce a division by zero");
+    QE_ASSERT(SCALE != SQFloat::_0)
 
     float_q COS_ROT = this->ij[0][0] / SCALE;
 
@@ -161,7 +159,7 @@ void QTransformationMatrix3x3::GetRotation(float_q &fRotationAngle) const
 
     fRotationAngle = acos_q(COS_ROT);
 
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fRotationAngle), "The obtained rotation angle is NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fRotationAngle) );
       
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles must be specified in degrees, then converts it.
@@ -185,12 +183,12 @@ QTransformationMatrix3x3 QTransformationMatrix3x3::SwitchHandConvention() const
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 const QTransformationMatrix3x3& QTransformationMatrix3x3::GetIdentity()

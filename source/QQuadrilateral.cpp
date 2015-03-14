@@ -30,7 +30,7 @@
 #include "SQAngle.h"
 #include "SQPoint.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -44,12 +44,12 @@ namespace Math
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QQuadrilateral::QQuadrilateral()
@@ -213,9 +213,9 @@ bool QQuadrilateral::IsConcave() const
 float_q QQuadrilateral::GetAngleA() const
 {
     // Contiguous vertices shouldn't coincide
-    QE_ASSERT_WARNING(this->A != this->B && this->A != this->D, "Contiguous vertices shouldn't coincide");
+    QE_ASSERT(this->A != this->B && this->A != this->D);
 
-    const float_q &ANGLE = (this->D - this->A).AngleBetween(this->B - this->A);
+    const float_q &ANGLE = (this->D - this->A).DotProductAngle(this->B - this->A);
 
     if (this->IsReflexAngle(this->A, this->B, this->D, this->C))
     {
@@ -232,9 +232,9 @@ float_q QQuadrilateral::GetAngleA() const
 float_q QQuadrilateral::GetAngleB() const
 {
     // Contiguous vertices shouldn't coincide
-    QE_ASSERT_WARNING(this->B != this->A && this->B != this->C, "Contiguous vertices shouldn't coincide");
+    QE_ASSERT(this->B != this->A && this->B != this->C);
 
-    const float_q &ANGLE = (this->A - this->B).AngleBetween(this->C - this->B);
+    const float_q &ANGLE = (this->A - this->B).DotProductAngle(this->C - this->B);
 
     if (this->IsReflexAngle(this->B, this->A, this->C, this->D))
     {
@@ -251,9 +251,9 @@ float_q QQuadrilateral::GetAngleB() const
 float_q QQuadrilateral::GetAngleC() const
 {
     // Contiguous vertices shouldn't coincide
-    QE_ASSERT_WARNING(this->C != this->B && this->C != this->D, "Contiguous vertices shouldn't coincide");
+    QE_ASSERT(this->C != this->B && this->C != this->D);
 
-    const float_q &ANGLE = (this->B - this->C).AngleBetween(this->D - this->C);
+    const float_q &ANGLE = (this->B - this->C).DotProductAngle(this->D - this->C);
 
     if (this->IsReflexAngle(this->C, this->B, this->D, this->A))
     {
@@ -270,9 +270,9 @@ float_q QQuadrilateral::GetAngleC() const
 float_q QQuadrilateral::GetAngleD() const
 {
     // Contiguous vertices shouldn't coincide
-    QE_ASSERT_WARNING(this->D != this->A && this->D != this->C, "Contiguous vertices shouldn't coincide");
+    QE_ASSERT(this->D != this->A && this->D != this->C);
 
-    const float_q &ANGLE = (this->C - this->D).AngleBetween(this->A - this->D);
+    const float_q &ANGLE = (this->C - this->D).DotProductAngle(this->A - this->D);
 
     if (this->IsReflexAngle(this->D, this->A, this->C, this->B))
     {
@@ -286,7 +286,7 @@ float_q QQuadrilateral::GetAngleD() const
         return ANGLE;
 }
 
-QQuadrilateral QQuadrilateral::Rotate(const float_q fRotationAngle) const
+QQuadrilateral QQuadrilateral::Rotate(const float_q &fRotationAngle) const
 {
     QQuadrilateral auxQuadrilateral = *this;
     SQPoint::Rotate(fRotationAngle, rcast_q(&auxQuadrilateral, QVector2*), 4);
@@ -300,7 +300,7 @@ QQuadrilateral QQuadrilateral::Translate(const QBaseVector2 &vTranslation) const
     return auxQuadrilateral;
 }
 
-QQuadrilateral QQuadrilateral::Translate(const float_q fTranslationX, const float_q fTranslationY) const
+QQuadrilateral QQuadrilateral::Translate(const float_q &fTranslationX, const float_q &fTranslationY) const
 {
     QQuadrilateral auxQuadrilateral = *this;
     SQPoint::Translate(fTranslationX, fTranslationY, rcast_q(&auxQuadrilateral, QVector2*), 4);
@@ -314,7 +314,7 @@ QQuadrilateral QQuadrilateral::Scale(const QBaseVector2 &vScale) const
     return auxQuadrilateral;
 }
 
-QQuadrilateral QQuadrilateral::Scale(const float_q fScaleX, const float_q fScaleY) const
+QQuadrilateral QQuadrilateral::Scale(const float_q &fScaleX, const float_q &fScaleY) const
 {
     QQuadrilateral auxQuadrilateral = *this;
     SQPoint::Scale(fScaleX, fScaleY, rcast_q(&auxQuadrilateral, QVector2*), 4);
@@ -328,7 +328,7 @@ QQuadrilateral QQuadrilateral::Transform(const QTransformationMatrix3x3 &transfo
     return auxQuadrilateral;
 }
 
-QQuadrilateral QQuadrilateral::RotateWithPivot(const float_q fRotationAngle, const QVector2 &vPivot) const
+QQuadrilateral QQuadrilateral::RotateWithPivot(const float_q &fRotationAngle, const QVector2 &vPivot) const
 {
     QQuadrilateral auxQuadrilateral = *this;
     SQPoint::RotateWithPivot(fRotationAngle, vPivot, rcast_q(&auxQuadrilateral, QVector2*), 4);
@@ -342,7 +342,7 @@ QQuadrilateral QQuadrilateral::ScaleWithPivot(const QBaseVector2 &vScale, const 
     return auxQuadrilateral;
 }
 
-QQuadrilateral QQuadrilateral::ScaleWithPivot(const float_q fScaleX, const float_q fScaleY, const QBaseVector2 &vPivot) const
+QQuadrilateral QQuadrilateral::ScaleWithPivot(const float_q &fScaleX, const float_q &fScaleY, const QBaseVector2 &vPivot) const
 {
     QQuadrilateral auxQuadrilateral = *this;
     SQPoint::ScaleWithPivot(fScaleX, fScaleY, vPivot, rcast_q(&auxQuadrilateral, QVector2*), 4);
@@ -358,10 +358,10 @@ QQuadrilateral QQuadrilateral::TransformWithPivot(const QTransformationMatrix3x3
 
 string_q QQuadrilateral::ToString() const
 {
-    return string_q("QL(a(") + this->A.ToString() + QE_L("),b(") +
-                               this->B.ToString() + QE_L("),c(") +
-                               this->C.ToString() + QE_L("),d(") +
-                               this->D.ToString() + QE_L("))");
+    return QE_L("QL(a(") + this->A.ToString() + QE_L("),b(") +
+                           this->B.ToString() + QE_L("),c(") +
+                           this->C.ToString() + QE_L("),d(") +
+                           this->D.ToString() + QE_L("))");
 }
 
 bool QQuadrilateral::PointsInSameSideOfLine(const QBaseVector2 &vPoint1, const QBaseVector2 &vPoint2,
@@ -396,12 +396,12 @@ bool QQuadrilateral::IsReflexAngle(const QVector2 &vAngleVertex, const QVector2 
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 const QQuadrilateral& QQuadrilateral::GetUnitSquare()

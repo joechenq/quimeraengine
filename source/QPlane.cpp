@@ -48,12 +48,12 @@ namespace Math
 {
     
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
     
 QPlane::QPlane()
@@ -68,12 +68,12 @@ QPlane::QPlane(const QBasePlane &plane) : QBasePlane(plane)
 {
 }
 
-QPlane::QPlane(const float_q fA, const float_q fB, const float_q fC, const float_q fD) :
+QPlane::QPlane(const float_q &fA, const float_q &fB, const float_q &fC, const float_q &fD) :
                 QBasePlane(fA, fB, fC, fD)
 {
 }
 
-QPlane::QPlane(const float_q fValueAll) : QBasePlane(fValueAll)
+QPlane::QPlane(const float_q &fValueAll) : QBasePlane(fValueAll)
 {
 }
 
@@ -95,17 +95,17 @@ QPlane::QPlane(const QVector4 &vPoint1, const QVector4 &vPoint2, const QVector4 
     this->QPlaneImp(vPoint1, vPoint2, vPoint3);
 }
 
-template <class VectorT>
-void QPlane::QPlaneImp(const VectorT &vPoint1, const VectorT &vPoint2, const VectorT &vPoint3)
+template <class VectorType>
+void QPlane::QPlaneImp(const VectorType &vPoint1, const VectorType &vPoint2, const VectorType &vPoint3)
 {
     // If points coincide, the plane can't be determined
-    QE_ASSERT_WARNING( vPoint1 != vPoint2 && vPoint2 != vPoint3 && vPoint3 != vPoint1, "Input points must not coincide");
+    QE_ASSERT( vPoint1 != vPoint2 && vPoint2 != vPoint3 && vPoint3 != vPoint1);
 
     // Creates two vectors, to obtain the direction vector of the plane via cross product
-    VectorT vAux1 = ( vPoint1 - vPoint2 ).CrossProduct( vPoint1 - vPoint3 );;
+    VectorType vAux1 = ( vPoint1 - vPoint2 ).CrossProduct( vPoint1 - vPoint3 );;
 
     // Checkout to avoid the possibility of tree colinear points.
-    QE_ASSERT_WARNING(!vAux1.IsZero(), "Input points must not be colinear");
+    QE_ASSERT(!vAux1.IsZero())
 
     // Plane equation
     *this = QPlane( vAux1.x, vAux1.y, vAux1.z, -vAux1.DotProduct(vPoint1) ).Normalize();
@@ -113,28 +113,28 @@ void QPlane::QPlaneImp(const VectorT &vPoint1, const VectorT &vPoint2, const Vec
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
-QPlane QPlane::operator*(const float_q fScalar) const
+QPlane QPlane::operator*(const float_q &fScalar) const
 {
     return QPlane(this->a * fScalar, this->b * fScalar, this->c * fScalar, this->d * fScalar);
 }
 
 // Left float product
-QPlane operator*(const float_q fScalar, const QPlane &plane)
+QPlane operator*(const float_q &fScalar, const QPlane &plane)
 {
     return QPlane(plane.a * fScalar, plane.b * fScalar, plane.c * fScalar, plane.d * fScalar);
 }
 
-QPlane QPlane::operator/(const float_q fScalar) const
+QPlane QPlane::operator/(const float_q &fScalar) const
 {
-    QE_ASSERT_WARNING(fScalar != SQFloat::_0, "Input value must not equal zero");
+    QE_ASSERT(fScalar != SQFloat::_0)
 
     const float_q &DIVISOR = SQFloat::_1/fScalar;
 
@@ -151,10 +151,10 @@ QPlane& QPlane::operator*=(const float_q fScalar)
     return *this;
 }
 
-QPlane& QPlane::operator/=(const float_q fScalar)
+QPlane& QPlane::operator/=(const float_q &fScalar)
 {
     // Checkout to avoid division by 0
-    QE_ASSERT_WARNING(fScalar != SQFloat::_0, "Input value must not equal zero");
+    QE_ASSERT(fScalar != SQFloat::_0)
 
     const float_q &DIVISOR = SQFloat::_1/fScalar;
 
@@ -180,7 +180,7 @@ QPlane& QPlane::operator=(const QBasePlane &plane)
 QPlane QPlane::Normalize() const
 {
     // Checkout to avoid division by zero.
-    QE_ASSERT_WARNING(this->GetLength() != SQFloat::_0, "A plane whose length equals zero cannot be normalized, this will produce a division by zero");
+    QE_ASSERT(this->GetLength() != SQFloat::_0);
 
     float_q fInvDivisor = SQFloat::_1 / this->GetLength();
 
@@ -202,21 +202,20 @@ float_q QPlane::DotProduct(const QBasePlane &plane) const
     return plane.a * this->a + plane.b * this->b + plane.c * this->c;
 }
 
-float_q QPlane::AngleBetween(const QVector3 &vVector) const
+float_q QPlane::DotProductAngle(const QVector3 &vVector) const
 {
-    return this->AngleBetweenImp(vVector);
+    return this->DotProductAngleImp(vVector);
 }
 
-float_q QPlane::AngleBetween(const QVector4 &vVector) const
+float_q QPlane::DotProductAngle(const QVector4 &vVector) const
 {
-    return this->AngleBetweenImp(vVector);
+    return this->DotProductAngleImp(vVector);
 }
 
-float_q QPlane::AngleBetween(const QBasePlane &plane) const
+float_q QPlane::DotProductAngle(const QBasePlane &plane) const
 {
     // When the length of a plane equals zero, the calculated angle is not correct
-    QE_ASSERT_WARNING( SQFloat::IsNotZero(this->GetSquaredLength()) && !(SQFloat::IsZero(plane.a) && SQFloat::IsZero(plane.b) && SQFloat::IsZero(plane.c)), 
-               "When the length of a plane equals zero, the calculated angle is not correct" );
+    QE_ASSERT( SQFloat::IsNotZero(this->GetSquaredLength()) && !(SQFloat::IsZero(plane.a) && SQFloat::IsZero(plane.b) && SQFloat::IsZero(plane.c)) );
 
     float_q DOT = this->DotProduct(plane);
 
@@ -228,7 +227,7 @@ float_q QPlane::AngleBetween(const QBasePlane &plane) const
 
     float_q fAngle = acos_q(DOT);
 
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fAngle), "The resultant angle is NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fAngle) )
     
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles are specified in degrees, then converts angle to degrees
@@ -299,8 +298,8 @@ EQIntersections QPlane::IntersectionPoint(const QBasePlane &plane1, const QBaseP
 EQSpaceRelation QPlane::SpaceRelation(const QBasePlane &plane) const
 {
     // It's impossible to calculate the spacial relation for a null plane
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)), "It's impossible to calculate the spacial relation for a null plane" );
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(plane.a) && SQFloat::IsZero(plane.b) && SQFloat::IsZero(plane.c)), "It's impossible to calculate the spacial relation for a null plane" );
+    QE_ASSERT( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)) );
+    QE_ASSERT( !(SQFloat::IsZero(plane.a) && SQFloat::IsZero(plane.b) && SQFloat::IsZero(plane.c)) );
 
     // Cross product: checks if planes are parallel or coincident
     if (SQFloat::IsZero(plane.b * this->c - plane.c * this->b) &&
@@ -335,7 +334,7 @@ QPlane QPlane::Rotate(const QQuaternion &qRotation) const
 QPlane QPlane::Scale(const QScalingMatrix3x3 &scale) const
 {
     // None of the scale values should equal zero
-    QE_ASSERT_WARNING( scale.ij[0][0] != SQFloat::_0 && scale.ij[1][1] != SQFloat::_0 && scale.ij[2][2] != SQFloat::_0, "None of the scale values should equal zero, this will cause a division by zero" );
+    QE_ASSERT( scale.ij[0][0] != SQFloat::_0 && scale.ij[1][1] != SQFloat::_0 && scale.ij[2][2] != SQFloat::_0 );
 
     return QPlane(this->a / scale.ij[0][0], this->b / scale.ij[1][1], this->c / scale.ij[2][2], this->d)
             .Normalize();
@@ -344,16 +343,16 @@ QPlane QPlane::Scale(const QScalingMatrix3x3 &scale) const
 QPlane QPlane::Scale(const QBaseVector3 &vScale) const
 {
     // None of the scale values should equal zero
-    QE_ASSERT_WARNING( vScale.x != SQFloat::_0 && vScale.y != SQFloat::_0 && vScale.z != SQFloat::_0, "None of the scale values should equal zero, this will cause a division by zero" );
+    QE_ASSERT( vScale.x != SQFloat::_0 && vScale.y != SQFloat::_0 && vScale.z != SQFloat::_0 );
 
     return QPlane(this->a / vScale.x, this->b / vScale.y, this->c / vScale.z, this->d)
             .Normalize();
 }
 
-QPlane QPlane::Scale(const float_q fScaleX, const float_q fScaleY, const float_q fScaleZ) const
+QPlane QPlane::Scale(const float_q &fScaleX, const float_q &fScaleY, const float_q &fScaleZ) const
 {
     // None of the scale values should equal zero
-    QE_ASSERT_WARNING( fScaleX != SQFloat::_0 && fScaleY != SQFloat::_0 && fScaleZ != SQFloat::_0, "None of the scale values should equal zero, this will cause a division by zero" );
+    QE_ASSERT( fScaleX != SQFloat::_0 && fScaleY != SQFloat::_0 && fScaleZ != SQFloat::_0 );
 
     return QPlane(this->a / fScaleX, this->b / fScaleY, this->c / fScaleZ, this->d)
             .Normalize();
@@ -391,7 +390,7 @@ QPlane QPlane::Translate(const QBaseVector4 &vTranslation) const
                   this->d - (this->a * vTranslation.x + this->b * vTranslation.y + this->c * vTranslation.z));
 }
 
-QPlane QPlane::Translate(const float_q fTranslationX, const float_q fTranslationY, const float_q fTranslationZ) const
+QPlane QPlane::Translate(const float_q &fTranslationX, const float_q &fTranslationY, const float_q &fTranslationZ) const
 {
     return QPlane(this->a,
                   this->b,
@@ -529,12 +528,12 @@ QPlane QPlane::ScaleWithPivot(const QBaseVector3 &vScale, const QVector4 &vPivot
     return this->ScaleWithPivotImp(vScale, vPivot);
 }
 
-QPlane QPlane::ScaleWithPivot(const float_q fScaleX, const float_q fScaleY, const float_q fScaleZ, const QVector3 &vPivot) const
+QPlane QPlane::ScaleWithPivot(const float_q &fScaleX, const float_q &fScaleY, const float_q &fScaleZ, const QVector3 &vPivot) const
 {
     return this->ScaleWithPivotImp(fScaleX, fScaleY, fScaleZ, vPivot);
 }
 
-QPlane QPlane::ScaleWithPivot(const float_q fScaleX, const float_q fScaleY, const float_q fScaleZ, const QVector4 &vPivot) const
+QPlane QPlane::ScaleWithPivot(const float_q &fScaleX, const float_q &fScaleY, const float_q &fScaleZ, const QVector4 &vPivot) const
 {
     return this->ScaleWithPivotImp(fScaleX, fScaleY, fScaleZ, vPivot);
 }
@@ -571,41 +570,27 @@ QPlane QPlane::TransformWithPivot(const QTransformationMatrix<QMatrix4x4> &trans
 
 string_q QPlane::ToString() const
 {
-    static const string_q STRING_PREFIX("PL(");
-    static const string_q STRING_COMMA(",");
-    static const string_q STRING_END(")");
-
-    string_q strOutput = STRING_PREFIX;
-    strOutput.Append(this->a);
-    strOutput.Append(STRING_COMMA);
-    strOutput.Append(this->b);
-    strOutput.Append(STRING_COMMA);
-    strOutput.Append(this->c);
-    strOutput.Append(STRING_COMMA);
-    strOutput.Append(this->d);
-    strOutput.Append(STRING_END);
-
-    return strOutput;
+    return QE_L("PL(") + SQFloat::ToString(this->a) + QE_L(",") + SQFloat::ToString(this->b) +
+           QE_L(",")   + SQFloat::ToString(this->c) + QE_L(",") + SQFloat::ToString(this->d) + QE_L(")");
 }
 
-template <class VectorT>
-float_q QPlane::DotProductImp(const VectorT &vVector) const
+template <class VectorType>
+float_q QPlane::DotProductImp(const VectorType &vVector) const
 {
     return vVector.x * this->a + vVector.y * this->b + vVector.z * this->c;
 }
 
-template <class VectorT>
-float_q QPlane::AngleBetweenImp(const VectorT &vVector) const
+template <class VectorType>
+float_q QPlane::DotProductAngleImp(const VectorType &vVector) const
 {
     // When the length of either the plane or the vector equals zero, the calculated angle is not correct
-    QE_ASSERT_WARNING( SQFloat::IsNotZero(this->GetSquaredLength()) && !(SQFloat::IsZero(vVector.x) && SQFloat::IsZero(vVector.y) && SQFloat::IsZero(vVector.z)), 
-               "When the length of either the plane or the vector equals zero, the calculated angle is not correct" );
+    QE_ASSERT( SQFloat::IsNotZero(this->GetSquaredLength()) && !(SQFloat::IsZero(vVector.x) && SQFloat::IsZero(vVector.y) && SQFloat::IsZero(vVector.z)) );
 
-    // Length of plane equals one due to plane is supposed to be normalized.
+    // Length of plane equals due to plane is supposed to be normalized.
     const float_q &DOT_LENGTH = sqrt_q(vVector.x*vVector.x + vVector.y*vVector.y + vVector.z*vVector.z);
 
     // Checkout to avoid division by zero.
-    QE_ASSERT_WARNING(DOT_LENGTH != SQFloat::_0, "Input vector must not be null, this will produce a division by zero");
+    QE_ASSERT(DOT_LENGTH != SQFloat::_0)
 
     float_q DOT = this->DotProduct(vVector)/DOT_LENGTH;
 
@@ -617,7 +602,7 @@ float_q QPlane::AngleBetweenImp(const VectorT &vVector) const
 
     float_q fAngle = acos_q(DOT);
 
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fAngle), "The resultant angle is NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fAngle) )
 
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles are specified in degrees, then converts angle to degrees
@@ -627,65 +612,65 @@ float_q QPlane::AngleBetweenImp(const VectorT &vVector) const
     return fAngle;
 }
 
-template <class VectorT>
-QPlane QPlane::RotateWithPivotImp(const QQuaternion &qRotation, const VectorT &vPivot) const
+template <class VectorType>
+QPlane QPlane::RotateWithPivotImp(const QQuaternion &qRotation, const VectorType &vPivot) const
 {
     return this->Translate(-vPivot)
                 .Rotate(qRotation)
                 .Translate(vPivot);
 }
 
-template <class VectorT>
-QPlane QPlane::RotateWithPivotImp(const QRotationMatrix3x3 &rotation, const VectorT &vPivot) const
+template <class VectorType>
+QPlane QPlane::RotateWithPivotImp(const QRotationMatrix3x3 &rotation, const VectorType &vPivot) const
 {
     return this->Translate(-vPivot)
                 .Rotate(rotation)
                 .Translate(vPivot);
 }
 
-template <class VectorT>
-QPlane QPlane::ScaleWithPivotImp(const QBaseVector3 &vScale, const VectorT &vPivot) const
+template <class VectorType>
+QPlane QPlane::ScaleWithPivotImp(const QBaseVector3 &vScale, const VectorType &vPivot) const
 {
     return this->Translate(-vPivot)
                 .Scale(vScale)
                 .Translate(vPivot);
 }
 
-template <class VectorT>
-QPlane QPlane::ScaleWithPivotImp(const float_q fScaleX, const float_q fScaleY, const float_q fScaleZ, const VectorT &vPivot) const
+template <class VectorType>
+QPlane QPlane::ScaleWithPivotImp(const float_q &fScaleX, const float_q &fScaleY, const float_q &fScaleZ, const VectorType &vPivot) const
 {
     return this->Translate(-vPivot)
                 .Scale(fScaleX, fScaleY, fScaleZ)
                 .Translate(vPivot);
 }
 
-template <class VectorT>
-QPlane QPlane::ScaleWithPivotImp(const QScalingMatrix3x3 &scale, const VectorT &vPivot) const
+template <class VectorType>
+QPlane QPlane::ScaleWithPivotImp(const QScalingMatrix3x3 &scale, const VectorType &vPivot) const
 {
     return this->Translate(-vPivot)
                 .Scale(scale)
                 .Translate(vPivot);
 }
 
-template <class MatrixT, class VectorT>
-QPlane QPlane::TransformWithPivotImp(const MatrixT &transformation, const VectorT &vPivot) const
+template <class MatrixType, class VectorType>
+QPlane QPlane::TransformWithPivotImp(const MatrixType &transformation, const VectorType &vPivot) const
 {
     return this->Translate(-vPivot)
                 .Transform(transformation)
                 .Translate(vPivot);
 }
 
-template <class VectorT>
-VectorT QPlane::PointProjectionImp(const VectorT &vPoint) const
+template <class VectorType>
+VectorType QPlane::PointProjectionImp(const VectorType &vPoint) const
 {
     // The plane shouldn't be null
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)), "The plane should not be null, the result will be incorrect" );
+    QE_ASSERT( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)) );
         
     // [SMELL] Thund: Can this line be replaced with a dot product + d?
     const float_q &PROJ = -(this->a * vPoint.x + this->b * vPoint.y + this->c * vPoint.z + this->d);
 
     // [SMELL] Thund: Can this line contain all the operations so no 2 constructor calls are performed?
-    VectorT vProjection;
+    VectorType vProjection;
     vProjection.x = PROJ * this->a  + vPoint.x;
     vProjection.y = PROJ * this->b  + vPoint.y;
     vProjection.z = PROJ * this->c  + vPoint.z;
@@ -693,31 +678,31 @@ VectorT QPlane::PointProjectionImp(const VectorT &vPoint) const
     return vProjection;
 }
 
-template <class VectorT>
-bool QPlane::ContainsImp(const VectorT &vPoint) const
+template <class VectorType>
+bool QPlane::ContainsImp(const VectorType &vPoint) const
 {
     // The plane should not be null
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)), "The plane should not be null, the result will be incorrect" );
+    QE_ASSERT( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)) );
 
     return SQFloat::IsZero(this->a * vPoint.x + this->b * vPoint.y + this->c * vPoint.z + this->d);
 }
 
-template <class VectorT>
-float_q QPlane::PointDistanceImp(const VectorT &vPoint) const
+template <class VectorType>
+float_q QPlane::PointDistanceImp(const VectorType &vPoint) const
 {
     // The plane should not be null
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)), "The plane should not be null, the result will be incorrect" );
+    QE_ASSERT( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)) );
 
     return SQFloat::Abs(this->a * vPoint.x + this->b * vPoint.y + this->c * vPoint.z + this->d);
 }
 
-template <class VectorT>
-EQIntersections QPlane::IntersectionPointImp(const QBasePlane &plane1, const QBasePlane &plane2, VectorT &vIntersection) const
+template <class VectorType>
+EQIntersections QPlane::IntersectionPointImp(const QBasePlane &plane1, const QBasePlane &plane2, VectorType &vIntersection) const
 {
     // None of the planes should be null
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)), "The plane should not be null, the result will be incorrect" );
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(plane1.a) && SQFloat::IsZero(plane1.b) && SQFloat::IsZero(plane1.c)), "Input planes should not be null, the result will be incorrect" );
-    QE_ASSERT_WARNING( !(SQFloat::IsZero(plane2.a) && SQFloat::IsZero(plane2.b) && SQFloat::IsZero(plane2.c)), "Input planes should not be null, the result will be incorrect" );
+    QE_ASSERT( !(SQFloat::IsZero(this->a) && SQFloat::IsZero(this->b) && SQFloat::IsZero(this->c)) );
+    QE_ASSERT( !(SQFloat::IsZero(plane1.a) && SQFloat::IsZero(plane1.b) && SQFloat::IsZero(plane1.c)) );
+    QE_ASSERT( !(SQFloat::IsZero(plane2.a) && SQFloat::IsZero(plane2.b) && SQFloat::IsZero(plane2.c)) );
 
     // Solved by Cramer method.
     const float_q &DET_C = this->a * plane1.b * plane2.c + this->b * plane1.c * plane2.a + this->c * plane1.a * plane2.b -
@@ -766,18 +751,18 @@ EQIntersections QPlane::IntersectionPointImp(const QBasePlane &plane1, const QBa
 }
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
-const QPlane& QPlane::GetNullPlane()
+const QPlane& QPlane::GetZeroPlane()
 {
-    static const QPlane NULLPLANE(SQFloat::_0,  SQFloat::_0,  SQFloat::_0,  SQFloat::_0);
-    return NULLPLANE;
+    static const QPlane ZEROPLANE(SQFloat::_0,  SQFloat::_0,  SQFloat::_0,  SQFloat::_0);
+    return ZEROPLANE;
 }
 
 const QPlane& QPlane::GetPlaneZX()

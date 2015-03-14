@@ -10,14 +10,11 @@
     <Filter Include="Tests\Math">
       <UniqueIdentifier>{c3aa2ece-6001-499f-9db7-bc124b1e8328}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tests\Time">
-      <UniqueIdentifier>{d117c55a-2de6-49f4-9bc9-0ebf930a49f7}</UniqueIdentifier>
+    <Filter Include="Tests\DataTypes">
+      <UniqueIdentifier>{539ea320-355d-4181-9c79-5e4fa6eff11f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tests\Containers">
-      <UniqueIdentifier>{b9c8227d-e3b9-4435-9e48-6e79d4dd9f4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tests\Common">
-      <UniqueIdentifier>{f78a8875-0174-48a5-9940-f41ef313a284}</UniqueIdentifier>
+    <Filter Include="Tests\General">
+      <UniqueIdentifier>{8cc96c95-271b-4301-abf4-4108d835eb8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -32,6 +29,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\TestModule_Tools.cpp">
       <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQVF32_Test.cpp">
+      <Filter>Tests\DataTypes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QQuaternion_Test.cpp">
       <Filter>Tests\Math</Filter>
@@ -111,6 +111,12 @@
     <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QTranslationMatrix_Test.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQFloat_Test.cpp">
+      <Filter>Tests\DataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\tests\unit\testmodule_core\EQEnumeration_Test.cpp">
+      <Filter>Tests\General</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQPoint_Test.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
@@ -189,92 +195,11 @@
     <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QSphere_Test.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QTimeSpan_Test.cpp">
-      <Filter>Tests\Time</Filter>
+    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQInteger_Test.cpp">
+      <Filter>Tests\DataTypes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QDateTime_Test.cpp">
-      <Filter>Tests\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQTimeZoneFactory_Test.cpp">
-      <Filter>Tests\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QTimeZone_Test.cpp">
-      <Filter>Tests\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QDstInformation_Test.cpp">
-      <Filter>Tests\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QArrayIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QList_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QNTree_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QListIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\CallCounter.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QNTreeIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QBinarySearchTree_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QConstArrayIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QConstBinarySearchTreeIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QConstListIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QConstNTreeIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQComparatorDefault_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QKeyValuePair_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQKeyValuePairComparator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QEvent_Test.cpp">
-      <Filter>Tests\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQEqualityComparator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QDictionary_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QHashtable_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQIntegerHashProvider_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQStringHashProvider_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QConstDictionaryIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QConstHashtableIterator_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QArrayDynamic_Test.cpp">
-      <Filter>Tests\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\QArrayFixed_Test.cpp">
-      <Filter>Tests\Containers</Filter>
+    <ClCompile Include="..\..\..\..\tests\unit\testmodule_tools\SQBoolean_Test.cpp">
+      <Filter>Tests\DataTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,41 +233,14 @@
     <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QVector3Whitebox.h">
       <Filter>Tests\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\tests\unit\testmodule_core\EQEnumerationMock.h">
+      <Filter>Tests\General</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QLineSegmentWhiteBox.h">
       <Filter>Tests\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QTransformationMatrixWhiteBox.h">
       <Filter>Tests\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\ArrayElementMock.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QListWhiteBox.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\ListElementMock.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QNTreeWhiteBox.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\CallCounter.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QNTreeIteratorMock.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QBinarySearchTreeWhiteBox.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QConstBinarySearchTreeIteratorMock.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QArrayFixedTestClass.h">
-      <Filter>Tests\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\tests\unit\testmodule_tools\QArrayFixedWhiteBox.h">
-      <Filter>Tests\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

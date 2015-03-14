@@ -30,6 +30,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QVector3.h"
 
 #include "QMatrix4x3.h"
@@ -43,14 +45,12 @@ using namespace boost::unit_test;
 #include "QDualQuaternion.h"
 #include "SQAngle.h"
 #include "SQVF32.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
 
 QTEST_SUITE_BEGIN( QVector3_TestSuite )
@@ -201,7 +201,7 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenPointerIsNull_Test )
     {
         QVector3 vVectorUT(NULL_ARRAY);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -337,7 +337,7 @@ QTEST_CASE ( Constructor10_VectorComponentsAreCopiedIntoCorrectComponents_Test )
 /// <summary>
 /// Checks if it returns a vector with all components set to zero.
 /// </summary>
-QTEST_CASE ( GetNullVector_ReturnsANullVector_Test )
+QTEST_CASE ( GetZeroVector_ReturnsANullVector_Test )
 {
     // [Preparation]
     const float_q EXPECTED_VALUE_FOR_X = SQFloat::_0;
@@ -345,7 +345,7 @@ QTEST_CASE ( GetNullVector_ReturnsANullVector_Test )
     const float_q EXPECTED_VALUE_FOR_Z = SQFloat::_0;
 
 	// [Execution]
-    QVector3 vVectorUT = QVector3::GetNullVector();
+    QVector3 vVectorUT = QVector3::GetZeroVector();
 
     // [Verification]
     BOOST_CHECK_EQUAL(vVectorUT.x, EXPECTED_VALUE_FOR_X);
@@ -751,7 +751,7 @@ QTEST_CASE ( OperatorDivision1_AssertionFailsWhenDivisorEqualsZero_Test )
         QVector3 vVectorUT;
         vVectorUT / SCALAR;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -844,7 +844,7 @@ QTEST_CASE ( OperatorDivision2_AssertionFailsWhenAnyComponentEqualsZero_Test )
     {
         vVectorUT / OPERAND_WITH_ZERO_X;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailedWhenXEqualsZero = true;
     }
@@ -853,7 +853,7 @@ QTEST_CASE ( OperatorDivision2_AssertionFailsWhenAnyComponentEqualsZero_Test )
     {
         vVectorUT / OPERAND_WITH_ZERO_Y;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailedWhenYEqualsZero = true;
     }
@@ -862,7 +862,7 @@ QTEST_CASE ( OperatorDivision2_AssertionFailsWhenAnyComponentEqualsZero_Test )
     {
         vVectorUT / OPERAND_WITH_ZERO_Z;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailedWhenZEqualsZero = true;
     }
@@ -1211,7 +1211,7 @@ QTEST_CASE ( OperatorDivisionAssignation1_AssertionFailsWhenDivisorEqualsZero_Te
         QVector3 vVectorUT;
         vVectorUT /= SCALAR;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -1341,7 +1341,7 @@ QTEST_CASE ( OperatorDivisionAssignation2_AssertionFailsWhenAnyComponentEqualsZe
     {
         vVectorUT /= OPERAND_WITH_ZERO_X;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailedWhenXEqualsZero = true;
     }
@@ -1350,7 +1350,7 @@ QTEST_CASE ( OperatorDivisionAssignation2_AssertionFailsWhenAnyComponentEqualsZe
     {
         vVectorUT /= OPERAND_WITH_ZERO_Y;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailedWhenYEqualsZero = true;
     }
@@ -1359,7 +1359,7 @@ QTEST_CASE ( OperatorDivisionAssignation2_AssertionFailsWhenAnyComponentEqualsZe
     {
         vVectorUT /= OPERAND_WITH_ZERO_Z;
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailedWhenZEqualsZero = true;
     }
@@ -1483,9 +1483,9 @@ QTEST_CASE ( Normalize_AssertionFailsWhenNullVectorIsToBeNormalized_Test )
 
     try
     {
-        VECTOR.Normalize();
+        QVector3 vVectorUT = VECTOR.Normalize();
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -1677,7 +1677,7 @@ QTEST_CASE ( DotProduct_ReturnsZeroWhenAOperandIsNullVector_Test )
     const float_q EXPECTED_RESULT = SQFloat::_0;
 
     const QVector3 NONNULL_VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
-    const QVector3 NULL_VECTOR = QVector3::GetNullVector();
+    const QVector3 NULL_VECTOR = QVector3::GetZeroVector();
 
 	// [Execution]
     float_q fResult1UT = NONNULL_VECTOR.DotProduct(NULL_VECTOR);
@@ -1691,7 +1691,7 @@ QTEST_CASE ( DotProduct_ReturnsZeroWhenAOperandIsNullVector_Test )
 /// <summary>
 /// Checks that the returned angle result for 2 common vectors equals the expected value.
 /// </summary>
-QTEST_CASE ( AngleBetween_ReturnsAngleBetween2CommonVectors_Test )
+QTEST_CASE ( DotProductAngle_ReturnsAngleBetween2CommonVectors_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1706,7 +1706,7 @@ QTEST_CASE ( AngleBetween_ReturnsAngleBetween2CommonVectors_Test )
     const QVector3 OPERAND2 = QVector3(SQFloat::_0, SQFloat::_1, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK( SQFloat::AreEqual(fResultUT, EXPECTED_RESULT) );
@@ -1715,15 +1715,15 @@ QTEST_CASE ( AngleBetween_ReturnsAngleBetween2CommonVectors_Test )
 /// <summary>
 /// Checks that the "get angle from dot product" is commutative.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
+QTEST_CASE ( DotProductAngle_DotProductAngleIsCommutative_Test )
 {
     // [Preparation]
     const QVector3 OPERAND1 = QVector3(SQFloat::_1, SQFloat::_1, SQFloat::_0);
     const QVector3 OPERAND2 = QVector3(SQFloat::_0, SQFloat::_1, SQFloat::_0);
 
 	// [Execution]
-    float_q fResult1UT = OPERAND1.AngleBetween(OPERAND2);
-    float_q fResult2UT = OPERAND2.AngleBetween(OPERAND1);
+    float_q fResult1UT = OPERAND1.DotProductAngle(OPERAND2);
+    float_q fResult2UT = OPERAND2.DotProductAngle(OPERAND1);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, fResult2UT );
@@ -1732,7 +1732,7 @@ QTEST_CASE ( AngleBetween_AngleBetweenIsCommutative_Test )
 /// <summary>
 /// Checks that the angle equals zero when vectors are parallel.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleEqualsZeroWhenVectorsAreParallel_Test )
+QTEST_CASE ( DotProductAngle_AngleEqualsZeroWhenVectorsAreParallel_Test )
 {
     // [Preparation]
     const float_q EXPECTED_RESULT = SQFloat::_0;
@@ -1741,16 +1741,16 @@ QTEST_CASE ( AngleBetween_AngleEqualsZeroWhenVectorsAreParallel_Test )
     const QVector3 OPERAND2 = QVector3(SQFloat::_9, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
 }
 
 /// <summary>
-/// Checks that the angle equals PI/2 (or 90ยบ) when vectors are orthogonal.
+/// Checks that the angle equals PI/2 (or 90บ) when vectors are orthogonal.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorsAreOrthogonal_Test )
+QTEST_CASE ( DotProductAngle_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorsAreOrthogonal_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1766,8 +1766,8 @@ QTEST_CASE ( AngleBetween_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorsAreOrtho
     const QVector3 OPERAND3 = QVector3(SQFloat::_0, SQFloat::_0, SQFloat::_5);
 
 	// [Execution]
-    float_q fResult1UT = OPERAND1.AngleBetween(OPERAND2);
-    float_q fResult2UT = OPERAND2.AngleBetween(OPERAND3);
+    float_q fResult1UT = OPERAND1.DotProductAngle(OPERAND2);
+    float_q fResult2UT = OPERAND2.DotProductAngle(OPERAND3);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResult1UT, EXPECTED_RESULT );
@@ -1775,9 +1775,9 @@ QTEST_CASE ( AngleBetween_AngleEqualsHalfPiRadiansOr90DegreesWhenVectorsAreOrtho
 }
 
 /// <summary>
-/// Checks that the angle equals Pi (or 180ยบ) when vectors are opposite.
+/// Checks that the angle equals Pi (or 180บ) when vectors are opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleEqualsPiRadiansOr180DegreesWhenVectorsAreOpposite_Test )
+QTEST_CASE ( DotProductAngle_AngleEqualsPiRadiansOr180DegreesWhenVectorsAreOpposite_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1792,7 +1792,7 @@ QTEST_CASE ( AngleBetween_AngleEqualsPiRadiansOr180DegreesWhenVectorsAreOpposite
     const QVector3 OPERAND2 = QVector3(-SQFloat::_1, SQFloat::_0, SQFloat::_0);
 
 	// [Execution]
-    float_q fResultUT = OPERAND1.AngleBetween(OPERAND2);
+    float_q fResultUT = OPERAND1.DotProductAngle(OPERAND2);
 
     // [Verification]
     BOOST_CHECK_EQUAL( fResultUT, EXPECTED_RESULT );
@@ -1801,16 +1801,16 @@ QTEST_CASE ( AngleBetween_AngleEqualsPiRadiansOr180DegreesWhenVectorsAreOpposite
 /// <summary>
 /// Checks that the angle is always positive.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleIsAlwaysPositive_Test )
+QTEST_CASE ( DotProductAngle_AngleIsAlwaysPositive_Test )
 {
     // [Preparation]
     const QVector3 REFERENCE_OPERAND = QVector3(SQFloat::_1, SQFloat::_0, SQFloat::_0);                                // _
     const QVector3 OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, SQFloat::_1, SQFloat::_0);  // \_
-    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /ยจ
+    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsGreaterOrEquals(fResult1UT, SQFloat::_0) );
@@ -1818,9 +1818,9 @@ QTEST_CASE ( AngleBetween_AngleIsAlwaysPositive_Test )
 }
 
 /// <summary>
-/// Checks that the angle is lower than Pi (or 180ยบ) when vector are not opposite.
+/// Checks that the angle is lower than Pi (or 180บ) when vector are not opposite.
 /// </summary>
-QTEST_CASE ( AngleBetween_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorsAreNotOpposite_Test )
+QTEST_CASE ( DotProductAngle_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorsAreNotOpposite_Test )
 {
     // [Preparation]
     using Kinesis::QuimeraEngine::Tools::Math::SQAngle;
@@ -1833,11 +1833,11 @@ QTEST_CASE ( AngleBetween_AngleIsLowerThanPiRadiansOr180DegreesWhenVectorsAreNot
 
     const QVector3 REFERENCE_OPERAND = QVector3(SQFloat::_1, SQFloat::_0, SQFloat::_0);                                // _
     const QVector3 OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, SQFloat::_1, SQFloat::_0);  // \_
-    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /ยจ
+    const QVector3 OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE = QVector3(-SQFloat::_1, -SQFloat::_1, SQFloat::_0); // /จ
 
 	// [Execution]
-    float_q fResult1UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
-    float_q fResult2UT = REFERENCE_OPERAND.AngleBetween(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult1UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_MORE_THAN_HALF_CIRCUMFERENCE);
+    float_q fResult2UT = REFERENCE_OPERAND.DotProductAngle(OPERAND_SEPARATED_LESS_THAN_HALF_CIRCUMFERENCE);
 
     // [Verification]
     BOOST_CHECK( SQFloat::IsLessThan(fResult1UT, HALF_CIRCUMFERENCE_ANGLE) );
@@ -1871,7 +1871,7 @@ QTEST_CASE ( CrossProduct_ResultIsNullWhenVectorsAreParallelAndSameDirection_Tes
     // [Preparation]
     const QVector3 OPERAND1 = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
     const QVector3 OPERAND2 = QVector3(SQFloat::_2, SQFloat::_4, SQFloat::_6);
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = OPERAND1.CrossProduct(OPERAND2);
@@ -1890,7 +1890,7 @@ QTEST_CASE ( CrossProduct_ResultIsNullWhenVectorsAreParallelAndOppositeDirection
     // [Preparation]
     const QVector3 OPERAND1 = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
     const QVector3 OPERAND2 = QVector3(-SQFloat::_1, -SQFloat::_2, -SQFloat::_3);
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = OPERAND1.CrossProduct(OPERAND2);
@@ -1928,7 +1928,7 @@ QTEST_CASE ( CrossProduct_ReturnsNullVectorWhenAOperandIsNullVector_Test )
     // [Preparation]
     const float_q EXPECTED_RESULT_FOR_ALL = SQFloat::_0;
 
-    const QVector3 NULL_VECTOR = QVector3::GetNullVector();
+    const QVector3 NULL_VECTOR = QVector3::GetZeroVector();
     const QVector3 NONNULL_VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
 
 	// [Execution]
@@ -1951,7 +1951,7 @@ QTEST_CASE ( CrossProduct_BehavesCorrectlyWhenSameInstanceIsUsedAsParameter_Test
 {
     // [Preparation]
     const QVector3 OPERAND = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = OPERAND.CrossProduct(OPERAND);
@@ -2006,7 +2006,7 @@ QTEST_CASE ( Lerp_InterpolatingInTheMiddleOfTwoOppositeVectorsGivesNullVector_Te
     // [Preparation]
     const QVector3 OPERAND1 = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
     const QVector3 OPERAND2 = -OPERAND1;
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = OPERAND1.Lerp(SQFloat::_0_5, OPERAND2);
@@ -2024,7 +2024,7 @@ QTEST_CASE ( Lerp_WhenUsedNonNullVectorAndNullVectorTheResultIsAScaledNonNullVec
 {
     // [Preparation]
     const QVector3 OPERAND1 = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_3);
-    const QVector3 OPERAND2 = QVector3::GetNullVector();
+    const QVector3 OPERAND2 = QVector3::GetZeroVector();
     const QVector3 EXPECTED_RESULT = OPERAND1 * (SQFloat::_1 - SQFloat::_0_25);
 
 	// [Execution]
@@ -2201,7 +2201,7 @@ QTEST_CASE ( Transform1_VectorIsNullWhenQuaternionIsNull_Test )
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
     const QQuaternion NULL_QUATERNION = QQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0);
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = VECTOR.Transform(NULL_QUATERNION);
@@ -2288,9 +2288,9 @@ QTEST_CASE ( Transform2_VectorIsNullWhenDualQuaternionIsNull_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QQuaternion;
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QDualQuaternion NULL_DUALQUATERNION = QDualQuaternion(QVector3::GetNullVector(), QQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0));
+    const QDualQuaternion NULL_DUALQUATERNION = QDualQuaternion(QVector3::GetZeroVector(), QQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0));
 
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = VECTOR.Transform(NULL_DUALQUATERNION);
@@ -2376,9 +2376,9 @@ QTEST_CASE ( Transform3_VectorIsNullWhenRotationMatrixIsNull_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QRotationMatrix3x3 NULL_MATRIX = QRotationMatrix3x3(QMatrix3x3::GetNullMatrix());
+    const QRotationMatrix3x3 NULL_MATRIX = QRotationMatrix3x3(QMatrix3x3::GetZeroMatrix());
 
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = VECTOR.Transform(NULL_MATRIX);
@@ -2484,9 +2484,9 @@ QTEST_CASE ( Transform4_VectorIsNullWhenScaleMatrixIsNull_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QMatrix3x3;
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QScalingMatrix3x3 NULL_MATRIX = QScalingMatrix3x3(QMatrix3x3::GetNullMatrix());
+    const QScalingMatrix3x3 NULL_MATRIX = QScalingMatrix3x3(QMatrix3x3::GetZeroMatrix());
 
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = VECTOR.Transform(NULL_MATRIX);
@@ -2583,7 +2583,7 @@ void Transform5_VectorDoesNotChangeWhenTranslationMatrixIsNull_Template()
     using Kinesis::QuimeraEngine::Tools::Math::QTranslationMatrix;
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QTranslationMatrix<MatrixType> NULL_MATRIX = QTranslationMatrix<MatrixType>(MatrixType::GetNullMatrix());
+    const QTranslationMatrix<MatrixType> NULL_MATRIX = QTranslationMatrix<MatrixType>(MatrixType::GetZeroMatrix());
 
     const QVector3 EXPECTED_RESULT = VECTOR;
 
@@ -2726,9 +2726,9 @@ void Transform6_VectorIsNullWhenTransformationMatrixIsNull_Template()
     using Kinesis::QuimeraEngine::Tools::Math::QTransformationMatrix;
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QTransformationMatrix<MatrixType> NULL_MATRIX = QTransformationMatrix<MatrixType>(MatrixType::GetNullMatrix());
+    const QTransformationMatrix<MatrixType> NULL_MATRIX = QTransformationMatrix<MatrixType>(MatrixType::GetZeroMatrix());
 
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = VECTOR.Transform(NULL_MATRIX);
@@ -2820,9 +2820,9 @@ QTEST_CASE ( Transform7_VectorIsNullWhenSpaceConversionMatrixIsNull_Test )
     using Kinesis::QuimeraEngine::Tools::Math::QSpaceConversionMatrix;
 
     const QVector3 VECTOR = QVector3(SQFloat::_1, SQFloat::_2, SQFloat::_4);
-    const QSpaceConversionMatrix NULL_MATRIX = QSpaceConversionMatrix(QMatrix4x4::GetNullMatrix());
+    const QSpaceConversionMatrix NULL_MATRIX = QSpaceConversionMatrix(QMatrix4x4::GetZeroMatrix());
 
-    const QVector3 EXPECTED_RESULT = QVector3::GetNullVector();
+    const QVector3 EXPECTED_RESULT = QVector3::GetZeroVector();
 
 	// [Execution]
     QVector3 vVectorUT = VECTOR.Transform(NULL_MATRIX);
@@ -2842,17 +2842,9 @@ QTEST_CASE ( ToString_ReturnedFormatMatchesExpected_Test )
     const QVector3 VECTOR = QVector3(SQFloat::_0_25, (float_q)-0.000002, (float_q)40000.0 );
 
 #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("V3(0.25,-1.99999999e-06,40000)");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("V3(0.25,-1.99999999e-006,40000)");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("V3(0.25,-1.99999999e-006,40000)");
 #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
-    #if defined(QE_COMPILER_GCC) && (defined(QE_OS_LINUX) || defined(QE_OS_MAC)) // This is necessary due to a different implementation of the Standard Library when compiling with GCC on Linux or Mac
-        string_q EXPECTED_STRING_FORM = QE_L("V3(0.25,-1.9999999999999999e-06,40000)");
-    #else
-        string_q EXPECTED_STRING_FORM = QE_L("V3(0.25,-1.9999999999999999e-006,40000)");
-    #endif
+    const string_q EXPECTED_STRING_FORM = QE_L("V3(0.25,-1.9999999999999999e-006,40000)");
 #endif
 
 	// [Execution]

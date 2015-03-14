@@ -31,17 +31,17 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QTriangle.h"
 #include "QVector2.h"
 #include "QVector3.h"
 #include "QVector4.h"
 #include "SQAngle.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::string_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::string_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QTriangle;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
@@ -201,7 +201,7 @@ QTEST_CASE_TEMPLATE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test, TQ
     {
         QTriangle<T> triangleUT(NULL_POINTER, VECTOR_COMPONENTS_B, VECTOR_COMPONENTS_C);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete type of exception will be caught in the future
     {
         bAssertionFailedWhenAIsNull = true;
     }
@@ -212,7 +212,7 @@ QTEST_CASE_TEMPLATE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test, TQ
     {
         QTriangle<T> triangleUT(VECTOR_COMPONENTS_A, NULL_POINTER, VECTOR_COMPONENTS_C);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete type of exception will be caught in the future
     {
         bAssertionFailedWhenBIsNull = true;
     }
@@ -223,7 +223,7 @@ QTEST_CASE_TEMPLATE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test, TQ
     {
         QTriangle<T> triangleUT(VECTOR_COMPONENTS_A, VECTOR_COMPONENTS_B, NULL_POINTER);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete type of exception will be caught in the future
     {
         bAssertionFailedWhenCIsNull = true;
     }
@@ -241,8 +241,8 @@ QTEST_CASE_TEMPLATE ( Constructor5_AssertionFailsWhenInputValuesAreNull_Test, TQ
 /// </summary>
 QTEST_CASE_TEMPLATE ( Constructor6_ValuesAreSetProperly_Test, TQTemplateTypes )
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-    using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
     // [Preparation]
     float_q VECTOR_COMPONENTS_A[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_7 };
@@ -345,7 +345,7 @@ QTEST_CASE_TEMPLATE ( GetSurface_AssertionFailsWhenAllPointsCoincide_Test, TQTem
     {
         triangleUT.GetSurface();
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -435,7 +435,7 @@ QTEST_CASE_TEMPLATE ( GetAngleA_AssertionFailsWhenAllPointsCoincide_Test, TQTemp
     {
         triangleUT.GetAngleA();
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -501,7 +501,7 @@ QTEST_CASE_TEMPLATE ( GetAngleB_AssertionFailsWhenAllPointsCoincide_Test, TQTemp
     {
         triangleUT.GetAngleB();
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -567,7 +567,7 @@ QTEST_CASE_TEMPLATE ( GetAngleC_AssertionFailsWhenAllPointsCoincide_Test, TQTemp
     {
         triangleUT.GetAngleC();
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -628,7 +628,7 @@ QTEST_CASE_TEMPLATE ( GetIncenter_AssertionFailsWhenAllPointsCoincide_Test, TQTe
     {
         triangleUT.GetIncenter();
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -689,7 +689,7 @@ QTEST_CASE_TEMPLATE ( GetCentroid_AssertionFailsWhenAllPointsCoincide_Test, TQTe
     {
         triangleUT.GetCentroid();
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed = true;
     }
@@ -717,7 +717,7 @@ QTEST_CASE_TEMPLATE ( ToString_ExpectedOutputIsReturned_Test, TQTemplateTypes )
     const string_q A_STRING = VALUE_FOR_A.ToString();
     const string_q B_STRING = VALUE_FOR_B.ToString();
     const string_q C_STRING = VALUE_FOR_C.ToString();
-    const string_q EXPECTED_STRING = string_q("T(a(") + A_STRING + QE_L("),b(") + B_STRING + QE_L("),c(") + C_STRING + QE_L("))");
+    const string_q EXPECTED_STRING = QE_L("T(a(") + A_STRING + QE_L("),b(") + B_STRING + QE_L("),c(") + C_STRING + QE_L("))");
 
 	// [Execution]
     string_q strReturnedString = triangleUT.ToString();

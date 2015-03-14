@@ -30,16 +30,16 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QCircle.h"
 
 #include "QTransformationMatrix3x3.h"
 #include "SQPoint.h"
 #include "SQAngle.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QCircle;
 using Kinesis::QuimeraEngine::Tools::Math::QOrb;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
@@ -943,9 +943,9 @@ QTEST_CASE ( IntersectionPoint_AssertionFailsWhenRadiusEqualsZero_Test )
     bool bAssertionFailed1 = false;
     try
     {
-        CIRCLE_ONE.IntersectionPoint(CIRCLE_TWO, intersection1, intersection2);
+        EQIntersections intersection1UT = CIRCLE_ONE.IntersectionPoint(CIRCLE_TWO, intersection1, intersection2);
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed1 = true;
     }
@@ -953,9 +953,9 @@ QTEST_CASE ( IntersectionPoint_AssertionFailsWhenRadiusEqualsZero_Test )
     bool bAssertionFailed2 = false;
     try
     {
-        CIRCLE_TWO.IntersectionPoint(CIRCLE_ONE, intersection1, intersection2);
+        EQIntersections intersection2UT = CIRCLE_TWO.IntersectionPoint(CIRCLE_ONE, intersection1, intersection2);
     }
-    catch(const QAssertException&)
+    catch(...)
     {
         bAssertionFailed2 = true;
     }

@@ -39,12 +39,12 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |  CONSTANTS INITIALIZATION  |               ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |  CONSTANTS INITIALIZATION  |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 #if   QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
@@ -99,12 +99,12 @@ namespace Math
 //##################                                                       ##################
 //##################=======================================================##################
 
-float_q SQAngle::DegreesToRadians(const float_q fDegrees)
+float_q SQAngle::DegreesToRadians(const float_q &fDegrees)
 {
 
 #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
     // This workaround is necessary due to an unacceptable loss of precision
-    using Kinesis::QuimeraEngine::Common::DataTypes::f64_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::f64_q;
     return (float_q) (f64_q(fDegrees) * 4.0 * atan_q(1.0) / 180.0);
 #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
     return fDegrees * SQAngle::RadiansPerDegree;
@@ -112,12 +112,12 @@ float_q SQAngle::DegreesToRadians(const float_q fDegrees)
 
 }
 
-float_q SQAngle::RadiansToDegrees(const float_q fRadians)
+float_q SQAngle::RadiansToDegrees(const float_q &fRadians)
 {
 
 #if QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_SIMPLE
     // This workaround is necessary due to an unacceptable loss of precision
-    using Kinesis::QuimeraEngine::Common::DataTypes::f64_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::f64_q;
     return (float_q) (f64_q(fRadians) * 180.0 / (4.0 * atan_q(1.0)));
 #elif QE_CONFIG_PRECISION_DEFAULT == QE_CONFIG_PRECISION_DOUBLE
     return fRadians * SQAngle::DegreesPerRadian;
@@ -125,18 +125,18 @@ float_q SQAngle::RadiansToDegrees(const float_q fRadians)
 
 }
 
-float_q SQAngle::Truncate(const float_q fAngle)
+float_q SQAngle::Truncate(const float_q &fAngle)
 {
 
 #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS
-    return fmod_q(fAngle, SQAngle::_2Pi);  
+	return fmod_q(fAngle, SQAngle::_2Pi);  
 #elif QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
-    return fmod_q(fAngle, SQAngle::_360);
+	return fmod_q(fAngle, SQAngle::_360);
 #endif
 
 }
 
-float_q SQAngle::CountRevolutions(const float_q fAngle)
+float_q SQAngle::CountRevolutions(const float_q &fAngle)
 {
     const float_q COMPLETE_REVOLUTION =
         #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS
@@ -148,7 +148,7 @@ float_q SQAngle::CountRevolutions(const float_q fAngle)
     return fAngle / COMPLETE_REVOLUTION;
 }
 
-float_q SQAngle::CountCompleteRevolutions(const float_q fAngle)
+float_q SQAngle::CountCompleteRevolutions(const float_q &fAngle)
 {
     const float_q COMPLETE_REVOLUTION =
         #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_RADIANS

@@ -32,7 +32,7 @@
 #include "QTransformationMatrix3x3.h"
 #include "SQPoint.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -46,12 +46,12 @@ namespace Math
 
     
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QRay2D::QRay2D()
@@ -72,12 +72,12 @@ QRay2D::QRay2D(const QVector2 &vOrigin, const QVector2 &vDirection) : QRay<QVect
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QRay2D& QRay2D::operator=(const QBaseRay<QVector2, QVector2> &ray)
@@ -89,7 +89,7 @@ QRay2D& QRay2D::operator=(const QBaseRay<QVector2, QVector2> &ray)
 bool QRay2D::Intersection(const QRay2D &ray) const
 {
     // Direction vector of rays should not be null
-    QE_ASSERT_WARNING( !ray.Direction.IsZero() && !this->Direction.IsZero(), "Direction vector of rays should not be null" );
+    QE_ASSERT( !ray.Direction.IsZero() && !this->Direction.IsZero() );
 
     const float_q &DENOMINATOR = this->Direction.x * ray.Direction.y - this->Direction.y * ray.Direction.x;
 
@@ -117,12 +117,12 @@ bool QRay2D::Intersection(const QRay2D &ray) const
 bool QRay2D::Intersection(const QBaseTriangle<QVector2> &triangle) const
 {
     // Vertices of the triangle must not coincide
-    QE_ASSERT_WARNING( triangle.A != triangle.B && 
-               triangle.B != triangle.C &&
-               triangle.C != triangle.A, "Vertices of the triangle must not coincide" );
+    QE_ASSERT( triangle.A != triangle.B && 
+                triangle.B != triangle.C &&
+                triangle.C != triangle.A );
 
     // The direction vector of the ray shouldn't be null
-    QE_ASSERT_WARNING( !this->Direction.IsZero(), "The direction vector of the ray shouldn't be null" );
+    QE_ASSERT( !this->Direction.IsZero() );
 
     return ( this->Intersection(QBaseLineSegment<QVector2>(triangle.A, triangle.B)) ||
              this->Intersection(QBaseLineSegment<QVector2>(triangle.B, triangle.C)) ||
@@ -138,7 +138,7 @@ bool QRay2D::Intersection(const QBaseQuadrilateral &quad) const
 EQIntersections QRay2D::IntersectionPoint(const QRay2D &ray, QBaseVector2 &vIntersection) const
 {
     // Direction vector of rays should not be null
-    QE_ASSERT_WARNING( !ray.Direction.IsZero() && !this->Direction.IsZero(), "Direction vector of rays should not be null" );
+    QE_ASSERT( !ray.Direction.IsZero() && !this->Direction.IsZero() );
 
     const float_q &DENOMINATOR = this->Direction.x * ray.Direction.y - this->Direction.y * ray.Direction.x;
 
@@ -146,7 +146,7 @@ EQIntersections QRay2D::IntersectionPoint(const QRay2D &ray, QBaseVector2 &vInte
     {
         if (this->Origin == ray.Origin)
         {
-            if ( (this->Direction + ray.Direction) == QVector2::GetNullVector() ) // Directions are opposite (are supossed normalized)
+            if ( (this->Direction + ray.Direction) == QVector2::GetZeroVector() ) // Directions are opposite (are supossed normalized)
             {
                 vIntersection = this->Origin;
                 return EQIntersections::E_One;
@@ -208,12 +208,12 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseTriangle<QVector2> &triangl
 EQIntersections QRay2D::IntersectionPoint(const QBaseTriangle<QVector2> &triangle, QBaseVector2 &vIntersection1, QBaseVector2 &vIntersection2) const
 {
     // Vertices of the triangle must not coincide
-    QE_ASSERT_WARNING( triangle.A != triangle.B && 
+    QE_ASSERT( triangle.A != triangle.B && 
                triangle.B != triangle.C &&
-               triangle.C != triangle.A, "Vertices of the triangle must not coincide" );
+               triangle.C != triangle.A );
 
     // The direction vector of the ray shouldn't be null
-    QE_ASSERT_WARNING( !this->Direction.IsZero(), "The direction vector of the ray shouldn't be null" );
+    QE_ASSERT( !this->Direction.IsZero() );
 
     QVector2 vAux;
 
@@ -312,7 +312,7 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseTriangle<QVector2> &triangl
             else if (this->IntersectionPoint(QBaseLineSegment<QVector2>(triangle.C, triangle.A), vAux) == EQIntersections::E_One)
                 vIntersection1 = vAux;
             else
-                QE_ASSERT_WARNING(false, "Something went very wrong, this code branch must never be reached");  // Something is wrong, if ray point is interior, it must be ONE intersection with a edge.
+                QE_ASSERT(false)  // Something is wrong, if ray point is interior, it must be ONE intersection with a edge.
 
             return EQIntersections::E_One;
         }
@@ -430,7 +430,7 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseTriangle<QVector2> &triangl
                 }
             }
             else
-                QE_ASSERT_WARNING(false, "Something went very wrong, this code branch must never be reached");  // Something is wrong, there is ONE intersection and is not a vertex
+                QE_ASSERT(false)  // Something is wrong, there is ONE intersection and is not a vertex
         }
 
         if (bPrevInt)
@@ -654,7 +654,7 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseQuadrilateral &quad, QBaseV
             else if (this->IntersectionPoint(QBaseLineSegment<QVector2>(quad.D, quad.A), vAux) == EQIntersections::E_One)
                 vIntersection1 = vAux;
             else
-                QE_ASSERT_WARNING(false, "Something went very wrong, this code branch must never be reached");  // Something is wrong, if ray point is interior, it must be ONE intersection with a edge.
+                QE_ASSERT(false)  // Something is wrong, if ray point is interior, it must be ONE intersection with a edge.
 
             return EQIntersections::E_One;
         }
@@ -817,7 +817,7 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseQuadrilateral &quad, QBaseV
                 }
             }
             else // Its the first intersection found
-                QE_ASSERT_WARNING(false, "Something went very wrong, this code branch must never be reached");  // Something is wrong
+                QE_ASSERT(false)  // Something is wrong
         }
 
         if (bPrevInt)
@@ -833,7 +833,7 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseQuadrilateral &quad, QBaseV
 bool QRay2D::Intersection(const QBaseLineSegment<QVector2> &segment) const
 {
     // Direction vector of ray should not be null and the length of the segment should be greater than zero
-    QE_ASSERT_WARNING( segment.A != segment.B && !this->Direction.IsZero(), "Direction vector of ray should not be null and the length of the segment should be greater than zero" );
+    QE_ASSERT( segment.A != segment.B && !this->Direction.IsZero() );
 
     QVector2 vAux(segment.B - segment.A);
 
@@ -868,7 +868,7 @@ bool QRay2D::Intersection(const QBaseLineSegment<QVector2> &segment) const
 EQIntersections QRay2D::IntersectionPoint(const QBaseLineSegment<QVector2> &segment, QBaseVector2 &vIntersection) const
 {
     // Direction vector of ray should not be null and the length of the segment should be greater than zero
-    QE_ASSERT_WARNING( segment.A != segment.B && !this->Direction.IsZero(), "Direction vector of ray should not be null and the length of the segment should be greater than zero" );
+    QE_ASSERT( segment.A != segment.B && !this->Direction.IsZero() );
 
     QVector2 vAux(segment.B - segment.A);
 
@@ -952,7 +952,7 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseLineSegment<QVector2> &segm
 EQIntersections QRay2D::IntersectionPoint(const QBaseLineSegment<QVector2> &segment, QBaseVector2 &vIntersection1, QBaseVector2 &vIntersection2) const
 {
     // Direction vector of ray should not be null and the length of the segment should be greater than zero
-    QE_ASSERT_WARNING( segment.A != segment.B && !this->Direction.IsZero(), "Direction vector of ray should not be null and the length of the segment should be greater than zero" );
+    QE_ASSERT( segment.A != segment.B && !this->Direction.IsZero() );
 
     QVector2 vAux(segment.B - segment.A);
 
@@ -1042,10 +1042,10 @@ EQIntersections QRay2D::IntersectionPoint(const QBaseLineSegment<QVector2> &segm
 void QRay2D::Reflection(const QBaseLineSegment<QVector2> &segment, QBaseRay<QVector2, QVector2> &ray) const
 {
     // The direction vector of the ray must not be null
-    QE_ASSERT_WARNING( !this->Direction.IsZero(), "The direction vector of the ray must not be null" );
+    QE_ASSERT( !this->Direction.IsZero() );
 
     // The endpoints of the line segment shouldn't coincide
-    QE_ASSERT_WARNING( segment.A != segment.B, "The endpoints of the line segment must not coincide" );
+    QE_ASSERT( segment.A != segment.B );
 
     // Method based in this: http://www.inmensia.com/articulos/raytracing/mecanismosluz.html
 
@@ -1079,10 +1079,10 @@ void QRay2D::Reflection(const QBaseLineSegment<QVector2> &segment, QBaseRay<QVec
 void QRay2D::Reflection(const QBaseLineSegment<QVector2> &segment, QBaseVector2 &vDirection) const
 {
     // The direction vector of the ray must not be null
-    QE_ASSERT_WARNING( !this->Direction.IsZero(), "The direction vector of the ray must not be null" );
+    QE_ASSERT( !this->Direction.IsZero() );
 
     // The endpoints of the line segment shouldn't coincide
-    QE_ASSERT_WARNING( segment.A != segment.B, "The endpoints of the line segment must not coincide" );
+    QE_ASSERT( segment.A != segment.B );
 
     // Method based in this: http://www.inmensia.com/articulos/raytracing/mecanismosluz.html
 
@@ -1112,7 +1112,7 @@ void QRay2D::Reflection(const QBaseLineSegment<QVector2> &segment, QBaseVector2 
 QRay2D QRay2D::Transform(const QTransformationMatrix3x3 &transformation) const
 {
     QRay2D auxRay = *this;
-    auxRay.Origin = auxRay.Origin.Transform(transformation);
+	auxRay.Origin = auxRay.Origin.Transform(transformation);
 
     // Direction is transformed without translation. The calculation takes into account only the submatrix that contains
     // the rotation and the scale.
@@ -1124,14 +1124,14 @@ QRay2D QRay2D::Transform(const QTransformationMatrix3x3 &transformation) const
     return auxRay;
 }
 
-QRay2D QRay2D::Rotate(const float_q fRotationAngle) const
+QRay2D QRay2D::Rotate(const float_q &fRotationAngle) const
 {
     QRay2D auxRay = *this;
     SQPoint::Rotate(fRotationAngle, rcast_q(&auxRay, QVector2*), 2);
     return auxRay;
 }
 
-QRay2D QRay2D::RotateWithPivot(const float_q fRotationAngle, const QBaseVector2 &vPivot) const
+QRay2D QRay2D::RotateWithPivot(const float_q &fRotationAngle, const QBaseVector2 &vPivot) const
 {
     QRay2D auxRay = *this;
     SQPoint::RotateWithPivot(fRotationAngle, vPivot, &auxRay.Origin, 1);
@@ -1146,7 +1146,7 @@ QRay2D QRay2D::Translate(const QBaseVector2 &vTranslation) const
     return auxRay;
 }
 
-QRay2D QRay2D::Translate(const float_q fTranslationX, const float_q fTranslationY) const
+QRay2D QRay2D::Translate(const float_q &fTranslationX, const float_q &fTranslationY) const
 {
     QRay2D auxRay = *this;
     SQPoint::Translate(fTranslationX, fTranslationY, &auxRay.Origin, 1);
@@ -1160,7 +1160,7 @@ QRay2D QRay2D::Scale(const QBaseVector2 &vScale) const
     return QRay2D(auxRay.Origin, auxRay.Direction.Normalize());
 }
 
-QRay2D QRay2D::Scale(const float_q vScaleX, const float_q vScaleY) const
+QRay2D QRay2D::Scale(const float_q &vScaleX, const float_q &vScaleY) const
 {
     QRay2D auxRay = *this;
     SQPoint::Scale(vScaleX, vScaleY, rcast_q(&auxRay, QVector2*), 2);
@@ -1175,7 +1175,7 @@ QRay2D QRay2D::ScaleWithPivot(const QBaseVector2 &vScale, const QBaseVector2 &vP
     return QRay2D(auxRay.Origin, auxRay.Direction.Normalize());
 }
 
-QRay2D QRay2D::ScaleWithPivot(const float_q vScaleX, const float_q vScaleY, const QBaseVector2 &vPivot) const
+QRay2D QRay2D::ScaleWithPivot(const float_q &vScaleX, const float_q &vScaleY, const QBaseVector2 &vPivot) const
 {
     QRay2D auxRay = *this;
     SQPoint::ScaleWithPivot(vScaleX, vScaleY, vPivot, &auxRay.Origin, 1);
@@ -1253,36 +1253,36 @@ bool QRay2D::PointsInSameSideOfLine(const QVector2 &vP1, const QVector2 &vP2, co
 
 bool QRay2D::PointInsideQuadrilateral(const QBaseQuadrilateral& quad, const QVector2& vPoint) const
 {
-    return ( PointsInSameSideOfLine(vPoint, quad.C, quad.A, quad.B) &&
+	return ( PointsInSameSideOfLine(vPoint, quad.C, quad.A, quad.B) &&
                 PointsInSameSideOfLine(vPoint, quad.A, quad.B, quad.C) &&
                 PointsInSameSideOfLine(vPoint, quad.A, quad.C, quad.D) &&
                 PointsInSameSideOfLine(vPoint, quad.C, quad.D, quad.A) );
 }
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
-const QRay2D& QRay2D::GetNullRay()
+const QRay2D& QRay2D::GetRayZero()
 {
-    static const QRay2D NULLRAY(QVector2::GetNullVector(), QVector2::GetNullVector());
-    return NULLRAY;
+    static const QRay2D RAYZERO(QVector2::GetZeroVector(), QVector2::GetZeroVector());
+    return RAYZERO;
 }
 
 const QRay2D& QRay2D::GetRayX()
 {
-    static const QRay2D RAYX(QVector2::GetNullVector(), QVector2::GetUnitVectorX());
+    static const QRay2D RAYX(QVector2::GetZeroVector(), QVector2::GetUnitVectorX());
     return RAYX;
 }
 
 const QRay2D& QRay2D::GetRayY()
 {
-    static const QRay2D RAYY(QVector2::GetNullVector(), QVector2::GetUnitVectorY());
+    static const QRay2D RAYY(QVector2::GetZeroVector(), QVector2::GetUnitVectorY());
     return RAYY;
 }
 

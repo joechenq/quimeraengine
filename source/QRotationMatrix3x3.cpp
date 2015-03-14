@@ -26,7 +26,6 @@
 
 #include "QRotationMatrix3x3.h"
 
-#include "Assertions.h"
 #include "QVector3.h"
 #include "QBaseQuaternion.h"
 #include "QTranslationMatrix.h"
@@ -37,7 +36,7 @@
 #include "QMatrix4x4.h"
 #include "SQFloat.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -50,12 +49,12 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
    
 QRotationMatrix3x3::QRotationMatrix3x3()
@@ -71,7 +70,7 @@ QRotationMatrix3x3::QRotationMatrix3x3(const QBaseMatrix3x3 &rotation) : QMatrix
 {
 }
 
-QRotationMatrix3x3::QRotationMatrix3x3(const float_q fRotationAngleX, const float_q fRotationAngleY, const float_q fRotationAngleZ)
+QRotationMatrix3x3::QRotationMatrix3x3(const float_q &fRotationAngleX, const float_q &fRotationAngleY, const float_q &fRotationAngleZ)
 {
 
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
@@ -111,7 +110,7 @@ QRotationMatrix3x3::QRotationMatrix3x3(const float_q fRotationAngleX, const floa
     ij[2][2]  =  fA * fC;
 }
 
-QRotationMatrix3x3::QRotationMatrix3x3 (const float_q fRotationAngle, const QBaseVector3 &vRotationAxis)
+QRotationMatrix3x3::QRotationMatrix3x3 (const float_q &fRotationAngle, const QBaseVector3 &vRotationAxis)
 {
     // Taken from http://en.wikipedia.org/wiki/Rotation_representation#Rotation_matrix_.E2.86.94_Euler_axis.2Fangle
     // but changing factors affected by sinus to get a left handed matrix.
@@ -181,12 +180,12 @@ QRotationMatrix3x3::QRotationMatrix3x3(const QBaseQuaternion &qRotation)
 }
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 // Binary operators
@@ -305,9 +304,9 @@ void QRotationMatrix3x3::GetRotation(float_q &fRotationAngleX, float_q &fRotatio
         fRotationAngleZ = atan2_q(-this->ij[1][0], this->ij[0][0]);
         fRotationAngleY = SQFloat::_0;
     }
-    
+
     // Checkout to avoid NaN values
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fRotationAngleX) && !SQFloat::IsNaN(fRotationAngleY) && !SQFloat::IsNaN(fRotationAngleZ), "One or more calculated angle are NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fRotationAngleX) && !SQFloat::IsNaN(fRotationAngleY) && !SQFloat::IsNaN(fRotationAngleZ) )
 
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // Since angles are specified in radians, we convert it to degrees
@@ -322,13 +321,13 @@ void QRotationMatrix3x3::GetRotation(QBaseQuaternion &qRotation) const
     // Source: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/christian.htm
 
     // If the main diagonal is zero, the rotation matrix is not well-formed
-    QE_ASSERT_WARNING( SQFloat::IsNotZero(this->ij[0][0] + this->ij[1][1] + this->ij[2][2]), "The main diagonal is zero, the rotation matrix is not well-formed" );
-    
+    QE_ASSERT( SQFloat::IsNotZero(this->ij[0][0] + this->ij[1][1] + this->ij[2][2]) )
+
     qRotation.w = sqrt_q( std::max(SQFloat::_0, SQFloat::_1 + this->ij[0][0] + this->ij[1][1] + this->ij[2][2]) ) * SQFloat::_0_5;
     qRotation.x = sqrt_q( std::max(SQFloat::_0, SQFloat::_1 + this->ij[0][0] - this->ij[1][1] - this->ij[2][2]) ) * SQFloat::_0_5;
     qRotation.y = sqrt_q( std::max(SQFloat::_0, SQFloat::_1 - this->ij[0][0] + this->ij[1][1] - this->ij[2][2]) ) * SQFloat::_0_5;
     qRotation.z = sqrt_q( std::max(SQFloat::_0, SQFloat::_1 - this->ij[0][0] - this->ij[1][1] + this->ij[2][2]) ) * SQFloat::_0_5;
-    
+
     // This sing depends on hand convention
     SQFloat::CopySign(this->ij[1][2] - this->ij[2][1], qRotation.x);
     SQFloat::CopySign(this->ij[2][0] - this->ij[0][2], qRotation.y);
@@ -350,86 +349,86 @@ void QRotationMatrix3x3::GetRotation(float_q &fRotationAngle, QBaseVector3 &vRot
 
     fRotationAngle = acos_q(COS_AUX);
 
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fRotationAngle), "The resultant angle \"fRotationAngle\" is NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fRotationAngle) );
 
     if( SQFloat::AreEqual(COS_AUX, SQFloat::_1) ) // Singularity 1: Angle == 0 -> we choose arbitrary axis.
     {
-        vRotationAxis = QVector3::GetNullVector();
+        vRotationAxis = QVector3::GetZeroVector();
     }
     else if( SQFloat::AreEqual(COS_AUX, -SQFloat::_1) ) // Singularity 2: Angle == PI -> we calculate axis.
     {
         const float_q &HALF_SQRT_2 = sqrt_q(SQFloat::_2) * SQFloat::_0_5;
 
         const float_q &XX = (this->ij[0][0] + SQFloat::_1) * SQFloat::_0_5;
-        const float_q &YY = (this->ij[1][1] + SQFloat::_1) * SQFloat::_0_5;
-        const float_q &ZZ = (this->ij[2][2] + SQFloat::_1) * SQFloat::_0_5;
+		const float_q &YY = (this->ij[1][1] + SQFloat::_1) * SQFloat::_0_5;
+		const float_q &ZZ = (this->ij[2][2] + SQFloat::_1) * SQFloat::_0_5;
 
         if( SQFloat::IsGreaterThan(XX, YY) && SQFloat::IsGreaterThan(XX, ZZ) ) // m[0][0] is the largest diagonal term
         {
-            if (SQFloat::IsZero(XX))
+			if (SQFloat::IsZero(XX))
             {
-                vRotationAxis.x = SQFloat::_0;
-                vRotationAxis.y = HALF_SQRT_2;
-                vRotationAxis.z = HALF_SQRT_2;
-            }
+				vRotationAxis.x = SQFloat::_0;
+				vRotationAxis.y = HALF_SQRT_2;
+				vRotationAxis.z = HALF_SQRT_2;
+			}
             else
             {
-                QE_ASSERT_WARNING( SQFloat::IsGreaterThan(XX, SQFloat::_0), "The variable \"XX\" must be greater than zero (matrix element [0,0] is negative, maybe)" );
+                QE_ASSERT( SQFloat::IsGreaterThan(XX, SQFloat::_0) )
 
                 vRotationAxis.x = sqrt_q(XX);
 
                 const float_q &INV_X = SQFloat::_1 / vRotationAxis.x;
                 const float_q &XY = (this->ij[0][1] + this->ij[1][0]) * SQFloat::_0_25;
-                const float_q &XZ = (this->ij[0][2] + this->ij[2][0]) * SQFloat::_0_25;
+		        const float_q &XZ = (this->ij[0][2] + this->ij[2][0]) * SQFloat::_0_25;
 
                 vRotationAxis.y = XY * INV_X;
-                vRotationAxis.z = XZ * INV_X;
-            }
-        }
+				vRotationAxis.z = XZ * INV_X;
+			}
+		}
         else if( SQFloat::IsGreaterThan(YY, ZZ) ) // m[1][1] is the largest diagonal term
         {
-            if (SQFloat::IsZero(YY))
+			if (SQFloat::IsZero(YY))
             {
-                vRotationAxis.x = HALF_SQRT_2;
-                vRotationAxis.y = SQFloat::_0;
-                vRotationAxis.z = HALF_SQRT_2;
-            }
+				vRotationAxis.x = HALF_SQRT_2;
+				vRotationAxis.y = SQFloat::_0;
+				vRotationAxis.z = HALF_SQRT_2;
+			}
             else
             {
-                QE_ASSERT_WARNING( SQFloat::IsGreaterThan(YY, SQFloat::_0), "The variable \"YY\" must be greater than zero (matrix element [1,1] is negative, maybe)" );
+                QE_ASSERT( SQFloat::IsGreaterThan(YY, SQFloat::_0) )
 
-                vRotationAxis.y = sqrt_q(YY);
+				vRotationAxis.y = sqrt_q(YY);
 
                 const float_q &INV_Y = SQFloat::_1 / vRotationAxis.y;
                 const float_q &XY = (this->ij[0][1] + this->ij[1][0]) * SQFloat::_0_25;
-                const float_q &YZ = (this->ij[1][2] + this->ij[2][1]) * SQFloat::_0_25;
+		        const float_q &YZ = (this->ij[1][2] + this->ij[2][1]) * SQFloat::_0_25;
 
                 vRotationAxis.x = XY * INV_Y;
-                vRotationAxis.z = YZ * INV_Y;
-            }
-        }
+				vRotationAxis.z = YZ * INV_Y;
+			}
+		}
         else // m[2][2] is the largest diagonal term so base result on this
         {
-            if(SQFloat::IsZero(ZZ))
+			if(SQFloat::IsZero(ZZ))
             {
-                vRotationAxis.x = HALF_SQRT_2;
-                vRotationAxis.y = HALF_SQRT_2;
-                vRotationAxis.z = SQFloat::_0;
-            }
+				vRotationAxis.x = HALF_SQRT_2;
+				vRotationAxis.y = HALF_SQRT_2;
+				vRotationAxis.z = SQFloat::_0;
+			}
             else
             {
-                QE_ASSERT_WARNING( SQFloat::IsGreaterThan(ZZ, SQFloat::_0), "The variable \"ZZ\" must be greater than zero (matrix element [2,2] is negative, maybe)" );
+                QE_ASSERT( SQFloat::IsGreaterThan(ZZ, SQFloat::_0) )
 
-                vRotationAxis.z = sqrt_q(ZZ);
+				vRotationAxis.z = sqrt_q(ZZ);
 
                 const float_q &INV_Z = SQFloat::_1 / vRotationAxis.z;
                 const float_q &XZ = (this->ij[0][2] + this->ij[2][0]) * SQFloat::_0_25;
-                const float_q &YZ = (this->ij[1][2] + this->ij[2][1]) * SQFloat::_0_25;
+		        const float_q &YZ = (this->ij[1][2] + this->ij[2][1]) * SQFloat::_0_25;
 
-                vRotationAxis.x = XZ * INV_Z;
-                vRotationAxis.y = YZ * INV_Z;
-            }
-        }
+				vRotationAxis.x = XZ * INV_Z;
+				vRotationAxis.y = YZ * INV_Z;
+			}
+		}
 
         #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
             // Since angles are specified in radians, we convert it to degrees
@@ -453,13 +452,13 @@ void QRotationMatrix3x3::GetRotation(float_q &fRotationAngle, QBaseVector3 &vRot
 
 float_q QRotationMatrix3x3::GetDeterminant() const
 {
-    return SQFloat::_1;
+	return SQFloat::_1;
 }
 
-template <class MatrixT>
-QTransformationMatrix<MatrixT> QRotationMatrix3x3::ProductOperatorImp(const QTranslationMatrix<MatrixT> &matrix) const
+template <class MatrixType>
+QTransformationMatrix<MatrixType> QRotationMatrix3x3::ProductOperatorImp(const QTranslationMatrix<MatrixType> &matrix) const
 {
-    QTransformationMatrix<MatrixT> aux(QTransformationMatrix<MatrixT>::GetIdentity());
+    QTransformationMatrix<MatrixType> aux(QTransformationMatrix<MatrixType>::GetIdentity());
 
     aux.ij[3][0] = matrix.ij[3][0];
     aux.ij[3][1] = matrix.ij[3][1];
@@ -480,10 +479,10 @@ QTransformationMatrix<MatrixT> QRotationMatrix3x3::ProductOperatorImp(const QTra
     return aux;
 }
 
-template <class MatrixT>
-QTransformationMatrix<MatrixT> QRotationMatrix3x3::ProductOperatorImp(const QTransformationMatrix<MatrixT> &matrix) const
+template <class MatrixType>
+QTransformationMatrix<MatrixType> QRotationMatrix3x3::ProductOperatorImp(const QTransformationMatrix<MatrixType> &matrix) const
 {
-    QTransformationMatrix<MatrixT> aux(QTransformationMatrix<MatrixT>::GetIdentity());
+    QTransformationMatrix<MatrixType> aux(QTransformationMatrix<MatrixType>::GetIdentity());
 
     aux.ij[3][0] = matrix.ij[3][0];
     aux.ij[3][1] = matrix.ij[3][1];
@@ -506,12 +505,12 @@ QTransformationMatrix<MatrixT> QRotationMatrix3x3::ProductOperatorImp(const QTra
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 const QRotationMatrix3x3& QRotationMatrix3x3::GetIdentity()

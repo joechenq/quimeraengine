@@ -31,16 +31,16 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "QBaseTriangle.h"
 #include "QVector2.h"
 #include "QVector3.h"
 #include "QVector4.h"
 #include "SQVF32.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseTriangle;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
 using Kinesis::QuimeraEngine::Tools::Math::QVector3;
@@ -174,7 +174,7 @@ QTEST_CASE_TEMPLATE ( Constructor4_AssertionFailsWhenInputValuesAreNull_Test, TQ
     {
         QBaseTriangle<T> triangleUT(NULL_POINTER, VECTOR_COMPONENTS_B, VECTOR_COMPONENTS_C);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete type of exception will be caught in the future
     {
         bAssertionFailedWhenAIsNull = true;
     }
@@ -185,7 +185,7 @@ QTEST_CASE_TEMPLATE ( Constructor4_AssertionFailsWhenInputValuesAreNull_Test, TQ
     {
         QBaseTriangle<T> triangleUT(VECTOR_COMPONENTS_A, NULL_POINTER, VECTOR_COMPONENTS_C);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete type of exception will be caught in the future
     {
         bAssertionFailedWhenBIsNull = true;
     }
@@ -196,7 +196,7 @@ QTEST_CASE_TEMPLATE ( Constructor4_AssertionFailsWhenInputValuesAreNull_Test, TQ
     {
         QBaseTriangle<T> triangleUT(VECTOR_COMPONENTS_A, VECTOR_COMPONENTS_B, NULL_POINTER);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: A concrete type of exception will be caught in the future
     {
         bAssertionFailedWhenCIsNull = true;
     }
@@ -214,8 +214,8 @@ QTEST_CASE_TEMPLATE ( Constructor4_AssertionFailsWhenInputValuesAreNull_Test, TQ
 /// </summary>
 QTEST_CASE_TEMPLATE ( Constructor5_ValuesAreSetProperly_Test, TQTemplateTypes )
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-    using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
     // [Preparation]
     float_q VECTOR_COMPONENTS_A[] = { SQFloat::_1, SQFloat::_2, SQFloat::_3, SQFloat::_7 };
@@ -247,8 +247,8 @@ QTEST_CASE_TEMPLATE ( Constructor5_ValuesAreSetProperly_Test, TQTemplateTypes )
 QTEST_CASE_TEMPLATE ( OperatorEquality_TrueWhenOperandsDifferTolerance_Test, TQTemplateTypes )
 {
     // [Preparation]
-    const QBaseTriangle<T> LEFT_OPERAND = QBaseTriangle<T>( T::GetNullVector(), T::GetNullVector(), T::GetNullVector() );
-    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetNullVector(), T::GetNullVector(), T::GetNullVector() );
+    const QBaseTriangle<T> LEFT_OPERAND = QBaseTriangle<T>( T::GetZeroVector(), T::GetZeroVector(), T::GetZeroVector() );
+    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetZeroVector(), T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND == RIGHT_OPERAND);
@@ -261,7 +261,7 @@ QTEST_CASE_TEMPLATE ( OperatorEquality_TrueWhenOperandsDifferLessThanTolerance_T
 {
     // [Preparation]
     const QBaseTriangle<T> LEFT_OPERAND = QBaseTriangle<T>( T(SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon - SQFloat::Epsilon * SQFloat::_0_5));
-    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetNullVector(), T::GetNullVector(), T::GetNullVector() );
+    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetZeroVector(), T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND == RIGHT_OPERAND);
@@ -274,7 +274,7 @@ QTEST_CASE_TEMPLATE ( OperatorEquality_FalseWhenOperandsDifferGreaterThanToleran
 {
     // [Preparation]
     const QBaseTriangle<T> LEFT_OPERAND = QBaseTriangle<T>( T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5) );
-    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetNullVector(), T::GetNullVector(), T::GetNullVector() );
+    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetZeroVector(), T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(!( LEFT_OPERAND == RIGHT_OPERAND ));
@@ -326,7 +326,7 @@ QTEST_CASE_TEMPLATE ( OperatorInequality_TrueWhenOperandsDifferGreaterThanTolera
 {
     // [Preparation]
     const QBaseTriangle<T> LEFT_OPERAND = QBaseTriangle<T>( T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5), T(SQFloat::Epsilon + SQFloat::Epsilon * SQFloat::_0_5) );
-    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetNullVector(), T::GetNullVector(), T::GetNullVector() );
+    const QBaseTriangle<T> RIGHT_OPERAND = QBaseTriangle<T>( T::GetZeroVector(), T::GetZeroVector(), T::GetZeroVector() );
 
 	// [Execution] / Verification
     BOOST_CHECK(LEFT_OPERAND != RIGHT_OPERAND);

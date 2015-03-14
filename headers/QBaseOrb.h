@@ -29,12 +29,9 @@
 
 #include "SQFloat.h"
 #include "SQVF32.h"
-#include "QVector2.h"
-#include "QVector3.h"
-#include "QVector4.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 
 
 namespace Kinesis
@@ -55,8 +52,8 @@ namespace Math
 /// Radius is expressed as a floating point value.<br/>
 /// Remember that a orb is the locus of points equidistant from a given one.
 /// </remarks>
-/// <typeparam name="VectorT">Allowed types: QBaseVector2, QBaseVector3, QBaseVector4, QVector2, QVector3, QVector4.</typeparam>
-template <class VectorT>
+/// <typeparam name="VectorType">Allowed types: QBaseVector2, QBaseVector3, QBaseVector4, QVector2, QVector3, QVector4.</typeparam>
+template <class VectorType>
 class QBaseOrb
 {
 
@@ -85,7 +82,7 @@ public:
     /// </summary>
     /// <param name="vCenter">[IN] Vector to define the center of the orb.</param>
     /// <param name="fRadius">[IN] Floating point value to define the radius of the orb.</param>
-    QBaseOrb(const VectorT &vCenter, const float_q fRadius) : Center(vCenter), Radius(fRadius)
+    QBaseOrb(const VectorType &vCenter, const float_q &fRadius) : Center(vCenter), Radius(fRadius)
     {
     }
 
@@ -101,7 +98,7 @@ public:
     /// <returns>
     /// True if orbs are the same, false otherwise.
     /// </returns>
-    bool operator== (const QBaseOrb<VectorT> &orb) const
+    bool operator== (const QBaseOrb<VectorType> &orb) const
     {
         return this->Center == orb.Center && SQFloat::AreEqual(this->Radius, orb.Radius);
     }
@@ -113,7 +110,7 @@ public:
     /// <returns>
     /// True if orbs are not the same, false otherwise.
     /// </returns>
-    bool operator!= (const QBaseOrb<VectorT> &orb) const
+    bool operator!= (const QBaseOrb<VectorType> &orb) const
     {
         return !(*this == orb);
     }
@@ -126,24 +123,13 @@ public:
     /// <summary>
     /// Vector which represents the center point of orb.
     /// </summary>
-    VectorT Center;
+    VectorType Center;
 
     /// <summary>
     /// Floating point value representig the radius of the orb.
     /// </summary>
     float_q Radius;
 };
-
-
-// SPECIALIZATION EXPORTATIONS
-// -----------------------------
-#ifdef QE_EXPORT_TOOLS_TEMPLATE_SPECIALIZATION
-
-template class QE_LAYER_TOOLS_SYMBOLS QBaseOrb<Kinesis::QuimeraEngine::Tools::Math::QVector2>;
-template class QE_LAYER_TOOLS_SYMBOLS QBaseOrb<Kinesis::QuimeraEngine::Tools::Math::QVector3>;
-template class QE_LAYER_TOOLS_SYMBOLS QBaseOrb<Kinesis::QuimeraEngine::Tools::Math::QVector4>;
-
-#endif // QE_EXPORT_TOOLS_TEMPLATE_SPECIALIZATION
 
 } //namespace Math
 } //namespace Tools

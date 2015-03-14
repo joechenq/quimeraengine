@@ -31,7 +31,7 @@
 
 #include "SQFloat.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -63,7 +63,7 @@ class QBaseVector4;
 /// one rotation and one translation, without deforming the transformed solid (which acts as a rigid solid).<br/>
 /// This class has been included for experimental purposes only. Use it at your own risk.
 /// </remarks>
-class QE_LAYER_TOOLS_SYMBOLS QDualQuaternion : public QBaseDualQuaternion
+class QDllExport QDualQuaternion : public QBaseDualQuaternion
 {
     // FRIENDS
     // ---------------
@@ -77,16 +77,16 @@ public:
     /// <returns>
     /// The resultant dual quaternion.
     /// </returns>
-    friend QDualQuaternion QE_LAYER_TOOLS_SYMBOLS operator*(const float_q fScalar, const QDualQuaternion &dualQuat);
+    friend QDualQuaternion QDllExport operator*(const float_q &fScalar, const QDualQuaternion &dualQuat);
 
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
     QDualQuaternion();
 
     /// <summary>
@@ -237,11 +237,11 @@ private:
     /// the rotation dual quaternion, taking into account that the transfomation is done as follows:<br/>
     /// FIRST ROTATION THEN TRANSLATION.
     /// </remarks>
-    /// <typeparam name="VectorT">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
+    /// <typeparam name="VectorType">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
     /// <param name="qRotation">[IN] The quaternion that keeps the rotation.</param>
     /// <param name="vTranslation">[IN] The vector which represents the translation.</param>
-    template <class VectorT>
-    void QDualQuaternionImp(const QBaseQuaternion &qRotation, const VectorT &vTranslation);
+    template <class VectorType>
+    void QDualQuaternionImp(const QBaseQuaternion &qRotation, const VectorType &vTranslation);
 
     /// <summary>
     /// Constructor from a regular quaternion which represents a rotation and a vector which represents a translation.
@@ -258,11 +258,11 @@ private:
     /// the translation dual quaternion, taking into account that the transfomation is done as follows:<br/>
     /// FIRST TRANSLATION THEN ROTATION.
     /// </remarks>
-    /// <typeparam name="VectorT">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
+    /// <typeparam name="VectorType">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
     /// <param name="vTranslation">[IN] The vector which represents the translation.</param>
     /// <param name="qRotation">[IN] The quaternion that keeps the rotation.</param>
-    template <class VectorT>
-    void QDualQuaternionImp(const VectorT &vTranslation, const QBaseQuaternion &qRotation);
+    template <class VectorType>
+    void QDualQuaternionImp(const VectorType &vTranslation, const QBaseQuaternion &qRotation);
 
 
     // PROPERTIES
@@ -278,8 +278,8 @@ public:
     static const QDualQuaternion& GetIdentity();
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -322,7 +322,7 @@ public:
     /// <returns>
     /// The resultant dual quaternion.
     /// </returns>
-    QDualQuaternion operator*(const float_q fScalar) const;
+    QDualQuaternion operator*(const float_q &fScalar) const;
 
     /// <summary>
     /// Product by a vector (multiplying to the dual quaternion by the right).
@@ -359,7 +359,7 @@ public:
     /// <returns>
     /// The resultant dual quaternion.
     /// </returns>
-    QDualQuaternion operator/(const float_q fScalar) const;
+    QDualQuaternion operator/(const float_q &fScalar) const;
 
     /// <summary>
     /// Add and assign operator. Each input quaternion component is added to the corresponding quaternion
@@ -414,7 +414,7 @@ public:
     /// <returns>
     /// The modified dual quaternion.
     /// </returns>
-    QDualQuaternion& operator/=(const float_q fScalar);
+    QDualQuaternion& operator/=(const float_q &fScalar);
 
     /// <summary>
     /// Assignation operator. Assigns the provided dual quaternion to the resident dual quaternion.
@@ -547,7 +547,7 @@ public:
     /// <returns>
     /// The "lerped" dual quaternion.
     /// </returns>
-    QDualQuaternion Lerp(const float_q fProportion, const QDualQuaternion &dualQuat) const;
+    QDualQuaternion Lerp(const float_q &fProportion, const QDualQuaternion &dualQuat) const;
 
     /// <summary>
     /// Converts dual quaternion into a string.
@@ -567,26 +567,26 @@ private:
     /// <summary>
     /// Applies a transformation composed of a rotation and a translation, performing the rotation first and then the traslation.
     /// </summary>
-    /// <typeparam name="VectorT">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
+    /// <typeparam name="VectorType">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
     /// <param name="qRotation">[IN] Regular quaternion which defines the rotation.</param>
     /// <param name="vTranslation">[IN] Vector which defines the translation.</param>
     /// <returns>
     /// The transformed dual quaternion.
     /// </returns>
-    template <class VectorT>
-    QDualQuaternion TransformRotationFirstImp(const QBaseQuaternion &qRotation, const VectorT &vTranslation) const;
+    template <class VectorType>
+    QDualQuaternion TransformRotationFirstImp(const QBaseQuaternion &qRotation, const VectorType &vTranslation) const;
 
     /// <summary>
     /// Applies a transformation composed of a rotation and a translation, performing the traslation first and then the rotation.
     /// </summary>
-    /// <typeparam name="VectorT">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
+    /// <typeparam name="VectorType">Allowed types: QBaseVector3, QBaseVector4, QVector3, QVector4.</typeparam>
     /// <param name="vTranslation">[IN] Vector which defines the translation.</param>
     /// <param name="qRotation">[IN] Regular quaternion which defines the rotation.</param>
     /// <returns>
     /// The transformed dual quaternion.
     /// </returns>
-    template <class VectorT>
-    QDualQuaternion TransformTranslationFirstImp(const VectorT &vTranslation, const QBaseQuaternion &qRotation) const;
+    template <class VectorType>
+    QDualQuaternion TransformTranslationFirstImp(const VectorType &vTranslation, const QBaseQuaternion &qRotation) const;
 
 };
 

@@ -26,7 +26,6 @@
 
 #include "QDualQuaternion.h"
 
-#include "Assertions.h"
 #include "QBaseVector3.h"
 #include "QBaseVector4.h"
 
@@ -41,12 +40,12 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QDualQuaternion::QDualQuaternion()
@@ -87,14 +86,14 @@ QDualQuaternion::QDualQuaternion(const QBaseVector4 &vTranslation, const QBaseQu
 
 QDualQuaternion::QDualQuaternion(const float_q *arValuesReal, const float_q *arValuesDual)
 {
-    QE_ASSERT_ERROR(arValuesReal != null_q && arValuesDual != null_q, "Input arrays must not be null");
+    QE_ASSERT(arValuesReal != null_q && arValuesDual != null_q)
 
     this->r = QQuaternion(arValuesReal[0], arValuesReal[1], arValuesReal[2], arValuesReal[3]);
     this->d = QQuaternion(arValuesDual[0], arValuesDual[1], arValuesDual[2], arValuesDual[3]);
 }
 
-template <class VectorT>
-void QDualQuaternion::QDualQuaternionImp(const QBaseQuaternion &qRotation, const VectorT &vTranslation)
+template <class VectorType>
+void QDualQuaternion::QDualQuaternionImp(const QBaseQuaternion &qRotation, const VectorType &vTranslation)
 {
     QDualQuaternion rotation(qRotation, QBaseQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0));
     QDualQuaternion translation(QBaseQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_1),
@@ -103,8 +102,8 @@ void QDualQuaternion::QDualQuaternionImp(const QBaseQuaternion &qRotation, const
     *this = translation * rotation;
 }
 
-template <class VectorT>
-void QDualQuaternion::QDualQuaternionImp(const VectorT &vTranslation, const QBaseQuaternion &qRotation)
+template <class VectorType>
+void QDualQuaternion::QDualQuaternionImp(const VectorType &vTranslation, const QBaseQuaternion &qRotation)
 {
     QDualQuaternion rotation(qRotation, QBaseQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_0));
     QDualQuaternion translation(QBaseQuaternion(SQFloat::_0, SQFloat::_0, SQFloat::_0, SQFloat::_1),
@@ -115,12 +114,12 @@ void QDualQuaternion::QDualQuaternionImp(const VectorT &vTranslation, const QBas
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QDualQuaternion QDualQuaternion::operator+(const QBaseDualQuaternion &dualQuat) const
@@ -138,12 +137,12 @@ QDualQuaternion QDualQuaternion::operator*(const QBaseDualQuaternion &dualQuat) 
     return QDualQuaternion(QBaseQuaternion(this->r * dualQuat.r), QBaseQuaternion(this->r * dualQuat.d + this->d * dualQuat.r));
 }
 
-QDualQuaternion QDualQuaternion::operator*(const float_q fScalar) const
+QDualQuaternion QDualQuaternion::operator*(const float_q &fScalar) const
 {
     return QDualQuaternion(QBaseQuaternion(this->r * fScalar), QBaseQuaternion(this->d * fScalar));
 }
 
-QDualQuaternion operator*(const float_q fScalar, const QDualQuaternion &dualQuat)
+QDualQuaternion operator*(const float_q &fScalar, const QDualQuaternion &dualQuat)
 {
     return QDualQuaternion(QBaseQuaternion(dualQuat.r * fScalar), QBaseQuaternion(dualQuat.d * fScalar));
 }
@@ -170,9 +169,9 @@ QDualQuaternion QDualQuaternion::operator*(const QBaseVector4 &vVector) const
     return auxQ;
 }
 
-QDualQuaternion QDualQuaternion::operator/(const float_q fScalar) const
+QDualQuaternion QDualQuaternion::operator/(const float_q &fScalar) const
 {
-    QE_ASSERT_WARNING(fScalar != SQFloat::_0, "The input value must not equal zero");
+    QE_ASSERT(fScalar != SQFloat::_0)
 
     const float_q &DIVISOR = SQFloat::_1/fScalar;
 
@@ -213,10 +212,10 @@ QDualQuaternion& QDualQuaternion::operator*=(const float_q fScalar)
     return *this;
 }
 
-QDualQuaternion& QDualQuaternion::operator/=(const float_q fScalar)
+QDualQuaternion& QDualQuaternion::operator/=(const float_q &fScalar)
 {
     // Checkout to avoid division by zero.
-    QE_ASSERT_WARNING(fScalar != SQFloat::_0, "The input array must not be null");
+    QE_ASSERT(fScalar != SQFloat::_0)
 
     const float_q &DIVISOR = SQFloat::_1/fScalar;
 
@@ -284,24 +283,24 @@ QDualQuaternion QDualQuaternion::TransformTranslationFirst(const QBaseVector4 &v
     return this->TransformTranslationFirstImp(vTranslation, qRotation);
 }
 
-QDualQuaternion QDualQuaternion::Lerp(const float_q fProportion, const QDualQuaternion &dualQuat) const
+QDualQuaternion QDualQuaternion::Lerp(const float_q &fProportion, const QDualQuaternion &dualQuat) const
 {
     QDualQuaternion auxDualQuat = (SQFloat::_1 - fProportion) * (*this) + fProportion * dualQuat;
     float_q fLength = auxDualQuat.GetNonDualLength();
 
-    QE_ASSERT_WARNING(fLength != SQFloat::_0, "A zero length will produce a division by zero");
+    QE_ASSERT(fLength != SQFloat::_0)
 
     return auxDualQuat / fLength;
 }
 
 string_q QDualQuaternion::ToString() const
 {
-    return string_q("DQ(r(") + r.ToString() +
-               QE_L("),d(")  + d.ToString() + QE_L("))");
+    return QE_L("DQ(r(") + r.ToString() +
+           QE_L("),d(")  + d.ToString() + QE_L("))");
 }
 
-template <class VectorT>
-QDualQuaternion QDualQuaternion::TransformRotationFirstImp(const QBaseQuaternion &qRotation, const VectorT &vTranslation) const
+template <class VectorType>
+QDualQuaternion QDualQuaternion::TransformRotationFirstImp(const QBaseQuaternion &qRotation, const VectorType &vTranslation) const
 {
     QDualQuaternion rotation(qRotation, QBaseQuaternion());
     QDualQuaternion translation(QQuaternion::GetIdentity(),
@@ -310,8 +309,8 @@ QDualQuaternion QDualQuaternion::TransformRotationFirstImp(const QBaseQuaternion
     return this->Transform(translation * rotation);
 }
 
-template <class VectorT>
-QDualQuaternion QDualQuaternion::TransformTranslationFirstImp(const VectorT &vTranslation, const QBaseQuaternion &qRotation) const
+template <class VectorType>
+QDualQuaternion QDualQuaternion::TransformTranslationFirstImp(const VectorType &vTranslation, const QBaseQuaternion &qRotation) const
 {
     QDualQuaternion rotation(qRotation, QBaseQuaternion());
     QDualQuaternion translation(QQuaternion::GetIdentity(),
@@ -322,12 +321,12 @@ QDualQuaternion QDualQuaternion::TransformTranslationFirstImp(const VectorT &vTr
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 const QDualQuaternion& QDualQuaternion::GetIdentity()

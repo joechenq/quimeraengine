@@ -26,15 +26,10 @@
 
 #include "QBaseMatrix2x2.h"
 
-#include <memory>
-#include <cstring>
-
-#include "Assertions.h"
-#include "StringsDefinitions.h"
 #include "SQFloat.h"
 #include "SQVF32.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -47,31 +42,31 @@ namespace Math
 {
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |  ATTRIBUTES INITIALIZATION |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |  ATTRIBUTES INITIALIZATION |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |       CONSTRUCTORS         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |       CONSTRUCTORS		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 QBaseMatrix2x2::QBaseMatrix2x2()
 {
-    ij[0][0] = SQFloat::_0;
-    ij[0][1] = SQFloat::_0;
-    ij[1][0] = SQFloat::_0;
-    ij[1][1] = SQFloat::_0;
+	ij[0][0] = SQFloat::_0;
+	ij[0][1] = SQFloat::_0;
+	ij[1][0] = SQFloat::_0;
+	ij[1][1] = SQFloat::_0;
 }
 
 QBaseMatrix2x2::QBaseMatrix2x2(const QBaseMatrix2x2 &matrix)
@@ -79,18 +74,18 @@ QBaseMatrix2x2::QBaseMatrix2x2(const QBaseMatrix2x2 &matrix)
     memcpy(this->ij, matrix.ij, sizeof(float_q) * 4);
 }
 
-QBaseMatrix2x2::QBaseMatrix2x2(const float_q fValueAll)
+QBaseMatrix2x2::QBaseMatrix2x2(const float_q &fValueAll)
 {
-    ij[0][0] = ij[0][1] =
-    ij[1][0] = ij[1][1] = fValueAll;
+	ij[0][0] = ij[0][1] =
+	ij[1][0] = ij[1][1] = fValueAll;
 }
 
-QBaseMatrix2x2::QBaseMatrix2x2(const float_q f00, const float_q f01, const float_q f10, const float_q f11)
+QBaseMatrix2x2::QBaseMatrix2x2(const float_q &f00, const float_q &f01, const float_q &f10, const float_q &f11)
 {
     ij[0][0] = f00;
-    ij[0][1] = f01;
-    ij[1][0] = f10;
-    ij[1][1] = f11;
+	ij[0][1] = f01;
+	ij[1][0] = f10;
+	ij[1][1] = f11;
 }
 
 /// <summary>
@@ -104,12 +99,12 @@ QBaseMatrix2x2::QBaseMatrix2x2(const float_q f00, const float_q f01, const float
 /// is undefined.</param>
 QBaseMatrix2x2::QBaseMatrix2x2(const float_q* arValues)
 {
-    QE_ASSERT_ERROR(arValues != null_q, "The input array must not be null");
+	QE_ASSERT(arValues != null_q)
 
-    ij[0][0] = arValues[0];
-    ij[0][1] = arValues[1];
-    ij[1][0] = arValues[2];
-    ij[1][1] = arValues[3];
+	ij[0][0] = arValues[0];
+	ij[0][1] = arValues[1];
+	ij[1][0] = arValues[2];
+	ij[1][1] = arValues[3];
 }
 
 /// <summary>
@@ -117,21 +112,21 @@ QBaseMatrix2x2::QBaseMatrix2x2(const float_q* arValues)
 /// Each pack element is unpacked following the row x column convention.
 /// </summary>
 /// <param name="value">[IN] 4x32 values for the matrix.</param>
-QBaseMatrix2x2::QBaseMatrix2x2(const vf32_q value)
+QBaseMatrix2x2::QBaseMatrix2x2(const vf32_q &value)
 {
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
 
-    SQVF32::Unpack(value, this->ij[0][0], this->ij[0][1], this->ij[1][0], this->ij[1][1]);
+	SQVF32::Unpack(value, this->ij[0][0], this->ij[0][1], this->ij[1][0], this->ij[1][1]);
 }
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |           METHODS          |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |		    METHODS			 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
 bool QBaseMatrix2x2::operator==(const QBaseMatrix2x2 &matrix) const

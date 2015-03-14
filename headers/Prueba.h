@@ -4,7 +4,7 @@
 #include <boost/thread.hpp>
 #include "InternalDefinitions.h"
 
-class QE_EXPORT_SYMBOLS Prueba
+class QDllExport Prueba
 {
 public:
 

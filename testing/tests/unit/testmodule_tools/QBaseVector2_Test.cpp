@@ -32,11 +32,9 @@ using namespace boost::unit_test;
 
 #include "QBaseVector2.h"
 #include "SQVF32.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseVector2;
 
 QTEST_SUITE_BEGIN( QBaseVector2_TestSuite )
@@ -152,7 +150,7 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenPointerIsNull_Test )
     {
         QBaseVector2 vVectorUT(NULL_ARRAY);
     }
-    catch(const QAssertException&)
+    catch(...) // TODO [Thund]: Only must catch the proper exception class, not implemented yet
     {
         bAssertionFailed = true;
     }
@@ -169,8 +167,8 @@ QTEST_CASE ( Constructor5_AssertionFailsWhenPointerIsNull_Test )
 QTEST_CASE ( Constructor6_VectorComponentsAreSetToValidVF32PackedValues_Test )
 {
     // [Preparation]
-    using Kinesis::QuimeraEngine::Common::DataTypes::SQVF32;
-    using Kinesis::QuimeraEngine::Common::DataTypes::vf32_q;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::SQVF32;
+    using Kinesis::QuimeraEngine::Tools::DataTypes::vf32_q;
 
     const float_q EXPECTED_VALUE_FOR_X = SQFloat::_1;
     const float_q EXPECTED_VALUE_FOR_Y = SQFloat::_2;

@@ -29,7 +29,7 @@
 
 #include "QQuaternion.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 
 
 namespace Kinesis
@@ -55,23 +55,23 @@ namespace Math
 /// one rotation and one translation, without deforming the transformed solid (which acts as a rigid solid).<br/>
 /// This class is experimental and therefore subject to changes.
 /// </remarks>
-class QE_LAYER_TOOLS_SYMBOLS QBaseDualQuaternion
+class QDllExport QBaseDualQuaternion
 {
 
-    // CONSTRUCTORS
-    // ---------------
+	// CONSTRUCTORS
+	// ---------------
 public:
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
     QBaseDualQuaternion();
 
     /// <summary>
-    /// Copy constructor. Copies attributes from given dual quaternion.
-    /// </summary>
-    /// <param name="dualQuat">[IN] The dual quaternion from which we want to create a copy in the resident dual quaternion.</param>
-    QBaseDualQuaternion(const QBaseDualQuaternion &dualQuat);
+	/// Copy constructor. Copies attributes from given dual quaternion.
+	/// </summary>
+	/// <param name="dualQuat">[IN] The dual quaternion from which we want to create a copy in the resident dual quaternion.</param>
+	QBaseDualQuaternion(const QBaseDualQuaternion &dualQuat);
 
     /// <summary>
     /// Constructor from two quaternions, one to initialize the non-dual part and another to do it with the dual part.
@@ -81,8 +81,8 @@ public:
     QBaseDualQuaternion(const QBaseQuaternion &qReal, const QBaseQuaternion &qDual);
 
 
-    // METHODS
-    // ---------------
+	// METHODS
+	// ---------------
 public:
 
     /// <summary>
@@ -104,8 +104,8 @@ public:
     bool operator!=(const QBaseDualQuaternion &dualQuat) const;
 
 
-    // ATTRIBUTES
-    // ---------------
+	// ATTRIBUTES
+	// ---------------
 public:
 
     /// <summary>

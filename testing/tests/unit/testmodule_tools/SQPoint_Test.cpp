@@ -30,6 +30,8 @@ using namespace boost::unit_test;
 
 #include "../../testsystem/TestingExternalDefinitions.h"
 
+#include "ToolsExports.h"
+
 #include "SQPoint.h"
 #include "QTransformationMatrix3x3.h"
 #include "SQFloat.h"
@@ -45,11 +47,9 @@ using namespace boost::unit_test;
 #include "QScalingMatrix3x3.h"
 #include "QQuaternion.h"
 #include "QSpaceConversionMatrix.h"
-#include "QAssertException.h"
 
-using Kinesis::QuimeraEngine::Common::Exceptions::QAssertException;
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 using Kinesis::QuimeraEngine::Tools::Math::SQPoint;
 using Kinesis::QuimeraEngine::Tools::Math::QBaseVector2;
 using Kinesis::QuimeraEngine::Tools::Math::QVector2;
@@ -164,7 +164,7 @@ QTEST_CASE ( Translate1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -278,7 +278,7 @@ QTEST_CASE ( Translate2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION.x, TRANSLATION.y, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -420,7 +420,7 @@ QTEST_CASE ( Rotate1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Rotate(ROTATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -534,7 +534,7 @@ QTEST_CASE ( Scale1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -648,7 +648,7 @@ QTEST_CASE ( Scale2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE.x, SCALE.y, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -815,7 +815,7 @@ QTEST_CASE ( Transform1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(TRANSFORMATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -929,7 +929,7 @@ QTEST_CASE ( Translate3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1043,7 +1043,7 @@ QTEST_CASE ( Translate4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1157,7 +1157,7 @@ QTEST_CASE ( Translate5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION.x, TRANSLATION.y, TRANSLATION.z, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1271,7 +1271,7 @@ QTEST_CASE ( Translate6_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION.x, TRANSLATION.y, TRANSLATION.z, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1397,7 +1397,7 @@ QTEST_CASE ( Translate7_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1523,7 +1523,7 @@ QTEST_CASE ( Translate8_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1649,7 +1649,7 @@ QTEST_CASE ( Translate9_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1775,7 +1775,7 @@ QTEST_CASE ( Translate10_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Translate(TRANSLATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -1923,7 +1923,7 @@ QTEST_CASE ( Rotate2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Rotate(ROTATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2071,7 +2071,7 @@ QTEST_CASE ( Rotate3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Rotate(ROTATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2219,7 +2219,7 @@ QTEST_CASE ( Rotate4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Rotate(ROTATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2367,7 +2367,7 @@ QTEST_CASE ( Rotate5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Rotate(ROTATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2481,7 +2481,7 @@ QTEST_CASE ( Scale3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2595,7 +2595,7 @@ QTEST_CASE ( Scale4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2709,7 +2709,7 @@ QTEST_CASE ( Scale5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE.x, SCALE.y, SCALE.z, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2823,7 +2823,7 @@ QTEST_CASE ( Scale6_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE.x, SCALE.y, SCALE.z, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -2945,7 +2945,7 @@ QTEST_CASE ( Scale7_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3067,7 +3067,7 @@ QTEST_CASE ( Scale8_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Scale(SCALE, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3238,7 +3238,7 @@ QTEST_CASE ( Transform2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(TRANSFORMATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3409,7 +3409,7 @@ QTEST_CASE ( Transform3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(TRANSFORMATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3581,7 +3581,7 @@ QTEST_CASE ( Transform4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(TRANSFORMATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3752,7 +3752,7 @@ QTEST_CASE ( Transform5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(TRANSFORMATION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -3887,7 +3887,7 @@ QTEST_CASE ( Transform6_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(CONVERSION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4022,7 +4022,7 @@ QTEST_CASE ( Transform7_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::Transform(CONVERSION, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4168,7 +4168,7 @@ QTEST_CASE ( RotateWithPivot1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::RotateWithPivot(ROTATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4286,7 +4286,7 @@ QTEST_CASE ( ScaleWithPivot1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE.x, SCALE.y, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4404,7 +4404,7 @@ QTEST_CASE ( ScaleWithPivot2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4575,7 +4575,7 @@ QTEST_CASE ( TransformWithPivot1_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::TransformWithPivot(TRANSFORMATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4726,7 +4726,7 @@ QTEST_CASE ( RotateWithPivot2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::RotateWithPivot(ROTATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -4877,7 +4877,7 @@ QTEST_CASE ( RotateWithPivot3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::RotateWithPivot(ROTATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5028,7 +5028,7 @@ QTEST_CASE ( RotateWithPivot4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::RotateWithPivot(ROTATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5179,7 +5179,7 @@ QTEST_CASE ( RotateWithPivot5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::RotateWithPivot(ROTATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5297,7 +5297,7 @@ QTEST_CASE ( ScaleWithPivot3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5415,7 +5415,7 @@ QTEST_CASE ( ScaleWithPivot4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5533,7 +5533,7 @@ QTEST_CASE ( ScaleWithPivot5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE.x, SCALE.y, SCALE.z, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5651,7 +5651,7 @@ QTEST_CASE ( ScaleWithPivot6_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE.x, SCALE.y, SCALE.z, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5777,7 +5777,7 @@ QTEST_CASE ( ScaleWithPivot7_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -5903,7 +5903,7 @@ QTEST_CASE ( ScaleWithPivot8_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::ScaleWithPivot(SCALE, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -6079,7 +6079,7 @@ QTEST_CASE ( TransformWithPivot2_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::TransformWithPivot(TRANSFORMATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -6254,7 +6254,7 @@ QTEST_CASE ( TransformWithPivot3_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::TransformWithPivot(TRANSFORMATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -6469,7 +6469,7 @@ QTEST_CASE ( TransformWithPivot4_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::TransformWithPivot(TRANSFORMATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }
@@ -6644,7 +6644,7 @@ QTEST_CASE ( TransformWithPivot5_AssertionFailsWhenInputIsNull_Test )
     {
         SQPoint::TransformWithPivot(TRANSFORMATION, PIVOT, arInputPoints, POINTS_COUNT);
     }
-    catch(const QAssertException&)
+    catch(...) // [TODO] Thund: An special exception type has to be defined for this
     {
         bAssertionFailed = true;
     }

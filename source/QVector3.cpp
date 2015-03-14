@@ -26,7 +26,6 @@
 
 #include "QVector3.h"
 
-#include "Assertions.h"
 #include "QQuaternion.h"
 #include "QDualQuaternion.h"
 #include "QMatrix4x3.h"
@@ -37,7 +36,7 @@
 #include "QBaseVector4.h"
 #include "SQAngle.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::SQFloat;
+using Kinesis::QuimeraEngine::Tools::DataTypes::SQFloat;
 
 
 namespace Kinesis
@@ -74,11 +73,11 @@ QVector3::QVector3(const QBaseVector4 &vVector) : QBaseVector3(vVector.x, vVecto
 {
 }
 
-QVector3::QVector3(const float_q fValueX, const float_q fValueY, const float_q fValueZ) : QBaseVector3(fValueX, fValueY, fValueZ)
+QVector3::QVector3(const float_q &fValueX, const float_q &fValueY, const float_q &fValueZ) : QBaseVector3(fValueX, fValueY, fValueZ)
 {
 }
 
-QVector3::QVector3(const float_q fValueAll) : QBaseVector3(fValueAll)
+QVector3::QVector3(const float_q &fValueAll) : QBaseVector3(fValueAll)
 {
 }
 
@@ -120,7 +119,7 @@ QVector3 QVector3::operator-(const QBaseVector3 &vVector) const
     return QVector3(this->x - vVector.x, this->y - vVector.y, this->z - vVector.z);
 }
 
-QVector3 QVector3::operator*(const float_q fScalar) const
+QVector3 QVector3::operator*(const float_q &fScalar) const
 {
     return QVector3(this->x * fScalar, this->y * fScalar, this->z * fScalar);
 }
@@ -147,10 +146,10 @@ QBaseVector4 QVector3::operator*(const QBaseMatrix3x4 &matrix) const
 
 }
 
-QVector3 QVector3::operator/(const float_q fScalar) const
+QVector3 QVector3::operator/(const float_q &fScalar) const
 {
     // Checkout to avoid division by 0
-    QE_ASSERT_WARNING (fScalar != SQFloat::_0, "Input value must not equal zero");
+    QE_ASSERT (fScalar != SQFloat::_0)
 
     const float_q &DIVISOR = SQFloat::_1/fScalar;
 
@@ -160,7 +159,7 @@ QVector3 QVector3::operator/(const float_q fScalar) const
 QVector3 QVector3::operator/(const QBaseVector3 &vVector) const
 {
     // Checkout to avoid division by 0
-    QE_ASSERT_WARNING (vVector.x != SQFloat::_0 && vVector.y != SQFloat::_0 && vVector.z != SQFloat::_0, "Input vector must not be null");
+    QE_ASSERT (vVector.x != SQFloat::_0 && vVector.y != SQFloat::_0 && vVector.z != SQFloat::_0)
 
     return QVector3(this->x / vVector.x, this->y / vVector.y, this->z / vVector.z);
 }
@@ -214,15 +213,15 @@ QVector3& QVector3::operator*=(const QBaseMatrix3x3 &matrix)
     return *this;
 }
 
-QVector3 operator*(const float_q fScalar, const QVector3 &vVector)
+QVector3 operator*(const float_q &fScalar, const QVector3 &vVector)
 {
     return QVector3(vVector.x * fScalar, vVector.y * fScalar, vVector.z * fScalar);
 }
 
-QVector3& QVector3::operator/=(const float_q fScalar)
+QVector3& QVector3::operator/=(const float_q &fScalar)
 {
     // Checkout to avoid division by 0
-    QE_ASSERT_WARNING(fScalar != SQFloat::_0, "Input value must not equal zero");
+    QE_ASSERT(fScalar != SQFloat::_0)
 
     const float_q &DIVISOR = SQFloat::_1 / fScalar;
 
@@ -236,7 +235,7 @@ QVector3& QVector3::operator/=(const float_q fScalar)
 QVector3& QVector3::operator/=(const QBaseVector3 &vVector)
 {
     // Checkout to avoid division by 0
-    QE_ASSERT_WARNING(vVector.x != SQFloat::_0 && vVector.y != SQFloat::_0 && vVector.z != SQFloat::_0, "Input vector must not be null");
+    QE_ASSERT(vVector.x != SQFloat::_0 && vVector.y != SQFloat::_0 && vVector.z != SQFloat::_0)
 
     this->x /= vVector.x;
     this->y /= vVector.y;
@@ -272,7 +271,7 @@ QVector3 QVector3::Normalize() const
     float_q fLength = this->GetLength();
 
     // Checkout to avoid division by 0
-    QE_ASSERT_WARNING(fLength != SQFloat::_0, "The vector is null so it cannot be normalized, this will cause a division by zero");
+    QE_ASSERT(fLength != SQFloat::_0)
 
     //Normalize
     return QVector3(this->x / fLength, this->y / fLength, this->z / fLength);
@@ -307,13 +306,13 @@ float_q QVector3::DotProduct(const QBaseVector3 &vVector) const
     return(this->x * vVector.x + this->y * vVector.y + this->z * vVector.z);
 }
 
-float_q QVector3::AngleBetween(const QVector3 &vVector) const
+float_q QVector3::DotProductAngle(const QVector3 &vVector) const
 {
     // Note: Square root is performed outside to avoid loss of precision and gain performance
     float_q fLength = sqrt_q(this->GetSquaredLength() * vVector.GetSquaredLength());
 
     // Checkout to avoid division by zero.
-    QE_ASSERT_WARNING(fLength != SQFloat::_0, "Vectors must not be null, this will cause a division by zero");
+    QE_ASSERT(fLength != SQFloat::_0)
 
     float_q fDot = this->DotProduct(vVector)/fLength;
 
@@ -325,7 +324,7 @@ float_q QVector3::AngleBetween(const QVector3 &vVector) const
 
     float_q fAngle = acos_q(fDot);
 
-    QE_ASSERT_WARNING( !SQFloat::IsNaN(fAngle), "The resultant angle is NAN" );
+    QE_ASSERT( !SQFloat::IsNaN(fAngle) );
     
     #if QE_CONFIG_ANGLENOTATION_DEFAULT == QE_CONFIG_ANGLENOTATION_DEGREES
         // If angles are specified in degrees, then converts angle to degrees
@@ -342,7 +341,7 @@ QVector3 QVector3::CrossProduct(const QBaseVector3 &vVector) const
                     this->x * vVector.y - this->y * vVector.x);
 }
 
-QVector3 QVector3::Lerp(const float_q fProportion, const QVector3 &vVector) const
+QVector3 QVector3::Lerp(const float_q &fProportion, const QVector3 &vVector) const
 {
     return QVector3(this->x * (SQFloat::_1 - fProportion) + vVector.x * fProportion,
                     this->y * (SQFloat::_1 - fProportion) + vVector.y * fProportion,
@@ -414,29 +413,19 @@ QVector3 QVector3::Transform(const QTransformationMatrix<QMatrix4x4> &transforma
 
 string_q QVector3::ToString() const
 {
-    static const string_q STRING_PREFIX("V3(");
-    static const string_q STRING_COMMA(",");
-    static const string_q STRING_END(")");
-
-    string_q strOutput = STRING_PREFIX;
-    strOutput.Append(this->x);
-    strOutput.Append(STRING_COMMA);
-    strOutput.Append(this->y);
-    strOutput.Append(STRING_COMMA);
-    strOutput.Append(this->z);
-    strOutput.Append(STRING_END);
-
-    return strOutput;
+    return QE_L("V3(") + SQFloat::ToString(this->x) +
+           QE_L(",")  + SQFloat::ToString(this->y) +
+           QE_L(",")  + SQFloat::ToString(this->z) + QE_L(")");
 }
 
-template <class MatrixT>
-QVector3 QVector3::TransformImp(const QTranslationMatrix<MatrixT> &translation) const
+template <class MatrixType>
+QVector3 QVector3::TransformImp(const QTranslationMatrix<MatrixType> &translation) const
 {
     return QVector3(this->x + translation.ij[3][0], this->y + translation.ij[3][1], this->z + translation.ij[3][2]);
 }
 
-template <class MatrixT>
-QVector3 QVector3::TransformImp(const QTransformationMatrix<MatrixT> &transformation) const
+template <class MatrixType>
+QVector3 QVector3::TransformImp(const QTransformationMatrix<MatrixType> &transformation) const
 {
     return QVector3(this->x * transformation.ij[0][0] + this->y * transformation.ij[1][0] + this->z * transformation.ij[2][0] + transformation.ij[3][0],
                     this->x * transformation.ij[0][1] + this->y * transformation.ij[1][1] + this->z * transformation.ij[2][1] + transformation.ij[3][1],
@@ -445,18 +434,18 @@ QVector3 QVector3::TransformImp(const QTransformationMatrix<MatrixT> &transforma
 
 
 //##################=======================================================##################
-//##################             ____________________________              ##################
-//##################            |                            |             ##################
-//##################            |         PROPERTIES         |             ##################
-//##################           /|                            |\            ##################
-//##################             \/\/\/\/\/\/\/\/\/\/\/\/\/\/              ##################
-//##################                                                       ##################
+//##################			 ____________________________			   ##################
+//##################			|							 |			   ##################
+//##################		    |         PROPERTIES		 |			   ##################
+//##################		   /|							 |\			   ##################
+//##################			 \/\/\/\/\/\/\/\/\/\/\/\/\/\/			   ##################
+//##################													   ##################
 //##################=======================================================##################
 
-const QVector3& QVector3::GetNullVector()
+const QVector3& QVector3::GetZeroVector()
 {
-    static const QVector3 NULLVECTOR(SQFloat::_0,  SQFloat::_0,  SQFloat::_0);
-    return NULLVECTOR;
+    static const QVector3 ZEROVECTOR(SQFloat::_0,  SQFloat::_0,  SQFloat::_0);
+    return ZEROVECTOR;
 }
 
 const QVector3& QVector3::GetVectorOfOnes()

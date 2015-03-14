@@ -29,7 +29,7 @@
 
 #include "QMatrix4x4.h"
 
-using Kinesis::QuimeraEngine::Common::DataTypes::float_q;
+using Kinesis::QuimeraEngine::Tools::DataTypes::float_q;
 
 
 namespace Kinesis
@@ -42,8 +42,8 @@ namespace Math
 {
 
 // Forward declarations
-template<class MatrixT> class QTranslationMatrix;
-template<class MatrixT> class QTransformationMatrix;
+template<class MatrixType> class QTranslationMatrix;
+template<class MatrixType> class QTransformationMatrix;
 class QRotationMatrix3x3;
 class QScalingMatrix3x3;
 class QBaseVector3;
@@ -52,10 +52,7 @@ class QVector3;
 class QVector4;
 class QBaseQuaternion;
 class QMatrix4x3;
-class QSpaceConversionMatrix;
 
-// Preventing friend global operator to be called.
-QSpaceConversionMatrix operator*(const float_q fScalar, const QSpaceConversionMatrix &matrix);
 
 /// <summary>
 /// Class representing a matrix which symbolizes coordinate system transformations.
@@ -63,7 +60,7 @@ QSpaceConversionMatrix operator*(const float_q fScalar, const QSpaceConversionMa
 /// <remarks>
 /// It adds functionality to change to view, projection and world spaces.
 /// </remarks>
-class QE_LAYER_TOOLS_SYMBOLS QSpaceConversionMatrix : public QMatrix4x4
+class QDllExport QSpaceConversionMatrix : public QMatrix4x4
 {
     // CONSTRUCTORS
     // ---------------
@@ -196,8 +193,8 @@ public:
     /// <param name="fFarClipPlane">[IN] Floating point value which defines the distance to the farthest clipping plane. It must not equal the near clip plane's distance.</param>
     /// <param name="fAspectRatio">[IN] Floating point value which defines the frame width/height ratio. If it equals zero, the result is undefined.</param>
     /// <param name="fVerticalFOV">[IN] Floating point value which defines the vertical field of view. If it equals zero, the result is undefined.</param>
-    void SetProjectionSpaceMatrix(const float_q fNearClipPlane, const float_q fFarClipPlane,
-                                  const float_q fAspectRatio, const float_q fVerticalFOV);
+    void SetProjectionSpaceMatrix(const float_q &fNearClipPlane, const float_q &fFarClipPlane,
+                                  const float_q &fAspectRatio, const float_q &fVerticalFOV);
 
     /// <summary>
     /// Turns the hand convention into opposite rules, that is like if we change the sign of z axis.
@@ -238,31 +235,18 @@ public:
 
 private:
 
-    // Preventing the operators from base class to be used.
-    QMatrix4x4 operator*(const float_q fScalar) const;
-    QMatrix4x4 operator*(const QBaseMatrix4x4 &matrix) const;
-    QBaseMatrix4x3 operator*(const QBaseMatrix4x3 &matrix) const;
-    QMatrix4x4 operator/(const float_q fScalar) const;
-    QMatrix4x4 operator+(const QBaseMatrix4x4 &matrix) const;
-    QMatrix4x4 operator-(const QBaseMatrix4x4 &matrix) const;
-    QMatrix4x4& operator*=(const QBaseMatrix4x4 &matrix);
-    QMatrix4x4& operator*=(const float_q fScalar);
-    QMatrix4x4& operator/=(const float_q fScalar);
-    QMatrix4x4& operator+=(const QBaseMatrix4x4 &matrix);
-    QMatrix4x4& operator-=(const QBaseMatrix4x4 &matrix);
-
     // Hidden method to prevent it could be used.
     void ResetToZero();
 
     /// <summary>
     /// Sets the world space matrix, which usually defines the size, orientation and position of an object in the world space.
     /// </summary>
-    /// <typeparam name="MatrixT">Allowed types: QMatrix4x3, QMatrix4x4.</typeparam>
+    /// <typeparam name="MatrixType">Allowed types: QMatrix4x3, QMatrix4x4.</typeparam>
     /// <param name="translation">[IN] Matrix which contains the translation (position).</param>
     /// <param name="rotation">[IN] Matrix which contains the rotation (orientation).</param>
     /// <param name="scale">[IN] Matrix which contains the scale (size).</param>
-    template <class MatrixT>
-    void SetWorldSpaceMatrixImp(const QTranslationMatrix<MatrixT> &translation, const QRotationMatrix3x3 &rotation, const QScalingMatrix3x3 &scale);
+    template <class MatrixType>
+    void SetWorldSpaceMatrixImp(const QTranslationMatrix<MatrixType> &translation, const QRotationMatrix3x3 &rotation, const QScalingMatrix3x3 &scale);
 };
 
 } //namespace Math
